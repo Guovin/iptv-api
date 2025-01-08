@@ -1,5 +1,6 @@
 import datetime
 import ipaddress
+import json
 import logging
 import os
 import re
@@ -11,6 +12,7 @@ from collections import defaultdict
 from logging.handlers import RotatingFileHandler
 from time import time
 
+import pytz
 import requests
 from bs4 import BeautifulSoup
 from flask import send_file, make_response
@@ -348,7 +350,7 @@ def get_ip_address():
         return f"http://{ip}:{config.app_port}"
 
 
-def convert_to_m3u():
+def convert_to_m3u(first_channel_name=None):
     """
     Convert result txt to m3u format
     """
@@ -373,7 +375,7 @@ def convert_to_m3u():
                             r"(CCTV|CETV)-(\d+)(\+.*)?",
                             lambda m: f"{m.group(1)}{m.group(2)}"
                                       + ("+" if m.group(3) else ""),
-                            original_channel_name,
+                            first_channel_name if current_group == "🕘️更新时间" else original_channel_name,
                         )
                         m3u_output += f'#EXTINF:-1 tvg-name="{processed_channel_name}" tvg-logo="https://live.fanmingming.cn/tv/{processed_channel_name}.png"'
                         if current_group:
@@ -499,16 +501,19 @@ def resource_path(relative_path, persistent=False):
             return total_path
 
 
-def write_content_into_txt(content, path=None, newline=True, callback=None):
+def write_content_into_txt(content, path=None, position=None, callback=None):
     """
     Write content into txt file
     """
     if not path:
         return
 
-    with open(path, "a", encoding="utf-8") as f:
-        if newline:
-            f.write(f"\n{content}")
+    mode = "r+" if position == "top" else "a"
+    with open(path, mode, encoding="utf-8") as f:
+        if position == "top":
+            existing_content = f.read()
+            f.seek(0, 0)
+            f.write(f"{content}\n{existing_content}")
         else:
             f.write(content)
 
@@ -579,3 +584,20 @@ def get_name_urls_from_file(path: str) -> dict[str, list]:
                     if url not in name_urls[name]:
                         name_urls[name].append(url)
     return name_urls
+
+
+def get_datetime_now():
+    """
+    Get the datetime now
+    """
+    now = datetime.datetime.now()
+    time_zone = pytz.timezone(config.time_zone)
+    return now.astimezone(time_zone).strftime("%Y-%m-%d %H:%M:%S")
+
+
+def get_version_info():
+    """
+    Get the version info
+    """
+    with open(resource_path("version.json"), "r", encoding="utf-8") as f:
+        return json.load(f)

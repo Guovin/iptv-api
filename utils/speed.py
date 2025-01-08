@@ -1,4 +1,5 @@
 import asyncio
+import http.cookies
 import json
 import re
 import subprocess
@@ -12,6 +13,8 @@ from multidict import CIMultiDictProxy
 import utils.constants as constants
 from utils.config import config
 from utils.tools import is_ipv6, remove_cache_info, get_resolution_value
+
+http.cookies._is_legal_key = lambda _: True
 
 
 async def get_speed_with_download(url: str, session: ClientSession = None, timeout: int = config.sort_timeout) -> dict[
@@ -30,8 +33,8 @@ async def get_speed_with_download(url: str, session: ClientSession = None, timeo
         created_session = False
     try:
         async with session.get(url, timeout=timeout) as response:
-            if response.status == 404:
-                raise Exception("404")
+            if response.status != 200:
+                raise Exception("Invalid response")
             info['delay'] = int(round((time() - start_time) * 1000))
             async for chunk in response.content.iter_any():
                 if chunk:

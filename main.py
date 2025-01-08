@@ -30,7 +30,8 @@ from utils.tools import (
     format_interval,
     check_ipv6_support,
     resource_path,
-    get_urls_from_file
+    get_urls_from_file,
+    get_version_info
 )
 
 
@@ -116,6 +117,9 @@ class UpdateSource:
                     for channel_obj in self.channel_items.values()
                     for name in channel_obj.keys()
                 ]
+                if not channel_names:
+                    print(f"❌ No channel names found! Please check the {config.source_file}!")
+                    return
                 await self.visit_page(channel_names)
                 self.tasks = []
                 append_total_data(
@@ -169,7 +173,7 @@ class UpdateSource:
                             "wb",
                     ) as file:
                         pickle.dump(channel_data_cache, file)
-                convert_to_m3u()
+                convert_to_m3u(channel_names[0])
                 print(
                     f"🥳 Update completed! Total time spent: {format_interval(time() - main_start_time)}. Please check the {user_final_file} file!"
                 )
@@ -209,6 +213,8 @@ class UpdateSource:
 
 
 if __name__ == "__main__":
+    info = get_version_info()
+    print(f"ℹ️ {info['name']} Version: {info['version']}")
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     update_source = UpdateSource()

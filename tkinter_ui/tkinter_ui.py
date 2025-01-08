@@ -6,7 +6,7 @@ import tkinter as tk
 from tkinter import messagebox
 from PIL import Image, ImageTk
 from utils.config import config
-from utils.tools import resource_path
+from utils.tools import resource_path, get_version_info
 from main import UpdateSource
 import asyncio
 import threading
@@ -19,14 +19,12 @@ from multicast import MulticastUI
 from hotel import HotelUI
 from subscribe import SubscribeUI
 from online_search import OnlineSearchUI
-import json
 from utils.speed import check_ffmpeg_installed_status
 
 
 class TkinterUI:
     def __init__(self, root):
-        with open(resource_path("version.json"), "r", encoding="utf-8") as f:
-            info = json.load(f)
+        info = get_version_info()
         self.root = root
         self.root.title(info.get("name", ""))
         self.version = info.get("version", "")
@@ -46,46 +44,6 @@ class TkinterUI:
         webbrowser.open_new_tab(self.result_url)
 
     def save_config(self):
-        config_values = {
-            "open_driver": self.default_ui.open_driver_var.get(),
-            "open_filter_resolution": self.speed_ui.open_filter_resolution_var.get(),
-            "open_hotel": self.hotel_ui.open_hotel_var.get(),
-            "open_hotel_foodie": self.hotel_ui.open_hotel_foodie_var.get(),
-            "open_hotel_fofa": self.hotel_ui.open_hotel_fofa_var.get(),
-            "open_keep_all": self.default_ui.open_keep_all_var.get(),
-            "open_multicast": self.multicast_ui.open_multicast_var.get(),
-            "open_multicast_foodie": self.multicast_ui.open_multicast_foodie_var.get(),
-            "open_multicast_fofa": self.multicast_ui.open_multicast_fofa_var.get(),
-            "open_online_search": self.online_search_ui.open_online_search_var.get(),
-            "open_proxy": self.default_ui.open_proxy_var.get(),
-            "open_request": self.default_ui.open_request_var.get(),
-            "open_service": self.default_ui.open_service_var.get(),
-            "open_sort": self.speed_ui.open_sort_var.get(),
-            "open_subscribe": self.subscribe_ui.open_subscribe_var.get(),
-            "open_supply": self.prefer_ui.open_supply_var.get(),
-            "open_update": self.default_ui.open_update_var.get(),
-            "open_update_time": self.default_ui.open_update_time_var.get(),
-            "open_url_info": self.default_ui.open_url_info_var.get(),
-            "open_use_cache": self.default_ui.open_use_cache_var.get(),
-            "open_use_old_result": self.default_ui.open_use_old_result_var.get(),
-            "final_file": self.default_ui.final_file_entry.get(),
-            "hotel_region_list": self.hotel_ui.region_list_combo.get(),
-            "hotel_page_num": self.hotel_ui.page_num_entry.get(),
-            "ipv_type": self.default_ui.ipv_type_combo.get(),
-            "ipv6_support": self.default_ui.ipv6_support_var.get(),
-            "min_resolution": self.speed_ui.min_resolution_entry.get(),
-            "multicast_region_list": self.multicast_ui.region_list_combo.get(),
-            "multicast_page_num": self.multicast_ui.page_num_entry.get(),
-            "online_search_page_num": self.online_search_ui.page_num_entry.get(),
-            "recent_days": self.online_search_ui.recent_days_entry.get(),
-            "request_timeout": self.default_ui.request_timeout_entry.get(),
-            "sort_timeout": self.speed_ui.sort_timeout_entry.get(),
-            "source_file": self.default_ui.source_file_entry.get(),
-            "urls_limit": self.default_ui.urls_limit_entry.get(),
-        }
-
-        for key, value in config_values.items():
-            config.set("Settings", key, str(value))
         config.save()
         messagebox.showinfo("提示", "保存成功")
 
@@ -274,7 +232,7 @@ def get_root_location(root):
     screen_width = root.winfo_screenwidth()
     screen_height = root.winfo_screenheight()
     width = 500
-    height = 600
+    height = 650
     x = (screen_width / 2) - (width / 2)
     y = (screen_height / 2) - (height / 2)
     return (width, height, x, y)
