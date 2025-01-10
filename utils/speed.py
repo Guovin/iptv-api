@@ -1,4 +1,5 @@
 import asyncio
+import http.cookies
 import json
 import re
 import subprocess
@@ -9,8 +10,11 @@ import m3u8
 from aiohttp import ClientSession, TCPConnector
 from multidict import CIMultiDictProxy
 
+import utils.constants as constants
 from utils.config import config
 from utils.tools import is_ipv6, remove_cache_info, get_resolution_value
+
+http.cookies._is_legal_key = lambda _: True
 
 
 async def get_speed_with_download(url: str, session: ClientSession = None, timeout: int = config.sort_timeout) -> dict[
@@ -29,8 +33,8 @@ async def get_speed_with_download(url: str, session: ClientSession = None, timeo
         created_session = False
     try:
         async with session.get(url, timeout=timeout) as response:
-            if response.status == 404:
-                raise Exception("404")
+            if response.status != 200:
+                raise Exception("Invalid response")
             info['delay'] = int(round((time() - start_time) * 1000))
             async for chunk in response.content.iter_any():
                 if chunk:
@@ -152,17 +156,22 @@ async def get_delay_requests(url, timeout=config.sort_timeout, proxy=None):
         return int(round((end - start) * 1000)) if end else float("inf")
 
 
-def is_ffmpeg_installed():
+def check_ffmpeg_installed_status():
     """
     Check ffmpeg is installed
     """
+    status = False
     try:
         result = subprocess.run(
             ["ffmpeg", "-version"], stdout=subprocess.PIPE, stderr=subprocess.PIPE
         )
-        return result.returncode == 0
+        status = result.returncode == 0
     except FileNotFoundError:
-        return False
+        status = False
+    except Exception as e:
+        print(e)
+    finally:
+        return status
 
 
 async def ffmpeg_url(url, timeout=config.sort_timeout):
@@ -284,6 +293,11 @@ async def get_speed(url, ipv6_proxy=None, filter_resolution=config.open_filter_r
             data['speed'] = float("inf")
             data['delay'] = float("-inf")
             data['resolution'] = "1920x1080"
+        elif re.match(constants.rtmp_url_pattern, url) is not None:
+            start_time = time()
+            data['resolution'] = await get_resolution_ffprobe(url, timeout)
+            data['delay'] = int(round((time() - start_time) * 1000))
+            data['speed'] = float("inf") if data['resolution'] is not None else 0
         else:
             data.update(await get_speed_m3u8(url, filter_resolution, timeout))
         if cache_key and cache_key not in cache:
@@ -294,6 +308,17 @@ async def get_speed(url, ipv6_proxy=None, filter_resolution=config.open_filter_r
     finally:
         if callback:
             callback()
+
+
+def sort_urls_key(item):
+    """
+    Sort the urls with key
+    """
+    speed, resolution, origin = item["speed"], item["resolution"], item["origin"]
+    if origin == "whitelist":
+        return float("inf")
+    else:
+        return (speed if speed is not None else float("-inf")) + get_resolution_value(resolution)
 
 
 def sort_urls(name, data, supply=config.open_supply, filter_speed=config.open_filter_speed, min_speed=config.min_speed,
@@ -338,15 +363,7 @@ def sort_urls(name, data, supply=config.open_supply, filter_speed=config.open_fi
                     result["speed"] = speed
                     result["resolution"] = resolution
                     filter_data.append(result)
-
-    def combined_key(item):
-        speed, resolution, origin = item["speed"], item["resolution"], item["origin"]
-        if origin == "whitelist":
-            return float("inf")
-        else:
-            return (speed if speed is not None else float("-inf")) + get_resolution_value(resolution)
-
-    filter_data.sort(key=combined_key, reverse=True)
+    filter_data.sort(key=sort_urls_key, reverse=True)
     return [
         (item["url"], item["date"], item["resolution"], item["origin"])
         for item in filter_data

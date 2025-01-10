@@ -2,6 +2,10 @@
 
 [中文](./tutorial.md) | English
 
+IPTV-API is a highly customizable IPTV interface update project📺. Customize channel menus, automatically obtain live
+sources, and generate available results after speed testing and verification, achieving an 『✨instant playback
+experience🚀』.
+
 ## Step 1: Fork this Repository
 
 Copy the source code of this repository to your personal account repository

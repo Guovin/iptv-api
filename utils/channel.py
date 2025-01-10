@@ -1,7 +1,6 @@
 import asyncio
 import base64
 import copy
-import datetime
 import os
 import pickle
 import re
@@ -16,6 +15,7 @@ from utils.config import config
 from utils.speed import (
     get_speed,
     sort_urls,
+    check_ffmpeg_installed_status
 )
 from utils.tools import (
     get_name_url,
@@ -26,10 +26,10 @@ from utils.tools import (
     add_url_info,
     remove_cache_info,
     resource_path,
-    write_content_into_txt,
     get_urls_from_file,
     get_name_urls_from_file,
     get_logger,
+    get_datetime_now
 )
 
 
@@ -196,10 +196,9 @@ def get_channel_multicast_name_region_type_result(result, names):
     """
     name_region_type_result = {}
     for name in names:
-        format_name = format_channel_name(name)
-        data = result.get(format_name)
+        data = result.get(name)
         if data:
-            name_region_type_result[format_name] = data
+            name_region_type_result[name] = data
     return name_region_type_result
 
 
@@ -536,7 +535,7 @@ def append_total_data(
                     )
                     print(f"{method.capitalize()}:", len(name_results), end=", ")
             print(
-                "total:",
+                "Total:",
                 len(data.get(cate, {}).get(name, [])),
             )
     if config.open_keep_all:
@@ -561,7 +560,7 @@ def append_total_data(
                     )
                     print(name, f"{method.capitalize()}:", len(urls), end=", ")
                     print(
-                        "total:",
+                        "Total:",
                         len(data.get(cate, {}).get(name, [])),
                     )
 
@@ -572,6 +571,7 @@ async def process_sort_channel_list(data, ipv6=False, callback=None):
     """
     ipv6_proxy = None if (not config.open_ipv6 or ipv6) else constants.ipv6_proxy
     open_filter_resolution = config.open_filter_resolution
+    get_resolution = open_filter_resolution and check_ffmpeg_installed_status()
     sort_timeout = config.sort_timeout
     need_sort_data = copy.deepcopy(data)
     process_nested_dict(need_sort_data, seen=set(), flag=r"cache:(.*)", force_str="!")
@@ -588,7 +588,7 @@ async def process_sort_channel_list(data, ipv6=False, callback=None):
             limited_get_speed(
                 info,
                 ipv6_proxy=ipv6_proxy,
-                filter_resolution=open_filter_resolution,
+                filter_resolution=get_resolution,
                 timeout=sort_timeout,
                 callback=callback,
             )
@@ -601,7 +601,6 @@ async def process_sort_channel_list(data, ipv6=False, callback=None):
     logger = get_logger(constants.sort_log_path, level=INFO, init=True)
     open_supply = config.open_supply
     open_filter_speed = config.open_filter_speed
-    open_filter_resolution = config.open_filter_resolution
     min_speed = config.min_speed
     min_resolution = config.min_resolution_value
     for cate, obj in data.items():
@@ -625,30 +624,21 @@ def write_channel_to_file(data, ipv6=False, callback=None):
     Write channel to file
     """
     try:
-        path = "output/result_new.txt"
+        path = constants.result_path
+        if not os.path.exists("output"):
+            os.makedirs("output")
         no_result_name = []
         open_empty_category = config.open_empty_category
         ipv_type_prefer = list(config.ipv_type_prefer)
         if any(pref in ipv_type_prefer for pref in ["自动", "auto"]) or not ipv_type_prefer:
             ipv_type_prefer = ["ipv6", "ipv4"] if ipv6 else ["ipv4", "ipv6"]
         origin_type_prefer = config.origin_type_prefer
-        if config.open_update_time:
-            now = datetime.datetime.now()
-            if os.environ.get("GITHUB_ACTIONS"):
-                now += datetime.timedelta(hours=8)
-            update_time = now.strftime("%Y-%m-%d %H:%M:%S")
-            update_time_url = next(
-                (get_total_urls(info_list, ipv_type_prefer, origin_type_prefer)[0]
-                 for channel_obj in data.values()
-                 for info_list in channel_obj.values() if info_list),
-                "url"
-            )
-            write_content_into_txt(f"🕘️更新时间,#genre#", path, newline=False)
-            write_content_into_txt(f"{update_time},{update_time_url}", path)
-            write_content_into_txt("", path)
+        first_cate = True
+        content = ""
         for cate, channel_obj in data.items():
             print(f"\n{cate}:", end=" ")
-            write_content_into_txt(f"{cate},#genre#", path)
+            content += f"{'\n\n' if not first_cate else ''}{cate},#genre#"
+            first_cate = False
             channel_obj_keys = channel_obj.keys()
             names_len = len(list(channel_obj_keys))
             for i, name in enumerate(channel_obj_keys):
@@ -661,17 +651,31 @@ def write_channel_to_file(data, ipv6=False, callback=None):
                         no_result_name.append(name)
                     continue
                 for url in channel_urls:
-                    write_content_into_txt(f"{name},{url}", path, callback=callback)
+                    content += f"\n{name},{url}"
+                    if callback:
+                        callback()
             print()
-            write_content_into_txt("", path)
         if open_empty_category and no_result_name:
             print("\n🈳 No result channel name:")
-            write_content_into_txt("🈳无结果频道,#genre#", path)
+            content += "\n\n🈳无结果频道,#genre#"
             for i, name in enumerate(no_result_name):
                 end_char = ", " if i < len(no_result_name) - 1 else ""
                 print(name, end=end_char)
-                write_content_into_txt(f"{name},url", path)
+                content += f"\n{name},url"
             print()
+        if config.open_update_time:
+            update_time_url = next(
+                (get_total_urls(info_list, ipv_type_prefer, origin_type_prefer)[0]
+                 for channel_obj in data.values()
+                 for info_list in channel_obj.values() if info_list),
+                "url"
+            )
+            if config.update_time_position == "top":
+                content = f"🕘️更新时间,#genre#\n{get_datetime_now()},{update_time_url}\n\n{content}"
+            else:
+                content += f"\n\n🕘️更新时间,#genre#\n{get_datetime_now()},{update_time_url}"
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(content)
     except Exception as e:
         print(f"❌ Write channel to file failed: {e}")
 

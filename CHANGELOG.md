@@ -1,5 +1,87 @@
 # 更新日志（Changelog）
 
+## v1.5.9
+
+### 2025/1/8
+
+- ❤️ 2025年第一次更新，祝大家新年快乐，万事如意
+- ✨ 公众号详细教程文章已发布，欢迎关注`Govin`公众号获取
+- ✨ 新增支持`rtmp`协议接口（#780）
+- ✨ 新增支持修改更新时间位置（`update_time_position`）（#755）
+- ✨ 新增支持修改时区（`time_zone`）（#759）
+- ✨ 更新组播源与酒店源离线数据，增加`广东移动组播RTP`（#773）
+- ✨ 更新Github CDN代理地址（#796）
+- ✨ GUI使用Github工作流基于源码自动构建并发布，唯一下载途径是[Release](https://github.com/Guovin/iptv-api/releases)
+  ，若安全软件有误报，请添加信任
+- ✨ 增加版本信息打印输出
+- ✨ 更新部分教程文档图片
+- 🐛 修复m3u更新时间logo显示问题（#794）
+- 🐛 修复测速阶段出现`cookie illegal key`问题（#728,#787）
+- 🐛 修复白名单接口排序与接口信息命名问题（#765）
+- 🐛 修复组播源更新结果异常问题
+- 🐛 修复写入结果目录为空问题
+- 🪄 调整接口状态码判断，只处理`200`状态码（#779）
+- 🪄 调整默认不显示接口信息，兼容更多播放器
+
+<details>
+  <summary>English</summary>
+
+- ❤️ First update of 2025, wishing everyone a Happy New Year and all the best
+- ✨ Detailed tutorial articles have been published on the `Govin` public account, welcome to follow for more information
+- ✨ Added support for `rtmp` protocol interface (#780)
+- ✨ Added support for modifying update time position (`update_time_position`) (#755)
+- ✨ Added support for modifying time zone (`time_zone`) (#759)
+- ✨ Updated offline data for multicast sources and hotel sources, added `Guangdong Mobile Multicast RTP` (#773)
+- ✨ Updated GitHub CDN proxy address (#796)
+- ✨ GUI is automatically built and released based on the source code using GitHub workflows, the only download method
+  is [Release](https://github.com/Guovin/iptv-api/releases). If there are false positives from security software, please
+  add it to the trust list
+- ✨ Added version information print output
+- ✨ Updated some tutorial document images
+- 🐛 Fixed m3u update time logo display issue (#794)
+- 🐛 Fixed `cookie illegal key` issue during speed test phase (#728, #787)
+- 🐛 Fixed whitelist interface sorting and interface information naming issue (#765)
+- 🐛 Fixed abnormal results issue for multicast source updates
+- 🐛 Fixed empty result directory issue
+- 🪄 Adjusted interface status code judgment to only process `200` status code (#779)
+- 🪄 Adjusted to hide interface information by default, compatible with more players
+
+</details>
+
+## v1.5.8
+
+### 2024/12/30
+
+- ✨ 推荐本次更新，实测可实现秒播级的观看体验，不可播放的情况明显减少
+- ✨ 支持获取分辨率，GUI用户需要手动安装`FFmpeg`（#608）
+- ✨ 支持`text/plain`结果输出，解决部分播放器显示问题（#736）
+- ✨ 增加默认订阅源
+- 🐛 修复IPv6接口测速输出的速率结果异常（#739）
+- 🐛 修复GUI出现的错误输出（#743）
+- 🐛 修复分辨率数值比较异常（#744）
+- 🐛 修复台标无法显示（#762）
+- 🪄 优化接口测速方法，兼容多种`m3u8`接口类型
+- 🪄 调整Github工作流执行结果IPv类型为自动，即根据网络环境自动选择IPv4或IPv6，若有需要可手动设置`ipv_type_prefer`调整输出偏好
+- 🪄 更新部分配置参数说明
+
+<details>
+  <summary>English</summary>
+
+- ✨ Recommended update, tested to achieve instant playback experience, significantly reducing playback failures
+- ✨ Support for obtaining resolution, GUI users need to manually install `FFmpeg` (#608)
+- ✨ Support for `text/plain` result output, solving display issues in some players (#736)
+- ✨ Added default subscription sources
+- 🐛 Fixed abnormal speed results for IPv6 interface speed tests (#739)
+- 🐛 Fixed error output in GUI (#743)
+- 🐛 Fixed abnormal resolution value comparison (#744)
+- 🐛 Fixed logo display issue (#762)
+- 🪄 Optimized interface speed test method, compatible with various `m3u8` interface types
+- 🪄 Adjusted GitHub workflow execution result IPv type to automatic, selecting IPv4 or IPv6 based on network
+  environment, with manual setting option for `ipv_type_prefer`
+- 🪄 Updated some configuration parameter descriptions
+
+</details>
+
 ## v1.5.7
 
 ### 2024/12/23

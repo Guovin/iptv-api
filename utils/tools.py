@@ -1,5 +1,6 @@
 import datetime
 import ipaddress
+import json
 import logging
 import os
 import re
@@ -11,6 +12,7 @@ from collections import defaultdict
 from logging.handlers import RotatingFileHandler
 from time import time
 
+import pytz
 import requests
 from bs4 import BeautifulSoup
 from flask import send_file, make_response
@@ -218,17 +220,18 @@ def get_total_urls(info_list, ipv_type_prefer, origin_type_prefer):
             else:
                 continue
 
-    ipv_type_total = list(dict.fromkeys(ipv_type_prefer + ["ipv4", "ipv6"]))
-    if len(total_urls) < urls_limit:
-        for origin in origin_type_prefer:
-            if len(total_urls) >= urls_limit:
-                break
-            for ipv_type in ipv_type_total:
+    if config.open_supply:
+        ipv_type_total = list(dict.fromkeys(ipv_type_prefer + ["ipv4", "ipv6"]))
+        if len(total_urls) < urls_limit:
+            for origin in origin_type_prefer:
                 if len(total_urls) >= urls_limit:
                     break
-                extra_urls = categorized_urls[origin][ipv_type][: config.source_limits.get(origin, urls_limit)]
-                total_urls.extend(extra_urls)
-                total_urls = list(dict.fromkeys(total_urls))[:urls_limit]
+                for ipv_type in ipv_type_total:
+                    if len(total_urls) >= urls_limit:
+                        break
+                    extra_urls = categorized_urls[origin][ipv_type][: config.source_limits.get(origin, urls_limit)]
+                    total_urls.extend(extra_urls)
+                    total_urls = list(dict.fromkeys(total_urls))[:urls_limit]
 
     total_urls = list(dict.fromkeys(total_urls))[:urls_limit]
 
@@ -317,8 +320,7 @@ def merge_objects(*objects):
                     dict1[key].update(value)
                 elif isinstance(dict1[key], list):
                     if value:
-                        dict1[key].extend(value)
-                        dict1[key] = list(set(dict1[key]))
+                        dict1[key].extend(x for x in value if x not in dict1[key])
                 elif value:
                     dict1[key] = {dict1[key], value}
             else:
@@ -349,14 +351,14 @@ def get_ip_address():
         return f"http://{ip}:{config.app_port}"
 
 
-def convert_to_m3u():
+def convert_to_m3u(first_channel_name=None):
     """
     Convert result txt to m3u format
     """
     user_final_file = resource_path(config.final_file)
     if os.path.exists(user_final_file):
         with open(user_final_file, "r", encoding="utf-8") as file:
-            m3u_output = '#EXTM3U x-tvg-url="https://live.fanmingming.com/e.xml"\n'
+            m3u_output = '#EXTM3U x-tvg-url="https://raw.githubusercontent.com/fanmingming/live/main/e.xml"\n'
             current_group = None
             for line in file:
                 trimmed_line = line.strip()
@@ -374,9 +376,9 @@ def convert_to_m3u():
                             r"(CCTV|CETV)-(\d+)(\+.*)?",
                             lambda m: f"{m.group(1)}{m.group(2)}"
                                       + ("+" if m.group(3) else ""),
-                            original_channel_name,
+                            first_channel_name if current_group == "🕘️更新时间" else original_channel_name,
                         )
-                        m3u_output += f'#EXTINF:-1 tvg-name="{processed_channel_name}" tvg-logo="https://live.fanmingming.com/tv/{processed_channel_name}.png"'
+                        m3u_output += f'#EXTINF:-1 tvg-name="{processed_channel_name}" tvg-logo="https://raw.githubusercontent.com/fanmingming/live/main/tv/{processed_channel_name}.png"'
                         if current_group:
                             m3u_output += f' group-title="{current_group}"'
                         m3u_output += f",{original_channel_name}\n{channel_link}\n"
@@ -444,8 +446,8 @@ def process_nested_dict(data, seen, flag=None, force_str=None):
             data[key] = remove_duplicates_from_tuple_list(value, seen, flag, force_str)
 
 
-url_domain_pattern = re.compile(
-    r"\b((https?):\/\/)?(\[[0-9a-fA-F:]+\]|([\w-]+\.)+[\w-]+)(:[0-9]{1,5})?\b"
+url_domain_compile = re.compile(
+    constants.url_domain_pattern
 )
 
 
@@ -453,7 +455,7 @@ def get_url_domain(url):
     """
     Get the url domain
     """
-    matcher = url_domain_pattern.search(url)
+    matcher = url_domain_compile.search(url)
     if matcher:
         return matcher.group()
     return None
@@ -477,11 +479,11 @@ def format_url_with_cache(url, cache=None):
     return add_url_info(url, f"cache:{cache}") if cache else url
 
 
-def remove_cache_info(str):
+def remove_cache_info(string):
     """
     Remove the cache info from the string
     """
-    return re.sub(r"[^a-zA-Z\u4e00-\u9fa5\$]?cache:.*", "", str)
+    return re.sub(r"[^a-zA-Z\u4e00-\u9fa5$]?cache:.*", "", string)
 
 
 def resource_path(relative_path, persistent=False):
@@ -500,16 +502,19 @@ def resource_path(relative_path, persistent=False):
             return total_path
 
 
-def write_content_into_txt(content, path=None, newline=True, callback=None):
+def write_content_into_txt(content, path=None, position=None, callback=None):
     """
     Write content into txt file
     """
     if not path:
         return
 
-    with open(path, "a", encoding="utf-8") as f:
-        if newline:
-            f.write(f"\n{content}")
+    mode = "r+" if position == "top" else "a"
+    with open(path, mode, encoding="utf-8") as f:
+        if position == "top":
+            existing_content = f.read()
+            f.seek(0, 0)
+            f.write(f"{content}\n{existing_content}")
         else:
             f.write(content)
 
@@ -580,3 +585,20 @@ def get_name_urls_from_file(path: str) -> dict[str, list]:
                     if url not in name_urls[name]:
                         name_urls[name].append(url)
     return name_urls
+
+
+def get_datetime_now():
+    """
+    Get the datetime now
+    """
+    now = datetime.datetime.now()
+    time_zone = pytz.timezone(config.time_zone)
+    return now.astimezone(time_zone).strftime("%Y-%m-%d %H:%M:%S")
+
+
+def get_version_info():
+    """
+    Get the version info
+    """
+    with open(resource_path("version.json"), "r", encoding="utf-8") as f:
+        return json.load(f)

@@ -25,6 +25,7 @@ flask = "*"
 opencc-python-reimplemented = "*"
 pillow = "*"
 m3u8 = "*"
+pytz = "*"
 
 [packages]
 requests = "*"
@@ -37,6 +38,7 @@ opencc-python-reimplemented = "*"
 gunicorn = "*"
 pillow = "*"
 m3u8 = "*"
+pytz = "*"
 
 [requires]
 python_version = "3.13"
