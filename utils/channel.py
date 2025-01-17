@@ -29,11 +29,22 @@ from utils.tools import (
     get_urls_from_file,
     get_name_urls_from_file,
     get_logger,
-    get_datetime_now
+    get_datetime_now,
+    format_url_with_cache
 )
 
 
-def get_channel_data_from_file(channels, file, use_old, whitelist):
+def format_channel_data(url: str, origin: str = None) -> tuple:
+    """
+    Format the channel data
+    """
+    info = url.partition("$")[2]
+    url_origin = "whitelist" if info and info.startswith("!") else origin
+    url = format_url_with_cache(url) if url_origin == origin else url
+    return url, None, None, url_origin
+
+
+def get_channel_data_from_file(channels, file, whitelist, open_local=config.open_local, local_data=None):
     """
     Get the channel data from the file
     """
@@ -56,14 +67,15 @@ def get_channel_data_from_file(channels, file, use_old, whitelist):
                 if name in whitelist:
                     for whitelist_url in whitelist[name]:
                         category_dict[name].append((whitelist_url, None, None, "whitelist"))
-                if use_old and url:
-                    info = url.partition("$")[2]
-                    origin = None
-                    if info and info.startswith("!"):
-                        origin = "whitelist"
-                    data = (url, None, None, origin)
+                if open_local and url:
+                    data = format_channel_data(url, "local")
                     if data not in category_dict[name]:
                         category_dict[name].append(data)
+                    if local_data and name in local_data:
+                        for local_url in local_data[name]:
+                            local_channel_data = format_channel_data(local_url, "local")
+                            if local_channel_data not in category_dict[name]:
+                                category_dict[name].append(local_channel_data)
     return channels
 
 
@@ -73,6 +85,7 @@ def get_channel_items():
     """
     user_source_file = resource_path(config.source_file)
     channels = defaultdict(lambda: defaultdict(list))
+    local_data = get_name_urls_from_file(resource_path(config.local_file))
     whitelist = get_name_urls_from_file(constants.whitelist_path)
     whitelist_urls = get_urls_from_file(constants.whitelist_path)
     whitelist_len = len(list(whitelist.keys()))
@@ -82,10 +95,10 @@ def get_channel_items():
     if os.path.exists(user_source_file):
         with open(user_source_file, "r", encoding="utf-8") as file:
             channels = get_channel_data_from_file(
-                channels, file, config.open_use_old_result, whitelist
+                channels, file, whitelist, config.open_local, local_data
             )
 
-    if config.open_use_old_result:
+    if config.open_history:
         result_cache_path = resource_path(constants.cache_path)
         if os.path.exists(result_cache_path):
             with open(result_cache_path, "rb") as file:
@@ -484,7 +497,7 @@ def get_origin_method_name(method):
 
 def append_old_data_to_info_data(info_data, cate, name, data, whitelist=None, blacklist=None):
     """
-    Append history channel data to total info data
+    Append history and local channel data to total info data
     """
     append_data_to_info_data(
         info_data,
@@ -494,7 +507,9 @@ def append_old_data_to_info_data(info_data, cate, name, data, whitelist=None, bl
         whitelist=whitelist,
         blacklist=blacklist
     )
-    print("History:", len(data), end=", ")
+    local_len = len([x for x in data if x[3] in ["local", 'whitelist']])
+    print("History:", len(data) - local_len, end=", ")
+    print("Local:", local_len, end=", ")
 
 
 def append_total_data(
@@ -522,7 +537,7 @@ def append_total_data(
     for cate, channel_obj in items:
         for name, old_info_list in channel_obj.items():
             print(f"{name}:", end=" ")
-            if config.open_use_old_result and old_info_list:
+            if old_info_list and (config.open_history or config.open_local):
                 append_old_data_to_info_data(data, cate, name, old_info_list, whitelist=whitelist, blacklist=blacklist)
             for method, result in total_result:
                 if config.open_method[method]:
@@ -549,7 +564,7 @@ def append_total_data(
                     if name in names:
                         continue
                     print(f"{name}:", end=" ")
-                    if config.open_use_old_result:
+                    if config.open_history or config.open_local:
                         old_info_list = channel_obj.get(name, [])
                         if old_info_list:
                             append_old_data_to_info_data(

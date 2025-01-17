@@ -163,7 +163,7 @@ class UpdateSource:
                 )
                 self.pbar.close()
                 update_file(user_final_file, constants.result_path)
-                if config.open_use_old_result:
+                if config.open_history:
                     if open_sort:
                         get_channel_data_cache_with_compare(
                             channel_data_cache, self.channel_data

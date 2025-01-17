@@ -22,8 +22,7 @@ from utils.tools import (
     get_pbar_remaining,
     get_soup,
     format_url_with_cache,
-    add_url_info,
-    get_urls_from_file
+    add_url_info
 )
 
 if config.open_driver:
@@ -49,8 +48,6 @@ async def get_channels_by_online_search(names, callback=None):
         proxy = await get_proxy(pageUrl, best=True, with_test=True)
     start_time = time()
     online_search_name = constants.origin_map["online_search"]
-    whitelist = get_urls_from_file(constants.whitelist_path)
-    blacklist = get_urls_from_file(constants.blacklist_path)
 
     def process_channel_by_online_search(name):
         nonlocal proxy

@@ -243,7 +243,7 @@ def get_total_urls(info_list, ipv_type_prefer, origin_type_prefer):
 
 def get_total_urls_from_sorted_data(data):
     """
-    Get the total urls with filter by date and depulicate from sorted data
+    Get the total urls with filter by date and duplicate from sorted data
     """
     total_urls = []
     if len(data) > config.urls_limit:
@@ -358,7 +358,7 @@ def convert_to_m3u(first_channel_name=None):
     user_final_file = resource_path(config.final_file)
     if os.path.exists(user_final_file):
         with open(user_final_file, "r", encoding="utf-8") as file:
-            m3u_output = '#EXTM3U x-tvg-url="https://raw.githubusercontent.com/fanmingming/live/main/e.xml"\n'
+            m3u_output = '#EXTM3U x-tvg-url="https://ghproxy.cc/https://raw.githubusercontent.com/fanmingming/live/main/e.xml"\n'
             current_group = None
             for line in file:
                 trimmed_line = line.strip()
@@ -378,7 +378,7 @@ def convert_to_m3u(first_channel_name=None):
                                       + ("+" if m.group(3) else ""),
                             first_channel_name if current_group == "🕘️更新时间" else original_channel_name,
                         )
-                        m3u_output += f'#EXTINF:-1 tvg-name="{processed_channel_name}" tvg-logo="https://raw.githubusercontent.com/fanmingming/live/main/tv/{processed_channel_name}.png"'
+                        m3u_output += f'#EXTINF:-1 tvg-name="{processed_channel_name}" tvg-logo="https://ghproxy.cc/https://raw.githubusercontent.com/fanmingming/live/main/tv/{processed_channel_name}.png"'
                         if current_group:
                             m3u_output += f' group-title="{current_group}"'
                         m3u_output += f",{original_channel_name}\n{channel_link}\n"
@@ -483,7 +483,7 @@ def remove_cache_info(string):
     """
     Remove the cache info from the string
     """
-    return re.sub(r"[^a-zA-Z\u4e00-\u9fa5$]?cache:.*", "", string)
+    return re.sub(r"[.*]?\$?cache:.*", "", string)
 
 
 def resource_path(relative_path, persistent=False):

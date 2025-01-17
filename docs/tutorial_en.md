@@ -202,7 +202,8 @@ mark).
 ![Workflow executed successfully](./images/workflow-success.png 'Workflow executed successfully')
 
 At this point, you can visit the file link to see if the latest results have been synchronized:
-https://raw.githubusercontent.com/your\_github\_username/repository\_name (corresponding to the TV created when forking)
+https://ghproxy.cc/https://raw.githubusercontent.com/your\_github\_username/repository\_name (corresponding to the TV
+created when forking)
 /master/output/user\_result.txt
 
 Or proxy address:
@@ -295,10 +296,22 @@ If you do not understand the software configuration options, do not change anyth
 docker pull guovern/iptv-api:latest
 ```
 
-- iptv-api:lite:
+🚀 Proxy acceleration (recommended for users in China):
+
+```bash
+docker pull docker.1ms.run/guovern/iptv-api:latest
+```
+
+- iptv-api:lite
 
 ```bash
 docker pull guovern/iptv-api:lite
+```
+
+🚀 Proxy acceleration (recommended for users in China):
+
+```bash
+docker pull docker.1ms.run/guovern/iptv-api:lite
 ```
 
 ### 2. Run the container:

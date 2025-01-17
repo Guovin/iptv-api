@@ -14,11 +14,11 @@ class PreferUI:
             for i, value in enumerate(self.get_origin_type_prefer_index(config.origin_type_prefer))
         ]
         self.origin_type_prefer_options = []
-        for config_option in config_options:
+        for i, config_option in enumerate(config_options):
             option = ConfigOption(root, **config_option)
             option.combo_box.bind(
                 "<<ComboboxSelected>>",
-                option.update_select,
+                lambda event, opt=option, index=i: opt.update_select(event, index),
             )
             option.entry.bind("<KeyRelease>", option.update_input)
             self.origin_type_prefer_options.append(option)
@@ -65,12 +65,13 @@ class PreferUI:
         self.open_supply_checkbutton.pack(side=tk.LEFT, padx=4, pady=8)
 
     def get_origin_type_prefer_index(self, origin_type_prefer):
-        index_list = [None, None, None, None]
+        index_list = [None, None, None, None, None]
         origin_type_prefer_obj = {
-            "hotel": 0,
-            "multicast": 1,
-            "subscribe": 2,
-            "online_search": 3,
+            "local": 0,
+            "hotel": 1,
+            "multicast": 2,
+            "subscribe": 3,
+            "online_search": 4,
         }
         for i, item in enumerate(origin_type_prefer):
             index_list[i] = origin_type_prefer_obj[item]
@@ -147,6 +148,7 @@ class ConfigOption:
 
         self.combo_box = ttk.Combobox(self.column1)
         self.origin_type_prefer_obj = {
+            "本地源": "local",
             "酒店源": "hotel",
             "组播源": "multicast",
             "订阅源": "subscribe",
@@ -172,15 +174,26 @@ class ConfigOption:
             )
         self.entry.pack(side=tk.LEFT, padx=4, pady=8)
 
-    def update_select(self, key):
-        origin_type_prefer_list = [item.lower() for item in config.origin_type_prefer]
+    def update_select(self, event, index):
+        origin_type_prefer_list = [''] * 5
+        prefer_list = [
+            origin.strip().lower()
+            for origin in config.get(
+                "Settings",
+                "origin_type_prefer",
+                fallback="",
+            ).split(",")
+        ]
+        for i, value in enumerate(prefer_list):
+            origin_type_prefer_list[i] = value
         select_value = self.origin_type_prefer_obj[
             self.combo_box.get()
         ]
-        if self.combo_box_value < len(origin_type_prefer_list):
-            origin_type_prefer_list[self.combo_box_value] = select_value
-        else:
-            origin_type_prefer_list.append(select_value)
+        origin_type_prefer_list[index] = select_value
+        self.entry.insert(
+            0,
+            config.source_limits[self.origin_type_prefer_obj[self.combo_box.get()]],
+        )
         config.set(
             "Settings",
             "origin_type_prefer",

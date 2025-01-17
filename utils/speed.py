@@ -318,7 +318,7 @@ def sort_urls_key(item):
     if origin == "whitelist":
         return float("inf")
     else:
-        return (speed if speed is not None else float("-inf")) + get_resolution_value(resolution)
+        return speed + get_resolution_value(resolution)
 
 
 def sort_urls(name, data, supply=config.open_supply, filter_speed=config.open_filter_speed, min_speed=config.min_speed,
@@ -345,24 +345,24 @@ def sort_urls(name, data, supply=config.open_supply, filter_speed=config.open_fi
         if cache_key and cache_key in cache:
             cache_item = cache[cache_key]
             if cache_item:
-                speed, delay, cache_resolution = cache_item['speed'], cache_item['delay'], cache_item['resolution']
+                speed, delay, cache_resolution = cache_item['speed'] or 0, cache_item['delay'] or -1, cache_item[
+                    'resolution']
                 resolution = cache_resolution or resolution
-                if speed is not None:
-                    try:
-                        if logger:
-                            logger.info(
-                                f"Name: {name}, URL: {result["url"]}, Date: {date}, Delay: {delay} ms, Speed: {speed:.2f} M/s, Resolution: {resolution}"
-                            )
-                    except Exception as e:
-                        print(e)
-                    if (not supply and filter_speed and speed < min_speed) or (
-                            not supply and filter_resolution and get_resolution_value(resolution) < min_resolution) or (
-                            supply and delay is None):
-                        continue
-                    result["delay"] = delay
-                    result["speed"] = speed
-                    result["resolution"] = resolution
-                    filter_data.append(result)
+                try:
+                    if logger:
+                        logger.info(
+                            f"Name: {name}, URL: {result["url"]}, Date: {date}, Delay: {delay} ms, Speed: {speed:.2f} M/s, Resolution: {resolution}"
+                        )
+                except Exception as e:
+                    print(e)
+                if (not supply and filter_speed and speed < min_speed) or (
+                        not supply and filter_resolution and get_resolution_value(resolution) < min_resolution) or (
+                        supply and delay == -1):
+                    continue
+                result["delay"] = delay
+                result["speed"] = speed
+                result["resolution"] = resolution
+                filter_data.append(result)
     filter_data.sort(key=sort_urls_key, reverse=True)
     return [
         (item["url"], item["date"], item["resolution"], item["origin"])

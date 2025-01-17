@@ -6,13 +6,13 @@ body:
   - type: checkboxes
     attributes:
       label: Don't skip these steps | 不要跳过这些步骤
-      description: Carefully complete the following steps before submitting an issue | 提交问题前，请仔细完成以下步骤
+      description: Before submitting a issue, please complete the following steps carefully | 提交问题前，请认真完成以下步骤
       options:
-        - label: I understand that I will be **blocked** if I *intentionally* remove or skip any mandatory\* field | 我明白，如果我“故意”删除或跳过任何强制性的\*字段，我将被**封锁**
+        - label: I understand that I will be **blocked** if I *intentionally* remove or skip any mandatory\* field | 我明白，如果我“故意”删除或跳过任何强制性的\*字段，我将被**限制**
           required: true
-        - label: I have checked through the search that there are no similar issues that already exist | 我已经通过搜索仔细检查过没有存在已经创建的相似问题
+        - label: I am sure that this is a running error exception problem and will not submit any problems unrelated to this project | 我确定这是运行报错异常问题，不会提交任何与本项目无关的问题
           required: true
-        - label: I will not submit any issues that are not related to this project | 我不会提交任何与本项目无关的问题
+        - label: I have searched and double-checked that there are no similar issues that have been created | 我已经通过搜索并仔细检查过没有存在已经创建的类似问题
           required: true
   - type: checkboxes
     id: checklist
