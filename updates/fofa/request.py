@@ -25,7 +25,7 @@ def get_fofa_urls_from_region_list():
     urls = []
     region_url = getattr(fofa_map, "region_url")
     region_list = config.hotel_region_list
-    if "all" in region_list or "ALL" in region_list or "全部" in region_list:
+    if "henan" in region_list or "Henan" in region_list or "河南" in region_list:
         urls = [
             (url, region)
             for region, url_list in region_url.items()
