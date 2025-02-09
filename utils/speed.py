@@ -90,7 +90,7 @@ async def get_speed_m3u8(url: str, filter_resolution: bool = config.open_filter_
     info = {'speed': None, 'delay': None, 'resolution': None}
     location = None
     try:
-        url = quote(url, safe=':/?$&=@[]').partition('$')[0]
+        url = quote(url, safe=':/?$&=@[]%').partition('$')[0]
         async with ClientSession(connector=TCPConnector(ssl=False), trust_env=True) as session:
             headers = await get_m3u8_headers(url, session)
             location = headers.get('Location')
@@ -145,15 +145,15 @@ async def get_delay_requests(url, timeout=config.sort_timeout, proxy=None):
         try:
             async with session.get(url, timeout=timeout, proxy=proxy) as response:
                 if response.status == 404:
-                    return float("inf")
+                    return -1
                 content = await response.read()
                 if content:
                     end = time()
                 else:
-                    return float("inf")
+                    return -1
         except Exception as e:
-            return float("inf")
-        return int(round((end - start) * 1000)) if end else float("inf")
+            return -1
+        return int(round((end - start) * 1000)) if end else -1
 
 
 def check_ffmpeg_installed_status():
@@ -238,7 +238,7 @@ def get_video_info(video_info):
     """
     Get the video info
     """
-    frame_size = float("inf")
+    frame_size = -1
     resolution = None
     if video_info is not None:
         info_data = video_info.replace(" ", "")
@@ -259,21 +259,22 @@ async def check_stream_delay(url_info):
         url = url_info[0]
         video_info = await ffmpeg_url(url)
         if video_info is None:
-            return float("inf")
+            return -1
         frame, resolution = get_video_info(video_info)
-        if frame is None or frame == float("inf"):
-            return float("inf")
+        if frame is None or frame == -1:
+            return -1
         url_info[2] = resolution
         return url_info, frame
     except Exception as e:
         print(e)
-        return float("inf")
+        return -1
 
 
 cache = {}
 
 
-async def get_speed(url, ipv6_proxy=None, filter_resolution=config.open_filter_resolution, timeout=config.sort_timeout,
+async def get_speed(url, ipv6_proxy=None, filter_resolution=config.open_filter_resolution,
+                    min_resolution=config.min_resolution_value, timeout=config.sort_timeout,
                     callback=None):
     """
     Get the speed (response time and resolution) of the url
@@ -288,10 +289,14 @@ async def get_speed(url, ipv6_proxy=None, filter_resolution=config.open_filter_r
             if matcher:
                 cache_key = matcher.group(1)
         if cache_key in cache:
-            return cache[cache_key][0]
+            cache_list = cache[cache_key]
+            for cache_item in cache_list:
+                if cache_item['speed'] > 0 and cache_item['delay'] != -1 and get_resolution_value(
+                        cache_item['resolution']) > min_resolution:
+                    return cache_item
         if ipv6_proxy and url_is_ipv6:
             data['speed'] = float("inf")
-            data['delay'] = float("-inf")
+            data['delay'] = 0
             data['resolution'] = "1920x1080"
         elif re.match(constants.rtmp_url_pattern, url) is not None:
             start_time = time()
@@ -300,8 +305,8 @@ async def get_speed(url, ipv6_proxy=None, filter_resolution=config.open_filter_r
             data['speed'] = float("inf") if data['resolution'] is not None else 0
         else:
             data.update(await get_speed_m3u8(url, filter_resolution, timeout))
-        if cache_key and cache_key not in cache:
-            cache[cache_key] = data
+        if cache_key:
+            cache.setdefault(cache_key, []).append(data)
         return data
     except:
         return data
@@ -343,24 +348,24 @@ def sort_urls(name, data, supply=config.open_supply, filter_speed=config.open_fi
         cache_key_match = re.search(r"cache:(.*)", url.partition("$")[2])
         cache_key = cache_key_match.group(1) if cache_key_match else None
         if cache_key and cache_key in cache:
-            cache_item = cache[cache_key]
-            if cache_item:
-                speed, delay, cache_resolution = cache_item['speed'] or 0, cache_item['delay'] or -1, cache_item[
-                    'resolution']
-                resolution = cache_resolution or resolution
+            cache_list = cache[cache_key]
+            if cache_list:
+                avg_speed = sum(item['speed'] or 0 for item in cache_list) / len(cache_list)
+                avg_delay = max(int(sum(item['delay'] or -1 for item in cache_list) / len(cache_list)), -1)
+                resolution = max((item['resolution'] for item in cache_list), key=get_resolution_value) or resolution
                 try:
                     if logger:
                         logger.info(
-                            f"Name: {name}, URL: {result["url"]}, Date: {date}, Delay: {delay} ms, Speed: {speed:.2f} M/s, Resolution: {resolution}"
+                            f"Name: {name}, URL: {result["url"]}, Date: {date}, Delay: {avg_delay} ms, Speed: {avg_speed:.2f} M/s, Resolution: {resolution}"
                         )
                 except Exception as e:
                     print(e)
-                if (not supply and filter_speed and speed < min_speed) or (
+                if (not supply and filter_speed and avg_speed < min_speed) or (
                         not supply and filter_resolution and get_resolution_value(resolution) < min_resolution) or (
-                        supply and delay == -1):
+                        supply and avg_delay < 0):
                     continue
-                result["delay"] = delay
-                result["speed"] = speed
+                result["delay"] = avg_delay
+                result["speed"] = avg_speed
                 result["resolution"] = resolution
                 filter_data.append(result)
     filter_data.sort(key=sort_urls_key, reverse=True)

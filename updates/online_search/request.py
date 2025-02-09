@@ -4,9 +4,6 @@ from time import time
 from tqdm.asyncio import tqdm_asyncio
 
 import utils.constants as constants
-from driver.setup import setup_driver
-from driver.utils import search_submit
-from requests_custom.utils import get_soup_requests, close_session
 from updates.proxy import get_proxy, get_proxy_next
 from utils.channel import (
     format_channel_name,
@@ -14,6 +11,9 @@ from utils.channel import (
     get_results_from_soup_requests,
 )
 from utils.config import config
+from utils.driver.setup import setup_driver
+from utils.driver.tools import search_submit
+from utils.requests.tools import get_soup_requests, close_session
 from utils.retry import (
     retry_func,
     find_clickable_element_with_retry,

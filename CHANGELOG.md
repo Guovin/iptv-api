@@ -1,5 +1,44 @@
 # 更新日志（Changelog）
 
+## v1.6.0
+
+### 2025/1/22
+
+- ✨ 新增支持`本地源`
+- ✨ 使用新的代理地址`https://ghproxy.cc`
+- ✨ 新增支持Docker修改定时任务时间，环境变量：`UPDATE_CRON1`, `UPDATE_CRON2`（#440）
+- ✨ 新增同域名重复执行测速次数配置`sort_duplicate_limit`
+- ✨ 新增`广东联通`RTP
+- 🐛 修复补偿模式结果输出问题（#813）
+- 🐛 修复无域名后缀、空格接口匹配问题（#832，#837）
+- 🐛 修复无结果状态文件写入报错（#841）
+- 🐛 修复GUI无法保存测速延迟设置
+- 🐛 修复Docker版本文件丢失（#800）
+- 🪄 `open_use_old_result`更名为`open_history`
+- 🪄 优化对接口中`%`符号的转义处理（#853）
+- 🪄 优化以接口Host去重（#846）
+- 🪄 支持协议类型偏好`ipv_type_prefer`可设置为空，可实现全部类型按速率排序输出结果
+
+<details>
+  <summary>English</summary>
+
+- ✨ Added support for `local sources`
+- ✨ Using new proxy address `https://ghproxy.cc`
+- ✨ Added support for modifying Docker scheduled task time, environment variables: `UPDATE_CRON1`, `UPDATE_CRON2` (#440)
+- ✨ Added configuration for the number of speed tests for the same domain `sort_duplicate_limit`
+- ✨ Added `Guangdong Unicom` RTP
+- 🐛 Fixed compensation mode result output issue (#813)
+- 🐛 Fixed issue with interface matching without domain suffix and spaces (#832, #837)
+- 🐛 Fixed error writing to file in no result state (#841)
+- 🐛 Fixed GUI unable to save speed test delay settings
+- 🐛 Fixed Docker version file loss issue (#800)
+- 🪄 `open_use_old_result` renamed to `open_history`
+- 🪄 Optimized escaping of `%` symbol in interfaces (#853)
+- 🪄 Optimized deduplication by interface host (#846)
+- 🪄 Supported setting `ipv_type_prefer` to empty, allowing all types to be sorted by speed for output results
+
+</details>
+
 ## v1.5.9
 
 ### 2025/1/8

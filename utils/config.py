@@ -84,19 +84,26 @@ class ConfigManager:
     @property
     def ipv_type_prefer(self):
         return [
-            type.strip().lower()
-            for type in self.config.get(
-                "Settings", "ipv_type_prefer", fallback="auto"
+            ipv_type_value.lower()
+            for ipv_type in self.config.get(
+                "Settings", "ipv_type_prefer", fallback=""
             ).split(",")
+            if (ipv_type_value := ipv_type.strip())
         ]
 
     @property
     def ipv4_num(self):
-        return self.config.getint("Settings", "ipv4_num", fallback=15)
+        try:
+            return self.config.getint("Settings", "ipv4_num", fallback=5)
+        except:
+            return ""
 
     @property
     def ipv6_num(self):
-        return self.config.getint("Settings", "ipv6_num", fallback=15)
+        try:
+            return self.config.getint("Settings", "ipv6_num", fallback=5)
+        except:
+            return ""
 
     @property
     def ipv6_support(self):
@@ -105,6 +112,7 @@ class ConfigManager:
     @property
     def ipv_limit(self):
         return {
+            "all": self.urls_limit,
             "ipv4": self.ipv4_num,
             "ipv6": self.ipv6_num,
         }
@@ -112,13 +120,13 @@ class ConfigManager:
     @property
     def origin_type_prefer(self):
         return [
-            origin.strip().lower()
+            origin_value.lower()
             for origin in self.config.get(
                 "Settings",
                 "origin_type_prefer",
                 fallback="",
             ).split(",")
-            if origin.strip().lower()
+            if (origin_value := origin.strip())
         ]
 
     @property
@@ -140,6 +148,7 @@ class ConfigManager:
     @property
     def source_limits(self):
         return {
+            "all": self.urls_limit,
             "local": self.local_num,
             "hotel": self.hotel_num,
             "multicast": self.multicast_num,
@@ -328,6 +337,10 @@ class ConfigManager:
     @property
     def local_num(self):
         return self.config.getint("Settings", "local_num", fallback=10)
+
+    @property
+    def sort_duplicate_limit(self):
+        return self.config.getint("Settings", "sort_duplicate_limit", fallback=3)
 
     def load(self):
         """

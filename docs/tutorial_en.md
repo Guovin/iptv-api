@@ -122,23 +122,36 @@ Adjust the configuration as needed, here is the default configuration descriptio
 
 `user_` prefix).
 
-- Subscription sources (`config/subscribe.txt`):
+- Subscription sources (`config/subscribe.txt`)
+
   Supports txt and m3u addresses as subscriptions, the program will read the channel interface data in sequence.
   ![Subscription sources](./images/subscribe.png 'Subscription sources')
 
-- Blacklist (`config/blacklist.txt`):
+
+- Local sources（`config/local.txt`）
+
+  The channel interface data comes from local files, and the program will read the channel interface data in sequence.
+  ![Local sources](./images/local.png 'Local sources')
+
+
+- Blacklist (`config/blacklist.txt`)
+
   Interfaces that match the blacklist keywords will be filtered and not collected, such as low-quality interfaces with
   ads.
   ![Blacklist](./images/blacklist.png 'Blacklist')
 
-- Whitelist (`config/whitelist.txt`):
+
+- Whitelist (`config/whitelist.txt`)
+
   Interfaces or subscription sources in the whitelist will not participate in speed testing and will be prioritized at
   the top of the results. Fill in the channel name to directly retain the record in the final result, such as: CCTV-1,
   interface address, only filling in the interface address will apply to all channels, multiple records are entered on
   separate lines.
   ![Whitelist](./images/whitelist.png 'Whitelist')
 
-- Multicast data (`config/rtp`):
+
+- Multicast data (`config/rtp`)
+
   In addition, you can also maintain multicast source data yourself, the files are located in the config/rtp directory,
   and the file naming format is: `region_operator.txt`.
   ![Multicast data](./images/rtp.png 'Multicast data')
@@ -202,13 +215,14 @@ mark).
 ![Workflow executed successfully](./images/workflow-success.png 'Workflow executed successfully')
 
 At this point, you can visit the file link to see if the latest results have been synchronized:
-https://ghproxy.cc/https://raw.githubusercontent.com/your\_github\_username/repository\_name (corresponding to the TV
+https://raw.githubusercontent.com/your\_github\_username/repository\_name (corresponding to the TV
 created when forking)
 /master/output/user\_result.txt
 
 Or proxy address:
 https://cdn.jsdelivr.net/gh/your\_github\_username/repository\_name (corresponding to the TV created when forking)
 @master/output/user\_result.txt
+
 ![Username and Repository Name](./images/rep-info.png 'Username and Repository Name')
 
 If you can access this link and it returns the updated interface content, then your live source interface link has been
@@ -224,6 +238,7 @@ successfully created! Simply copy and paste this link into software like `TVBox`
 If you want to modify the update frequency (default: 6:00 AM and 18:00 PM Beijing time daily), you can modify the
 `on: schedule: - cron` field:
 ![.github/workflows/main.yml](./images/schedule-cron.png '.github/workflows/main.yml')
+
 If you want to perform updates every 2 days, you can modify it like this:
 
 ```bash
@@ -288,9 +303,9 @@ If you do not understand the software configuration options, do not change anyth
 - `iptv-api:lite` (lite version): Lightweight, low performance requirements, fast update speed, uncertain stability (
   recommended for subscription sources).
 
-### 1. Pull the image:
+### 1. Pull the image
 
-- iptv-api:
+- iptv-api
 
 ```bash
 docker pull guovern/iptv-api:latest
@@ -314,48 +329,59 @@ docker pull guovern/iptv-api:lite
 docker pull docker.1ms.run/guovern/iptv-api:lite
 ```
 
-### 2. Run the container:
+### 2. Run the container
 
-- iptv-api:
+- iptv-api
 
 ```bash
 docker run -d -p 8000:8000 guovern/iptv-api
 ```
 
-- iptv-api:lite:
+- iptv-api:lite
 
 ```bash
 docker run -d -p 8000:8000 guovern/iptv-api:lite
 ```
 
-#### Volume mount parameters (optional):
+#### Mount (recommended):
 
 To synchronize files between the host and the container, modify templates, configurations, and obtain update result
 files directly in the host folder.
 
 Using the host path `/etc/docker` as an example:
 
-- iptv-api:
+- iptv-api
 
 ```bash
-docker run -v /etc/docker/config:/iptv-api/config -v /etc/docker/output:/iptv-api/output -d -p 8000:8000 guovern/iptv-api
+-v /etc/docker/config:/iptv-api/config
+-v /etc/docker/output:/iptv-api/output
 ```
 
-- iptv-api:lite:
+- iptv-api:lite
 
 ```bash
-docker run -v /etc/docker/config:/iptv-api-lite/config -v /etc/docker/output:/iptv-api-lite/output -d -p 8000:8000 guovern/iptv-api:lite
+-v /etc/docker/config:/iptv-api-lite/config
+-v /etc/docker/output:/iptv-api-lite/output
 ```
 
 ##### Note: If you pull the image again to update the version, and there are changes or additions to the configuration files, be sure to overwrite the old configuration files in the host (config directory), as the host configuration files cannot be updated automatically. Otherwise, the container will still run with the old configuration.
 
-#### Port environment variables:
+#### Environment Variables:
+
+- Port
 
 ```bash
 -e APP_PORT=8000
 ```
 
-### 3. Update results:
+- Scheduled execution time
+
+```bash
+-e UPDATE_CRON1="0 22 * * *"
+-e UPDATE_CRON2="0 10 * * *"
+```
+
+### 3. Update results
 
 ```
 - API address: `ip:8000`

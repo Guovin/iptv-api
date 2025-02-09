@@ -124,15 +124,22 @@ class SpeedUI:
 
         frame_default_sort_params = tk.Frame(root)
         frame_default_sort_params.pack(fill=tk.X)
-        frame_default_sort_params_column1 = tk.Frame(frame_default_sort_params)
-        frame_default_sort_params_column1.pack(side=tk.LEFT, fill=tk.Y)
-        frame_default_sort_params_column2 = tk.Frame(frame_default_sort_params)
-        frame_default_sort_params_column2.pack(side=tk.RIGHT, fill=tk.Y)
+
+        self.sort_duplicate_limit_label = tk.Label(
+            frame_default_sort_params, text="重复执行:", width=12
+        )
+        self.sort_duplicate_limit_label.pack(side=tk.LEFT, padx=4, pady=8)
+        self.sort_duplicate_limit_entry = tk.Entry(
+            frame_default_sort_params, width=10
+        )
+        self.sort_duplicate_limit_entry.pack(side=tk.LEFT, padx=4, pady=8)
+        self.sort_duplicate_limit_entry.insert(0, config.sort_duplicate_limit)
+        self.sort_duplicate_limit_entry.bind("<KeyRelease>", self.update_sort_duplicate_limit)
 
     def update_open_sort(self):
         config.set("Settings", "open_sort", str(self.open_sort_var.get()))
 
-    def update_sort_timeout(self):
+    def update_sort_timeout(self, event):
         config.set("Settings", "sort_timeout", self.sort_timeout_entry.get())
 
     def update_open_filter_speed(self):
@@ -155,6 +162,9 @@ class SpeedUI:
     def update_min_resolution(self, event):
         config.set("Settings", "min_resolution", self.min_resolution_entry.get())
 
+    def update_sort_duplicate_limit(self, event):
+        config.set("Settings", "sort_duplicate_limit", self.sort_duplicate_limit_entry.get())
+
     def change_entry_state(self, state):
         for entry in [
             "open_sort_checkbutton",
@@ -162,6 +172,7 @@ class SpeedUI:
             "open_filter_speed_checkbutton",
             "min_speed_entry",
             "open_filter_resolution_checkbutton",
-            "min_resolution_entry"
+            "min_resolution_entry",
+            "sort_duplicate_limit_entry"
         ]:
             getattr(self, entry).config(state=state)

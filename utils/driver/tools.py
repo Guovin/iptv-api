@@ -1,12 +1,14 @@
+import re
+from time import sleep
+
+from bs4 import BeautifulSoup
+
+from utils.config import config
 from utils.retry import (
     retry_func,
     locate_element_with_retry,
     find_clickable_element_with_retry,
 )
-from time import sleep
-import re
-from bs4 import BeautifulSoup
-from utils.config import config
 
 if config.open_driver:
     try:
@@ -19,7 +21,7 @@ def get_soup_driver(url):
     """
     Get the soup by driver
     """
-    from driver.setup import setup_driver
+    from utils.driver.setup import setup_driver
 
     driver = setup_driver()
     retry_func(lambda: driver.get(url), name=url)

@@ -10,10 +10,10 @@ from tqdm.asyncio import tqdm_asyncio
 
 import updates.fofa.fofa_map as fofa_map
 import utils.constants as constants
-from requests_custom.utils import get_source_requests, close_session
 from updates.proxy import get_proxy, get_proxy_next
 from utils.channel import format_channel_name
 from utils.config import config
+from utils.requests.tools import get_source_requests, close_session
 from utils.retry import retry_func
 from utils.tools import merge_objects, get_pbar_remaining, add_url_info, resource_path
 
@@ -92,7 +92,7 @@ async def get_channels_by_fofa(urls=None, multicast=False, callback=None):
         open_proxy = config.open_proxy
         open_driver = config.open_driver
         if open_driver:
-            from driver.setup import setup_driver
+            from utils.driver import setup_driver
         open_sort = config.open_sort
         if open_proxy:
             test_url = fofa_urls[0][0]

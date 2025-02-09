@@ -9,9 +9,6 @@ from tqdm.asyncio import tqdm_asyncio
 
 import updates.fofa.fofa_map as fofa_map
 import utils.constants as constants
-from driver.setup import setup_driver
-from driver.utils import search_submit
-from requests_custom.utils import get_soup_requests, close_session
 from updates.proxy import get_proxy, get_proxy_next
 from updates.subscribe import get_channels_by_subscribe_urls
 from utils.channel import (
@@ -19,6 +16,9 @@ from utils.channel import (
     get_results_from_multicast_soup_requests,
 )
 from utils.config import config
+from utils.driver.setup import setup_driver
+from utils.driver.tools import search_submit
+from utils.requests.tools import get_soup_requests, close_session
 from utils.retry import (
     retry_func,
     find_clickable_element_with_retry,

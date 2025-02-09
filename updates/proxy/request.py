@@ -4,9 +4,9 @@ from concurrent.futures import ThreadPoolExecutor
 from tqdm import tqdm
 from tqdm.asyncio import tqdm_asyncio
 
-from driver.utils import get_soup_driver
-from requests_custom.utils import get_soup_requests, close_session
 from utils.config import config
+from utils.driver.tools import get_soup_driver
+from utils.requests.tools import get_soup_requests, close_session
 from utils.retry import retry_func
 from utils.speed import get_delay_requests
 

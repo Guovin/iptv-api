@@ -107,22 +107,32 @@ IPTV-API是一个可高度自定义的IPTV接口更新项目📺，自定义频�
 
 #### 同理你可以自定义订阅源、黑名单、白名单（建议复制文件重命名添加`user_`前缀）
 
-- 订阅源（`config/subscribe.txt`）：
+- 订阅源（`config/subscribe.txt`）
+
   支持txt和m3u地址作为订阅，程序将依次读取其中的频道接口数据
   ![订阅源](./images/subscribe.png '订阅源')
 
 
-- 黑名单（`config/blacklist.txt`）：
+- 本地源（`config/local.txt`）
+
+  频道接口数据来源于本地文件，程序将依次读取其中的频道接口数据
+  ![本地源](./images/local.png '本地源')
+
+
+- 黑名单（`config/blacklist.txt`）
+
   符合黑名单关键字的接口将会被过滤，不会被收集，比如含广告等低质量接口
   ![黑名单](./images/blacklist.png '黑名单')
 
 
-- 白名单（`config/whitelist.txt`）：
+- 白名单（`config/whitelist.txt`）
+
   白名单内的接口或订阅源获取的接口将不会参与测速，优先排序至结果最前。填写频道名称会直接保留该记录至最终结果，如：CCTV-1,接口地址，只填写接口地址则对所有频道生效，多条记录换行输入。
   ![白名单](./images/whitelist.png '白名单')
 
 
-- 组播数据（`config/rtp`）：
+- 组播数据（`config/rtp`）
+
   此外，对于组播源数据你也可以自行维护，文件位于config/rtp目录下，文件命名格式为：`地区_运营商.txt`
   ![组播数据](./images/rtp.png '组播数据')
 
@@ -182,7 +192,7 @@ IPTV-API是一个可高度自定义的IPTV接口更新项目📺，自定义频�
 ![Workflow执行成功](./images/workflow-success.png 'Workflow执行成功')
 
 此时您可以访问文件链接，查看最新结果有没有同步即可：
-https://ghproxy.cc/https://raw.githubusercontent.com/您的github用户名/仓库名称（对应上述Fork创建时的iptv-api）/master/output/user_result.txt
+https://raw.githubusercontent.com/您的github用户名/仓库名称（对应上述Fork创建时的iptv-api）/master/output/user_result.txt
 
 或者代理地址：
 https://cdn.jsdelivr.net/gh/您的github用户名/仓库名称（对应上述Fork创建时的TV）@master/output/user_result.txt
@@ -261,9 +271,9 @@ pipenv run ui
   版本运行模式（推荐酒店源、组播源、关键字搜索使用此版本）
 - `iptv-api:lite`（精简版本）：轻量级，性能要求低，更新速度快，稳定性不确定（推荐订阅源使用此版本）
 
-### 1.拉取镜像：
+### 1. 拉取镜像
 
-- iptv-api：
+- iptv-api
 
 ```bash
 docker pull guovern/iptv-api:latest
@@ -275,7 +285,7 @@ docker pull guovern/iptv-api:latest
 docker pull docker.1ms.run/guovern/iptv-api:latest
 ```
 
-- iptv-api:lite：
+- iptv-api:lite
 
 ```bash
 docker pull guovern/iptv-api:lite
@@ -287,47 +297,58 @@ docker pull guovern/iptv-api:lite
 docker pull docker.1ms.run/guovern/iptv-api:lite
 ```
 
-### 2.运行容器：
+### 2. 运行容器
 
-- iptv-api：
+- iptv-api
 
 ```bash
 docker run -d -p 8000:8000 guovern/iptv-api
 ```
 
-- iptv-api:lite：
+- iptv-api:lite
 
 ```bash
 docker run -d -p 8000:8000 guovern/iptv-api:lite
 ```
 
-#### 卷挂载参数（可选）：
+#### 挂载（推荐）：
 
 实现宿主机文件与容器文件同步，修改模板、配置、获取更新结果文件可直接在宿主机文件夹下操作
 
 以宿主机路径`/etc/docker`为例：
 
-- iptv-api：
+- iptv-api
 
 ```bash
-docker run -v /etc/docker/config:/iptv-api/config -v /etc/docker/output:/iptv-api/output -d -p 8000:8000 guovern/iptv-api
+-v /etc/docker/config:/iptv-api/config
+-v /etc/docker/output:/iptv-api/output
 ```
 
-- iptv-api:lite：
+- iptv-api:lite
 
 ```bash
-docker run -v /etc/docker/config:/iptv-api-lite/config -v /etc/docker/output:/iptv-api-lite/output -d -p 8000:8000 guovern/iptv-api:lite
+-v /etc/docker/config:/iptv-api-lite/config
+-v /etc/docker/output:/iptv-api-lite/output
 ```
 
 ##### 注意：如果重新拉取镜像进行更新版本后，涉及到配置文件变更或增加新配置时，务必覆盖主机的旧配置文件（config目录），因为主机的配置文件是无法自动更新的，否则容器还是以旧配置运行。
 
-#### 端口环境变量：
+#### 环境变量：
+
+- 端口
 
 ```bash
 -e APP_PORT=8000
 ```
 
-### 3.更新结果：
+- 定时执行时间
+
+```bash
+-e UPDATE_CRON1="0 22 * * *"
+-e UPDATE_CRON2="0 10 * * *"
+```
+
+### 3. 更新结果
 
 - 接口地址：`ip:8000`
 - m3u 接口：`ip:8000/m3u`
