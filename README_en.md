@@ -25,6 +25,8 @@
 
 [中文](./README.md) | English
 
+✨💻[IPTV-Web](https://github.com/Guovin/iptv-web): IPTV live stream management platform, supports online playback and other features, under development...
+
 - [✅ Features](#features)
 - [🔗 Latest results](#latest-results)
 - [⚙️ Config parameter](#Config)
