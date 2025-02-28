@@ -47,7 +47,7 @@ async def get_channels_by_hotel(callback=None):
         except:
             pass
     if config.open_request:
-        pageUrl = constants.foodie_hotel_url
+        page_url = constants.foodie_hotel_url
         proxy = None
         open_proxy = config.open_proxy
         open_driver = config.open_driver
@@ -56,7 +56,7 @@ async def get_channels_by_hotel(callback=None):
         if "all" in region_list or "ALL" in region_list or "全部" in region_list:
             region_list = list(getattr(fofa_map, "region_url").keys())
         if open_proxy:
-            proxy = await get_proxy(pageUrl, best=True, with_test=True)
+            proxy = await get_proxy(page_url, best=True, with_test=True)
         start_time = time()
 
         def process_region_by_hotel(region):
@@ -69,7 +69,7 @@ async def get_channels_by_hotel(callback=None):
                     driver = setup_driver(proxy)
                     try:
                         retry_func(
-                            lambda: driver.get(pageUrl),
+                            lambda: driver.get(page_url),
                             name=f"Foodie hotel search:{name}",
                         )
                     except Exception as e:
@@ -78,7 +78,7 @@ async def get_channels_by_hotel(callback=None):
                         driver.close()
                         driver.quit()
                         driver = setup_driver(proxy)
-                        driver.get(pageUrl)
+                        driver.get(page_url)
                     search_submit(driver, name)
                 else:
                     page_soup = None
@@ -86,13 +86,13 @@ async def get_channels_by_hotel(callback=None):
                     code = None
                     try:
                         page_soup = retry_func(
-                            lambda: get_soup_requests(pageUrl, data=post_form, proxy=proxy),
+                            lambda: get_soup_requests(page_url, data=post_form, proxy=proxy),
                             name=f"Foodie hotel search:{name}",
                         )
                     except Exception as e:
                         if open_proxy:
                             proxy = get_proxy_next()
-                        page_soup = get_soup_requests(pageUrl, data=post_form, proxy=proxy)
+                        page_soup = get_soup_requests(page_url, data=post_form, proxy=proxy)
                     if not page_soup:
                         print(f"{name}:Request fail.")
                         return info_list
@@ -125,7 +125,7 @@ async def get_channels_by_hotel(callback=None):
                                 driver.execute_script("arguments[0].click();", page_link)
                             else:
                                 request_url = (
-                                    f"{pageUrl}?net={name}&page={page}&code={code}"
+                                    f"{page_url}?net={name}&page={page}&code={code}"
                                 )
                                 page_soup = retry_func(
                                     lambda: get_soup_requests(request_url, proxy=proxy),
@@ -188,11 +188,11 @@ async def get_channels_by_hotel(callback=None):
                         url = item.get("url")
                         date = item.get("date")
                         if url:
-                            search_region_result[region].append((url, date, None))
+                            search_region_result[region].append({"url": url, "date": date})
         urls = [
-            {"region": region, "url": f"http://{url}/ZHGXTV/Public/json/live_interface.txt"}
+            {"region": region, "url": f"http://{item["url"]}/ZHGXTV/Public/json/live_interface.txt"}
             for region, result in search_region_result.items()
-            for url, _, _ in result
+            for item in result
         ]
         request_channels = await get_channels_by_subscribe_urls(
             urls, hotel=True, retry=False, error_print=False

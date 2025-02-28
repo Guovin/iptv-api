@@ -92,7 +92,7 @@ async def get_channels_by_fofa(urls=None, multicast=False, callback=None):
         open_proxy = config.open_proxy
         open_driver = config.open_driver
         if open_driver:
-            from utils.driver import setup_driver
+            from utils.driver.setup import setup_driver
         open_sort = config.open_sort
         if open_proxy:
             test_url = fofa_urls[0][0]
@@ -225,10 +225,11 @@ def process_fofa_json_url(url, region, open_sort, hotel_name="酒店源"):
                                         f"{url}{item_url}", f"{region}{hotel_name}"
                                     )
                                 )
+                                data = {"url": total_url}
                                 if item_name not in channels:
-                                    channels[item_name] = [(total_url, None, None)]
+                                    channels[item_name] = [data]
                                 else:
-                                    channels[item_name].append((total_url, None, None))
+                                    channels[item_name].append(data)
                 except Exception as e:
                     # print(f"Error on fofa: {e}")
                     pass

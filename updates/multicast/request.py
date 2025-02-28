@@ -205,7 +205,7 @@ async def get_channels_by_multicast(names, callback=None):
                             date = item.get("date")
                             if url:
                                 search_region_type_result[region][type].append(
-                                    (url, date, None)
+                                    {"url": url, "date": date}
                                 )
             pbar.close()
         request_channels = get_channel_multicast_result(

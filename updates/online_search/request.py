@@ -151,11 +151,15 @@ async def get_channels_by_online_search(names, callback=None):
                                 retries += 1
                                 continue
                             for result in results:
-                                url, date, resolution = result
+                                url = result["url"]
                                 if url:
                                     url = add_url_info(url, online_search_name)
                                     url = format_url_with_cache(url)
-                                    info_list.append((url, date, resolution))
+                                    info_list.append({
+                                        "url": url,
+                                        "date": result["date"],
+                                        "resolution": result["resolution"],
+                                    })
                             break
                         else:
                             print(

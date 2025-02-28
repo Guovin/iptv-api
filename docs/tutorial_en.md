@@ -96,7 +96,7 @@ Like editing templates, modify the runtime configuration.
 
 1. Create a file.
 2. Name the configuration file `user_config.ini`.
-3. Paste the default configuration.
+3. Paste the default configuration. (when creating `user_config.ini`, you can only enter the configuration items you want to modify, no need to copy the entire `config.ini`. Note that the `[Settings]` at the top of the configuration file must be retained, otherwise the custom configuration below will not take effect)
 4. Modify the template and result file configuration:
     - source_file = config/user_demo.txt
     - final_file = output/user_result.txt
@@ -377,8 +377,7 @@ Using the host path `/etc/docker` as an example:
 - Scheduled execution time
 
 ```bash
--e UPDATE_CRON1="0 22 * * *"
--e UPDATE_CRON2="0 10 * * *"
+-e UPDATE_CRON="0 22,10 * * *"
 ```
 
 ### 3. Update results

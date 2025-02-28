@@ -33,6 +33,7 @@ from utils.tools import (
     get_urls_from_file,
     get_version_info
 )
+from utils.types import CategoryChannelData
 
 
 class UpdateSource:
@@ -41,18 +42,18 @@ class UpdateSource:
         self.update_progress = None
         self.run_ui = False
         self.tasks = []
-        self.channel_items = {}
+        self.channel_items: CategoryChannelData = {}
         self.hotel_fofa_result = {}
         self.hotel_foodie_result = {}
         self.multicast_result = {}
         self.subscribe_result = {}
         self.online_search_result = {}
-        self.channel_data = {}
+        self.channel_data: CategoryChannelData = {}
         self.pbar = None
         self.total = 0
         self.start_time = None
 
-    async def visit_page(self, channel_names=None):
+    async def visit_page(self, channel_names: list[str] = None):
         tasks_config = [
             ("hotel_fofa", get_channels_by_fofa, "hotel_fofa_result"),
             ("multicast", get_channels_by_multicast, "multicast_result"),
@@ -86,7 +87,7 @@ class UpdateSource:
                 self.tasks.append(task)
                 setattr(self, result_attr, await task)
 
-    def pbar_update(self, name=""):
+    def pbar_update(self, name: str = ""):
         if self.pbar.n < self.total:
             self.pbar.update()
             self.update_progress(
@@ -94,12 +95,12 @@ class UpdateSource:
                 int((self.pbar.n / self.total) * 100),
             )
 
-    def get_urls_len(self, filter=False):
+    def get_urls_len(self, is_filter: bool = False) -> int:
         data = copy.deepcopy(self.channel_data)
-        if filter:
+        if is_filter:
             process_nested_dict(data, seen={}, flag=r"cache:(.*)", force_str="!")
         processed_urls = set(
-            url_info[0]
+            url_info["url"]
             for channel_obj in data.values()
             for url_info_list in channel_obj.values()
             for url_info in url_info_list
@@ -137,7 +138,7 @@ class UpdateSource:
                 open_sort = config.open_sort
                 if open_sort:
                     urls_total = self.get_urls_len()
-                    self.total = self.get_urls_len(filter=True)
+                    self.total = self.get_urls_len(is_filter=True)
                     print(f"Total urls: {urls_total}, need to sort: {self.total}")
                     sort_callback = lambda: self.pbar_update(name="测速")
                     self.update_progress(

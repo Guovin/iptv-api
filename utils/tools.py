@@ -1,5 +1,4 @@
 import datetime
-import ipaddress
 import json
 import logging
 import os
@@ -19,6 +18,7 @@ from flask import send_file, make_response
 
 import utils.constants as constants
 from utils.config import config
+from utils.types import ChannelData
 
 
 def get_logger(path, level=logging.ERROR, init=False):
@@ -99,8 +99,9 @@ def filter_by_date(data):
     start_date = datetime.datetime.now() - datetime.timedelta(days=use_recent_days)
     recent_data = []
     unrecent_data = []
-    for (url, date, resolution, origin), response_time in data:
-        item = ((url, date, resolution, origin), response_time)
+    for info, response_time in data:
+        item = (info, response_time)
+        date = info["date"]
         if date:
             date = datetime.datetime.strptime(date, "%m-%d-%Y")
             if date >= start_date:
@@ -147,7 +148,7 @@ def get_resolution_value(resolution_str):
     return 0
 
 
-def get_total_urls(info_list, ipv_type_prefer, origin_type_prefer):
+def get_total_urls(info_list: list[ChannelData], ipv_type_prefer, origin_type_prefer) -> list:
     """
     Get the total urls from info list
     """
@@ -159,7 +160,8 @@ def get_total_urls(info_list, ipv_type_prefer, origin_type_prefer):
         origin_type_prefer = ["all"]
     categorized_urls = {origin: {ipv_type: [] for ipv_type in ipv_type_prefer} for origin in origin_type_prefer}
     total_urls = []
-    for url, _, resolution, origin in info_list:
+    for info in info_list:
+        url, origin, resolution, url_ipv_type = info["url"], info["origin"], info["resolution"], info["ipv_type"]
         if not origin:
             continue
 
@@ -181,8 +183,7 @@ def get_total_urls(info_list, ipv_type_prefer, origin_type_prefer):
             if origin_name:
                 url = add_url_info(pure_url, origin_name)
 
-        url_is_ipv6 = is_ipv6(url)
-        if url_is_ipv6:
+        if url_ipv_type == 'ipv6':
             url = add_url_info(url, "IPv6")
 
         if resolution:
@@ -192,9 +193,8 @@ def get_total_urls(info_list, ipv_type_prefer, origin_type_prefer):
             origin = "all"
 
         if ipv_prefer_bool:
-            key = "ipv6" if url_is_ipv6 else "ipv4"
-            if key in ipv_type_prefer:
-                categorized_urls[origin][key].append(url)
+            if url_ipv_type in ipv_type_prefer:
+                categorized_urls[origin][url_ipv_type].append(url)
         else:
             categorized_urls[origin]["all"].append(url)
 
@@ -236,21 +236,25 @@ def get_total_urls_from_sorted_data(data):
     """
     total_urls = []
     if len(data) > config.urls_limit:
-        total_urls = [url for (url, _, _, _), _ in filter_by_date(data)]
+        total_urls = [channel_data["url"] for channel_data, _ in filter_by_date(data)]
     else:
-        total_urls = [url for (url, _, _, _), _ in data]
+        total_urls = [channel_data["url"] for channel_data, _ in data]
     return list(dict.fromkeys(total_urls))[: config.urls_limit]
 
 
-def is_ipv6(url):
+def check_url_ipv6(url):
     """
     Check if the url is ipv6
     """
     try:
         host = urllib.parse.urlparse(url).hostname
-        ipaddress.IPv6Address(host)
-        return True
-    except ValueError:
+        if host:
+            addr_info = socket.getaddrinfo(host, None, socket.AF_UNSPEC, socket.SOCK_STREAM)
+            for info in addr_info:
+                if info[0] == socket.AF_INET6:
+                    return True
+        return False
+    except:
         return False
 
 
@@ -271,17 +275,15 @@ def check_ipv6_support():
     return False
 
 
-def check_url_ipv_type(url):
+def check_ipv_type_match(ipv_type: str) -> bool:
     """
-    Check if the url is compatible with the ipv type in the config
+    Check if the ipv type matches
     """
-    ipv6 = is_ipv6(url)
-    ipv_type = config.ipv_type
+    config_ipv_type = config.ipv_type
     return (
-            (ipv_type == "ipv4" and not ipv6)
-            or (ipv_type == "ipv6" and ipv6)
-            or ipv_type == "全部"
-            or ipv_type == "all"
+            config_ipv_type == ipv_type
+            or config_ipv_type == "全部"
+            or config_ipv_type == "all"
     )
 
 
@@ -402,13 +404,13 @@ def get_result_file_content(show_content=False, file_type=None):
     return response
 
 
-def remove_duplicates_from_tuple_list(tuple_list, seen, flag=None, force_str=None):
+def remove_duplicates_from_list(data_list, seen, flag=None, force_str=None):
     """
-    Remove duplicates from tuple list
+    Remove duplicates from data list
     """
     unique_list = []
-    for item in tuple_list:
-        item_first = item[0]
+    for item in data_list:
+        item_first = item["url"]
         part = item_first
         if force_str:
             info = item_first.partition("$")[2]
@@ -433,19 +435,14 @@ def process_nested_dict(data, seen, flag=None, force_str=None):
         if isinstance(value, dict):
             process_nested_dict(value, seen, flag, force_str)
         elif isinstance(value, list):
-            data[key] = remove_duplicates_from_tuple_list(value, seen, flag, force_str)
-
-
-url_host_compile = re.compile(
-    constants.url_host_pattern
-)
+            data[key] = remove_duplicates_from_list(value, seen, flag, force_str)
 
 
 def get_url_host(url):
     """
     Get the url host
     """
-    matcher = url_host_compile.search(url)
+    matcher = constants.url_host_pattern.search(url)
     if matcher:
         return matcher.group()
     return None
@@ -512,12 +509,11 @@ def write_content_into_txt(content, path=None, position=None, callback=None):
         callback()
 
 
-def get_name_url(content, pattern, multiline=False, check_url=True):
+def get_name_url(content, pattern, check_url=True):
     """
     Get name and url from content
     """
-    flag = re.MULTILINE if multiline else 0
-    matches = re.findall(pattern, content, flag)
+    matches = pattern.findall(content)
     channels = [
         {"name": match[0].strip(), "url": match[1].strip()}
         for match in matches
@@ -542,14 +538,13 @@ def get_urls_from_file(path: str) -> list:
     """
     real_path = get_real_path(resource_path(path))
     urls = []
-    url_pattern = constants.url_pattern
     if os.path.exists(real_path):
         with open(real_path, "r", encoding="utf-8") as f:
             for line in f:
                 line = line.strip()
                 if line.startswith("#"):
                     continue
-                match = re.search(url_pattern, line)
+                match = constants.url_pattern.search(line)
                 if match:
                     urls.append(match.group().strip())
     return urls
@@ -561,14 +556,13 @@ def get_name_urls_from_file(path: str) -> dict[str, list]:
     """
     real_path = get_real_path(resource_path(path))
     name_urls = defaultdict(list)
-    txt_pattern = constants.txt_pattern
     if os.path.exists(real_path):
         with open(real_path, "r", encoding="utf-8") as f:
             for line in f:
                 line = line.strip()
                 if line.startswith("#"):
                     continue
-                name_url = get_name_url(line, pattern=txt_pattern)
+                name_url = get_name_url(line, pattern=constants.txt_pattern)
                 if name_url and name_url[0]:
                     name = name_url[0]["name"]
                     url = name_url[0]["url"]
