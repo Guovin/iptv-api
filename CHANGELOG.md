@@ -1,5 +1,35 @@
 # 更新日志（Changelog）
 
+## v1.6.2
+
+### 2025/3/4
+
+- ✨ 新增支持CDN代理加速，配置项：`cdn_url`，用于订阅源与频道图标资源加速访问，可关注公众号私信`获取代理地址`
+- ✨ 新增支持`rtsp`协议接口
+- ✨ 新增支持本地源频道名称模糊匹配
+- ✨ 新增订阅源`Guovin/iptv-database`，来源于新仓库[IPTV-Database](https://github.com/Guovin/iptv-database)
+- 🐛 修复支持含验证信息的接口匹配（#946）
+- 🐛 修复输出结果文件问题，接口url不完整，丢失部分信息（#925）
+- 🪄 优化运行流程，调整默认配置：关闭组播源、酒店源获取
+
+<details>
+  <summary>English</summary>
+
+- ✨ Added support for CDN proxy acceleration, configuration item: `cdn_url`, for accelerating access to subscription
+  sources and channel icon resources. You can follow the public account and send a private message to
+  `get the proxy address`
+- ✨ Added support for `rtsp` protocol interface
+- ✨ Added support for fuzzy matching of local source channel names
+- ✨ Added subscription source `Guovin/iptv-database`, from the new
+  repository [IPTV-Database](https://github.com/Guovin/iptv-database)
+- 🐛 Fixed support for matching interfaces with verification information (#946)
+- 🐛 Fixed the issue with the output result file where the interface URL was incomplete and some information was
+  missing (#925)
+- 🪄 Optimized the running process and adjusted the default configuration: disabled multicast source and hotel source
+  retrieval
+
+</details>
+
 ## v1.6.1
 
 ### 2025/2/21

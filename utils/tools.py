@@ -15,6 +15,7 @@ import pytz
 import requests
 from bs4 import BeautifulSoup
 from flask import send_file, make_response
+from opencc import OpenCC
 
 import utils.constants as constants
 from utils.config import config
@@ -349,7 +350,7 @@ def convert_to_m3u(first_channel_name=None):
     user_final_file = resource_path(config.final_file)
     if os.path.exists(user_final_file):
         with open(user_final_file, "r", encoding="utf-8") as file:
-            m3u_output = '#EXTM3U x-tvg-url="https://raw.githubusercontent.com/fanmingming/live/main/e.xml"\n'
+            m3u_output = f'#EXTM3U x-tvg-url="{join_url(config.cdn_url, 'https://raw.githubusercontent.com/fanmingming/live/main/e.xml')}"\n'
             current_group = None
             for line in file:
                 trimmed_line = line.strip()
@@ -369,7 +370,7 @@ def convert_to_m3u(first_channel_name=None):
                                       + ("+" if m.group(3) else ""),
                             first_channel_name if current_group == "🕘️更新时间" else original_channel_name,
                         )
-                        m3u_output += f'#EXTINF:-1 tvg-name="{processed_channel_name}" tvg-logo="https://raw.githubusercontent.com/fanmingming/live/main/tv/{processed_channel_name}.png"'
+                        m3u_output += f'#EXTINF:-1 tvg-name="{processed_channel_name}" tvg-logo="{join_url(config.cdn_url, f'https://raw.githubusercontent.com/fanmingming/live/main/tv/{processed_channel_name}.png')}"'
                         if current_group:
                             m3u_output += f' group-title="{current_group}"'
                         m3u_output += f",{original_channel_name}\n{channel_link}\n"
@@ -509,6 +510,20 @@ def write_content_into_txt(content, path=None, position=None, callback=None):
         callback()
 
 
+def format_name(name: str) -> str:
+    """
+    Format the  name with sub and replace and lower
+    """
+    cc = OpenCC("t2s")
+    name = cc.convert(name)
+    for region in constants.region_list:
+        name = name.replace(f"{region}｜", "")
+    name = constants.sub_pattern.sub("", name)
+    for old, new in constants.replace_dict.items():
+        name = name.replace(old, new)
+    return name.lower()
+
+
 def get_name_url(content, pattern, check_url=True):
     """
     Get name and url from content
@@ -550,7 +565,7 @@ def get_urls_from_file(path: str) -> list:
     return urls
 
 
-def get_name_urls_from_file(path: str) -> dict[str, list]:
+def get_name_urls_from_file(path: str, format_name_flag: bool = False) -> dict[str, list]:
     """
     Get the name and urls from file
     """
@@ -564,7 +579,7 @@ def get_name_urls_from_file(path: str) -> dict[str, list]:
                     continue
                 name_url = get_name_url(line, pattern=constants.txt_pattern)
                 if name_url and name_url[0]:
-                    name = name_url[0]["name"]
+                    name = format_name(name_url[0]["name"]) if format_name_flag else name_url[0]["name"]
                     url = name_url[0]["url"]
                     if url not in name_urls[name]:
                         name_urls[name].append(url)
@@ -586,3 +601,19 @@ def get_version_info():
     """
     with open(resource_path("version.json"), "r", encoding="utf-8") as f:
         return json.load(f)
+
+
+def join_url(url1: str, url2: str) -> str:
+    """
+    Get the join url
+    :param url1: The first url
+    :param url2: The second url
+    :return: The join url
+    """
+    if not url1:
+        return url2
+    if not url2:
+        return url1
+    if not url1.endswith("/"):
+        url1 += "/"
+    return url1 + url2

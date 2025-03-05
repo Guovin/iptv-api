@@ -135,7 +135,7 @@ async def get_channels_by_fofa(urls=None, multicast=False, callback=None):
                     multicast_result = [(url, None, None) for url in urls]
                     results[region][type] = multicast_result
                 else:
-                    with ThreadPoolExecutor(max_workers=100) as executor:
+                    with ThreadPoolExecutor(max_workers=10) as executor:
                         futures = [
                             executor.submit(
                                 process_fofa_json_url,

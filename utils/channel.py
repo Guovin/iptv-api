@@ -8,7 +8,6 @@ from collections import defaultdict
 from logging import INFO
 
 from bs4 import NavigableString
-from opencc import OpenCC
 
 import utils.constants as constants
 from utils.config import config
@@ -18,6 +17,7 @@ from utils.speed import (
     check_ffmpeg_installed_status
 )
 from utils.tools import (
+    format_name,
     get_name_url,
     check_url_by_keywords,
     get_total_urls,
@@ -84,12 +84,12 @@ def get_channel_data_from_file(channels, file, whitelist, open_local=config.open
                 if open_local:
                     if url:
                         data = format_channel_data(url, "local")
-                        if data not in category_dict[name]:
-                            category_dict[name].append(data)
-                    if local_data and name in local_data:
-                        for local_url in local_data[name]:
-                            local_channel_data = format_channel_data(local_url, "local")
-                            if local_channel_data not in category_dict[name]:
+                        category_dict[name].append(data)
+                    if local_data:
+                        format_key = format_name(name)
+                        if format_key in local_data:
+                            for local_url in local_data[format_key]:
+                                local_channel_data = format_channel_data(local_url, "local")
                                 category_dict[name].append(local_channel_data)
     return channels
 
@@ -100,7 +100,7 @@ def get_channel_items() -> CategoryChannelData:
     """
     user_source_file = resource_path(config.source_file)
     channels = defaultdict(lambda: defaultdict(list))
-    local_data = get_name_urls_from_file(resource_path(config.local_file))
+    local_data = get_name_urls_from_file(resource_path(config.local_file), format_name_flag=True)
     whitelist = get_name_urls_from_file(constants.whitelist_path)
     whitelist_urls = get_urls_from_file(constants.whitelist_path)
     whitelist_len = len(list(whitelist.keys()))
@@ -147,14 +147,7 @@ def format_channel_name(name):
     """
     if config.open_keep_all:
         return name
-    cc = OpenCC("t2s")
-    name = cc.convert(name)
-    for region in constants.region_list:
-        name = name.replace(f"{region}｜", "")
-    name = constants.sub_pattern.sub("", name)
-    for old, new in constants.replace_dict.items():
-        name = name.replace(old, new)
-    return name.lower()
+    return format_name(name)
 
 
 def channel_name_is_equal(name1, name2):

@@ -1,5 +1,6 @@
 import asyncio
 import copy
+import os
 import pickle
 from time import time
 
@@ -31,7 +32,8 @@ from utils.tools import (
     check_ipv6_support,
     resource_path,
     get_urls_from_file,
-    get_version_info
+    get_version_info,
+    join_url
 )
 from utils.types import CategoryChannelData
 
@@ -75,6 +77,9 @@ class UpdateSource:
                 if setting == "subscribe":
                     subscribe_urls = get_urls_from_file(constants.subscribe_path)
                     whitelist_urls = get_urls_from_file(constants.whitelist_path)
+                    if not os.environ.get("GITHUB_ACTIONS") and config.cdn_url:
+                        subscribe_urls = [join_url(config.cdn_url, url) if "raw.githubusercontent.com" in url else url
+                                          for url in subscribe_urls]
                     task = asyncio.create_task(
                         task_func(subscribe_urls, whitelist=whitelist_urls, callback=self.update_progress)
                     )

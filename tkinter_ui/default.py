@@ -428,6 +428,15 @@ class DefaultUI:
         self.time_zone_entry.insert(0, config.time_zone)
         self.time_zone_entry.bind("<KeyRelease>", self.update_time_zone)
 
+        self.cdn_url_label = tk.Label(
+            frame_time_zone, text="CDN代理地址:", width=12
+        )
+        self.cdn_url_label.pack(side=tk.LEFT, padx=4, pady=8)
+        self.cdn_url_entry = tk.Entry(frame_time_zone, width=18)
+        self.cdn_url_entry.pack(side=tk.LEFT, padx=4, pady=8)
+        self.cdn_url_entry.insert(0, config.cdn_url)
+        self.cdn_url_entry.bind("<KeyRelease>", self.update_cdn_url)
+
         frame_default_url_keywords = tk.Frame(root)
         frame_default_url_keywords.pack(fill=tk.X)
         frame_default_url_keywords_column1 = tk.Frame(frame_default_url_keywords)
@@ -531,6 +540,9 @@ class DefaultUI:
     def update_time_zone(self, event):
         config.set("Settings", "time_zone", self.time_zone_entry.get())
 
+    def update_cdn_url(self, event):
+        config.set("Settings", "cdn_url", self.cdn_url_entry.get())
+
     def update_open_update_time(self):
         config.set("Settings", "open_update_time", str(self.open_update_time_var.get()))
 
@@ -583,6 +595,7 @@ class DefaultUI:
             "source_file_button",
             "source_file_edit_button",
             "time_zone_entry",
+            "cdn_url_entry",
             "final_file_entry",
             "final_file_button",
             "final_file_edit_button",
