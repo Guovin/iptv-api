@@ -96,7 +96,9 @@ Like editing templates, modify the runtime configuration.
 
 1. Create a file.
 2. Name the configuration file `user_config.ini`.
-3. Paste the default configuration. (when creating `user_config.ini`, you can only enter the configuration items you want to modify, no need to copy the entire `config.ini`. Note that the `[Settings]` at the top of the configuration file must be retained, otherwise the custom configuration below will not take effect)
+3. Paste the default configuration. (when creating `user_config.ini`, you can only enter the configuration items you
+   want to modify, no need to copy the entire `config.ini`. Note that the `[Settings]` at the top of the configuration
+   file must be retained, otherwise the custom configuration below will not take effect)
 4. Modify the template and result file configuration:
     - source_file = config/user_demo.txt
     - final_file = output/user_result.txt
@@ -293,7 +295,7 @@ pipenv run ui
 
 ![IPTV-API Update Software](./images/ui.png 'IPTV-API Update Software')
 
-If you do not understand the software configuration options, do not change anything, just click start update.
+If you do not understand the software configuration options, do not change anything, just click start.
 
 ## Docker
 

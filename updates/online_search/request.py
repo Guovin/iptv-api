@@ -21,7 +21,6 @@ from utils.retry import (
 from utils.tools import (
     get_pbar_remaining,
     get_soup,
-    format_url_with_cache,
     add_url_info
 )
 
@@ -154,7 +153,6 @@ async def get_channels_by_online_search(names, callback=None):
                                 url = result["url"]
                                 if url:
                                     url = add_url_info(url, online_search_name)
-                                    url = format_url_with_cache(url)
                                     info_list.append({
                                         "url": url,
                                         "date": result["date"],

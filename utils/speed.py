@@ -12,7 +12,7 @@ from multidict import CIMultiDictProxy
 
 import utils.constants as constants
 from utils.config import config
-from utils.tools import remove_cache_info, get_resolution_value
+from utils.tools import get_resolution_value
 from utils.types import TestResult, ChannelTestResult, TestResultCacheData
 
 http.cookies._is_legal_key = lambda _: True
@@ -272,7 +272,7 @@ async def check_stream_delay(url_info):
         return -1
 
 
-async def get_speed(url, is_ipv6=False, ipv6_proxy=None, resolution=None,
+async def get_speed(url, cache_key=None, is_ipv6=False, ipv6_proxy=None, resolution=None,
                     filter_resolution=config.open_filter_resolution,
                     min_resolution=config.min_resolution_value, timeout=config.sort_timeout,
                     callback=None) -> TestResult:
@@ -281,12 +281,6 @@ async def get_speed(url, is_ipv6=False, ipv6_proxy=None, resolution=None,
     """
     data: TestResult = {'speed': None, 'delay': None, 'resolution': resolution}
     try:
-        cache_key = None
-        if "$" in url:
-            url, _, cache_info = url.partition("$")
-            matcher = re.search(r"cache:(.*)", cache_info)
-            if matcher:
-                cache_key = matcher.group(1)
         if cache_key in cache:
             cache_list = cache[cache_key]
             for cache_item in cache_list:
@@ -297,7 +291,7 @@ async def get_speed(url, is_ipv6=False, ipv6_proxy=None, resolution=None,
         else:
             if is_ipv6 and ipv6_proxy:
                 data['speed'] = float("inf")
-                data['delay'] = 0
+                data['delay'] = 0.1
                 data['resolution'] = "1920x1080"
             elif constants.rt_url_pattern.match(url) is not None:
                 start_time = time()
@@ -334,24 +328,23 @@ def sort_urls(name, data, supply=config.open_supply, filter_speed=config.open_fi
     """
     filter_data = []
     for item in data:
-        url, date, resolution, origin, ipv_type = item["url"], item["date"], item["resolution"], item["origin"], item[
-            "ipv_type"]
+        host, date, resolution, origin, ipv_type = (
+            item["host"],
+            item["date"],
+            item["resolution"],
+            item["origin"],
+            item["ipv_type"]
+        )
         result: ChannelTestResult = {
-            "url": remove_cache_info(url),
-            "date": date,
+            **item,
             "delay": None,
             "speed": None,
-            "resolution": resolution,
-            "origin": origin,
-            "ipv_type": ipv_type,
         }
         if origin == "whitelist":
             filter_data.append(result)
             continue
-        cache_key_match = re.search(r"cache:(.*)", url.partition("$")[2])
-        cache_key = cache_key_match.group(1) if cache_key_match else None
-        if cache_key and cache_key in cache:
-            cache_list = cache[cache_key]
+        if host and host in cache:
+            cache_list = cache[host]
             if cache_list:
                 avg_speed: int | float | None = sum(item['speed'] or 0 for item in cache_list) / len(cache_list)
                 avg_delay: int | float | None = max(
@@ -364,9 +357,8 @@ def sort_urls(name, data, supply=config.open_supply, filter_speed=config.open_fi
                         )
                 except Exception as e:
                     print(e)
-                if (not supply and filter_speed and avg_speed < min_speed) or (
-                        not supply and filter_resolution and get_resolution_value(resolution) < min_resolution) or (
-                        supply and avg_delay < 0):
+                if avg_delay < 0 or (not supply and ((filter_speed and avg_speed < min_speed) or (
+                        filter_resolution and get_resolution_value(resolution) < min_resolution))):
                     continue
                 result["delay"] = avg_delay
                 result["speed"] = avg_speed

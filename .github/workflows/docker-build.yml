@@ -22,23 +22,32 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          push: true
-          tags: guovern/iptv-api:latest
-          platforms: linux/amd64,linux/arm64,linux/arm/v7
-          build-args: |
-            APP_WORKDIR=/iptv-api
-            LITE=False
+      - name: Get version from version.json
+        run: |
+          $version = (Get-Content version.json | ConvertFrom-Json).version
+          echo "version=$version" >> $env:GITHUB_ENV
+        shell: pwsh
+
+      # - name: Build and push Docker image
+      #   uses: docker/build-push-action@v4
+      #   with:
+      #     context: .
+      #     push: true
+      #     tags: |
+      #       guovern/iptv-api:latest
+      #       guovern/iptv-api:${{ env.version }}
+      #     platforms: linux/amd64,linux/arm64,linux/arm/v7
+      #     build-args: |
+      #       APP_WORKDIR=/iptv-api
+      #       LITE=False
 
       - name: Build and push Docker image (Lite)
         uses: docker/build-push-action@v4
         with:
           context: .
           push: true
-          tags: guovern/iptv-api:lite
+          tags: |
+            guovern/iptv-api:lite-test
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           build-args: |
             APP_WORKDIR=/iptv-api-lite

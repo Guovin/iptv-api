@@ -13,7 +13,7 @@ done
 crontab -d
 
 if [ -n "$UPDATE_CRON" ]; then
-  (crontab -l ; echo "$UPDATE_CRON cd $APP_WORKDIR && /.venv/bin/python main.py") | crontab -
+  echo "$UPDATE_CRON cd $APP_WORKDIR && /.venv/bin/python main.py >> /tmp/dcron.log 2>&1" | crontab -
 fi
 
 # dcron log level
@@ -27,6 +27,8 @@ fi
 # LOG_DEBUG	7	[* debug-level messages *]
 
 /usr/sbin/crond -b -L /tmp/dcron.log -l 4 &
+
+nginx -g 'daemon off;' &
 
 python $APP_WORKDIR/main.py &
 

@@ -61,41 +61,7 @@ jobs:
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git diff
-          final_file=$(python -c '
-          try: 
-            from utils.config import config
-            final_file = config.final_file
-          except: 
-            final_file = "output/result.txt"
-          print(final_file)')
-          final_m3u_file=$(python -c '
-          try: 
-            from utils.config import config
-            import os
-            final_file = config.final_file
-            final_m3u_file = os.path.splitext(final_file)[0] + ".m3u"
-          except: 
-            final_m3u_file = "output/result.m3u"
-          print(final_m3u_file)')
-          if [[ -f "$final_file" ]]; then
-            git add -f "$final_file"
-          fi
-          if [[ -f "$final_m3u_file" ]]; then
-            git add -f "$final_m3u_file"
-          fi
-          if [[ -f "output/cache.pkl" ]]; then
-            git add -f "output/cache.pkl"
-          fi
-          if [[ -f "output/sort.log" ]]; then
-            git add -f "output/sort.log"
-          fi
-          if [[ -f "updates/fofa/fofa_hotel_region_result.pkl" ]]; then
-            git add -f "updates/fofa/fofa_hotel_region_result.pkl"
-          fi
-          if [[ -f "updates/fofa/fofa_multicast_region_result.pkl" ]]; then
-            git add -f "updates/fofa/fofa_multicast_region_result.pkl"
-          fi
+          git add .
           if ! git diff --staged --quiet; then
             git commit -m "Github Action Auto Updated"
             git push --force

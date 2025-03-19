@@ -124,6 +124,7 @@ https://cdn.jsdelivr.net/gh/Guovin/iptv-api@gd/source.json
 | open_online_search     | 开启关键字搜索源功能                                                                                                                                                            | False             |
 | open_proxy             | 开启代理，自动获取免费可用代理，若更新无数据可开启此模式                                                                                                                                          | False             |
 | open_request           | 开启查询请求，数据来源于网络（仅针对酒店源与组播源）                                                                                                                                            | False             |
+| open_rtmp              | 开启RTMP推流功能，需要安装FFmpeg，利用本地带宽提升接口播放体验，推荐多人使用时开启，个人使用不建议开启，工作流不支持该功能                                                                                                    | False             |
 | open_service           | 开启页面服务，用于控制是否启动结果页面服务；如果使用青龙等平台部署，有专门设定的定时任务，需要更新完成后停止运行，可以关闭该功能                                                                                                      | True              |
 | open_sort              | 开启排序功能（响应速度、日期、分辨率）                                                                                                                                                   | True              |
 | open_subscribe         | 开启订阅源功能                                                                                                                                                               | False             |
