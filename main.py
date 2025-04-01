@@ -19,18 +19,14 @@ from utils.channel import (
     process_sort_channel_list,
     write_channel_to_file,
     get_channel_data_cache_with_compare,
-    format_channel_url_info,
 )
 from utils.config import config
 from utils.tools import (
-    update_file,
     get_pbar_remaining,
     get_ip_address,
-    convert_to_m3u,
     process_nested_dict,
     format_interval,
     check_ipv6_support,
-    resource_path,
     get_urls_from_file,
     get_version_info,
     join_url
@@ -92,18 +88,18 @@ class UpdateSource:
                 self.tasks.append(task)
                 setattr(self, result_attr, await task)
 
-    def pbar_update(self, name: str = ""):
+    def pbar_update(self, name: str = "", item_name: str = ""):
         if self.pbar.n < self.total:
             self.pbar.update()
             self.update_progress(
-                f"正在进行{name}, 剩余{self.total - self.pbar.n}个接口, 预计剩余时间: {get_pbar_remaining(n=self.pbar.n, total=self.total, start_time=self.start_time)}",
+                f"正在进行{name}, 剩余{self.total - self.pbar.n}个{item_name}, 预计剩余时间: {get_pbar_remaining(n=self.pbar.n, total=self.total, start_time=self.start_time)}",
                 int((self.pbar.n / self.total) * 100),
             )
 
     def get_urls_len(self, is_filter: bool = False) -> int:
         data = copy.deepcopy(self.channel_data)
         if is_filter:
-            process_nested_dict(data, seen={}, flag=r"cache:(.*)", force_str="!")
+            process_nested_dict(data, seen={}, force_str="!")
         processed_urls = set(
             url_info["url"]
             for channel_obj in data.values()
@@ -145,7 +141,7 @@ class UpdateSource:
                     urls_total = self.get_urls_len()
                     self.total = self.get_urls_len(is_filter=True)
                     print(f"Total urls: {urls_total}, need to sort: {self.total}")
-                    sort_callback = lambda: self.pbar_update(name="测速")
+                    sort_callback = lambda: self.pbar_update(name="测速", item_name="接口")
                     self.update_progress(
                         f"正在测速排序, 共{urls_total}个接口, {self.total}个接口需要进行测速",
                         0,
@@ -157,35 +153,32 @@ class UpdateSource:
                         ipv6=ipv6_support,
                         callback=sort_callback,
                     )
-                else:
-                    format_channel_url_info(self.channel_data)
-                self.total = self.get_urls_len()
+                self.total = 12
                 self.pbar = tqdm(total=self.total, desc="Writing")
                 self.start_time = time()
                 write_channel_to_file(
                     self.channel_data,
                     ipv6=ipv6_support,
-                    callback=lambda: self.pbar_update(name="写入结果"),
+                    first_channel_name=channel_names[0],
+                    callback=lambda: self.pbar_update(name="写入结果", item_name="文件"),
                 )
                 self.pbar.close()
-                update_file(user_final_file, constants.result_path)
                 if config.open_history:
                     if open_sort:
                         get_channel_data_cache_with_compare(
                             channel_data_cache, self.channel_data
                         )
                     with open(
-                            resource_path(constants.cache_path, persistent=True),
+                            constants.cache_path,
                             "wb",
                     ) as file:
                         pickle.dump(channel_data_cache, file)
-                convert_to_m3u(channel_names[0])
                 print(
                     f"🥳 Update completed! Total time spent: {format_interval(time() - main_start_time)}. Please check the {user_final_file} file!"
                 )
             if self.run_ui:
                 open_service = config.open_service
-                service_tip = ", 可使用以下链接观看直播:" if open_service else ""
+                service_tip = ", 可使用以下地址观看直播:" if open_service else ""
                 tip = (
                     f"✅ 服务启动成功{service_tip}"
                     if open_service and config.open_update == False

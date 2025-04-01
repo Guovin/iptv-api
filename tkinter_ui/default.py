@@ -1,8 +1,6 @@
 import os
 import tkinter as tk
-from tkinter import filedialog
-from tkinter import messagebox
-from tkinter import ttk
+from tkinter import filedialog, messagebox, ttk
 
 import utils.constants as constants
 from utils.config import config
@@ -43,35 +41,6 @@ class DefaultUI:
             command=lambda: self.edit_file(config.source_file),
         )
         self.source_file_edit_button.pack(side=tk.LEFT, padx=4, pady=0)
-
-        frame_default_local_file = tk.Frame(root)
-        frame_default_local_file.pack(fill=tk.X)
-        frame_default_local_file_column1 = tk.Frame(frame_default_local_file)
-        frame_default_local_file_column1.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-        frame_default_local_file_column2 = tk.Frame(frame_default_local_file)
-        frame_default_local_file_column2.pack(side=tk.RIGHT, fill=tk.Y)
-
-        self.local_file_label = tk.Label(
-            frame_default_local_file_column1, text="本地源文件:", width=8
-        )
-        self.local_file_entry = tk.Entry(frame_default_local_file_column1)
-        self.local_file_label.pack(side=tk.LEFT, padx=4, pady=8)
-        self.local_file_entry.pack(fill=tk.X, padx=4, expand=True)
-        self.local_file_entry.insert(0, config.local_file)
-
-        self.local_file_button = tk.ttk.Button(
-            frame_default_local_file_column2,
-            text="选择文件",
-            command=self.select_local_file,
-        )
-        self.local_file_button.pack(side=tk.LEFT, padx=4, pady=0)
-
-        self.local_file_edit_button = tk.ttk.Button(
-            frame_default_local_file_column2,
-            text="编辑",
-            command=lambda: self.edit_file(config.local_file),
-        )
-        self.local_file_edit_button.pack(side=tk.LEFT, padx=4, pady=0)
 
         frame_default_final_file = tk.Frame(root)
         frame_default_final_file.pack(fill=tk.X)
@@ -153,19 +122,19 @@ class DefaultUI:
         frame_default_open_cache_column2 = tk.Frame(frame_default_open_cache)
         frame_default_open_cache_column2.pack(side=tk.RIGHT, fill=tk.Y)
 
-        self.open_local_label = tk.Label(
-            frame_default_open_cache_column1, text="开启本地源:", width=12
+        self.open_rtmp_label = tk.Label(
+            frame_default_open_cache_column1, text="开启推流:", width=12
         )
-        self.open_local_label.pack(side=tk.LEFT, padx=4, pady=8)
-        self.open_local_var = tk.BooleanVar(value=config.open_local)
-        self.open_local_checkbutton = ttk.Checkbutton(
+        self.open_rtmp_label.pack(side=tk.LEFT, padx=4, pady=8)
+        self.open_rtmp_var = tk.BooleanVar(value=config.open_rtmp)
+        self.open_rtmp_checkbutton = ttk.Checkbutton(
             frame_default_open_cache_column1,
-            variable=self.open_local_var,
+            variable=self.open_rtmp_var,
             onvalue=True,
             offvalue=False,
-            command=self.update_open_local,
+            command=self.update_open_rtmp
         )
-        self.open_local_checkbutton.pack(side=tk.LEFT, padx=4, pady=8)
+        self.open_rtmp_checkbutton.pack(side=tk.LEFT, padx=4, pady=8)
 
         self.open_history_label = tk.Label(
             frame_default_open_cache_column2, text="使用历史结果:", width=12
@@ -403,7 +372,7 @@ class DefaultUI:
         self.open_empty_category_checkbutton.pack(side=tk.LEFT, padx=4, pady=8)
 
         self.ipv6_support_label = tk.Label(
-            frame_default_open_empty_category_column2, text="跳过IPv6检测:", width=12
+            frame_default_open_empty_category_column2, text="强制支持IPv6:", width=12
         )
         self.ipv6_support_label.pack(side=tk.LEFT, padx=4, pady=8)
         self.ipv6_support_var = tk.BooleanVar(value=config.ipv6_support)
@@ -418,21 +387,29 @@ class DefaultUI:
 
         frame_time_zone = tk.Frame(root)
         frame_time_zone.pack(fill=tk.X)
+        frame_time_zone_column1 = tk.Frame(
+            frame_time_zone
+        )
+        frame_time_zone_column1.pack(side=tk.LEFT, fill=tk.Y)
+        frame_time_zone_column2 = tk.Frame(
+            frame_time_zone
+        )
+        frame_time_zone_column2.pack(side=tk.RIGHT, fill=tk.Y)
 
         self.time_zone_label = tk.Label(
-            frame_time_zone, text="时区:", width=12
+            frame_time_zone_column1, text="时区:", width=12
         )
         self.time_zone_label.pack(side=tk.LEFT, padx=4, pady=8)
-        self.time_zone_entry = tk.Entry(frame_time_zone, width=18)
+        self.time_zone_entry = tk.Entry(frame_time_zone_column1, width=16)
         self.time_zone_entry.pack(side=tk.LEFT, padx=4, pady=8)
         self.time_zone_entry.insert(0, config.time_zone)
         self.time_zone_entry.bind("<KeyRelease>", self.update_time_zone)
 
         self.cdn_url_label = tk.Label(
-            frame_time_zone, text="CDN代理地址:", width=12
+            frame_time_zone_column2, text="CDN加速地址:", width=12
         )
         self.cdn_url_label.pack(side=tk.LEFT, padx=4, pady=8)
-        self.cdn_url_entry = tk.Entry(frame_time_zone, width=18)
+        self.cdn_url_entry = tk.Entry(frame_time_zone_column2, width=20)
         self.cdn_url_entry.pack(side=tk.LEFT, padx=4, pady=8)
         self.cdn_url_entry.insert(0, config.cdn_url)
         self.cdn_url_entry.bind("<KeyRelease>", self.update_cdn_url)
@@ -474,10 +451,8 @@ class DefaultUI:
     def update_app_port(self, event):
         config.set("Settings", "app_port", self.app_port_entry.get())
 
-    def update_open_local(self):
-        config.set(
-            "Settings", "open_local", str(self.open_local_var.get())
-        )
+    def update_open_rtmp(self):
+        config.set("Settings", "open_rtmp", str(self.open_rtmp_var.get()))
 
     def update_open_history(self):
         config.set(
@@ -497,15 +472,6 @@ class DefaultUI:
             self.source_file_entry.delete(0, tk.END)
             self.source_file_entry.insert(0, filepath)
             config.set("Settings", "source_file", filepath)
-
-    def select_local_file(self):
-        filepath = filedialog.askopenfilename(
-            initialdir=os.getcwd(), title="选择本地源文件", filetypes=[("txt", "*.txt")]
-        )
-        if filepath:
-            self.local_file_entry.delete(0, tk.END)
-            self.local_file_entry.insert(0, filepath)
-            config.set("Settings", "local_file", filepath)
 
     def select_final_file(self):
         filepath = filedialog.askopenfilename(
@@ -584,7 +550,7 @@ class DefaultUI:
             "open_update_checkbutton",
             "open_service_checkbutton",
             "app_port_entry",
-            "open_local_checkbutton",
+            "open_rtmp_checkbutton",
             "open_history_checkbutton",
             "open_use_cache_checkbutton",
             "open_request_checkbutton",
@@ -599,9 +565,6 @@ class DefaultUI:
             "final_file_entry",
             "final_file_button",
             "final_file_edit_button",
-            "local_file_entry",
-            "local_file_button",
-            "local_file_edit_button",
             "open_keep_all_checkbutton",
             "open_m3u_result_checkbutton",
             "urls_limit_entry",

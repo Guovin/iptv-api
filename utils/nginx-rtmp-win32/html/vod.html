@@ -1,0 +1,126 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+    <head>
+        <title>Rtmp|HLS 点播测试器</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	</head>
+<body>
+<script type="text/javascript" src="/swfobject.js"></script>
+<script type="text/javascript" src="/ParsedQueryString.js"></script>
+<script type="text/javascript">
+var player = null;
+
+function loadStream(url) {
+  player.setMediaResourceURL(url);
+}
+
+function getlink(url) {
+  return "/vod.html?src=" + encodeURIComponent(url);
+}
+
+function jsbridge(playerId, event, data) {
+  if (player == null) {
+	player = document.getElementById(playerId);
+  }
+  switch(event) {
+	case "onJavaScriptBridgeCreated":
+	  listStreams(teststreams,"streamlist");
+	  break;
+	 case "timeChange":
+	 case "timeupdate":
+	 case "progress":
+	   break;
+	 default:
+	  console.log(event, data);
+	}
+}
+
+	// Collect query parameters in an object that we can
+	// forward to SWFObject:
+
+	var pqs = new ParsedQueryString();
+	var parameterNames = pqs.params(false);
+	var parameters = {
+	//    src: "rtmp://192.168.0.10/live/demo",
+		autoPlay: "true",
+		verbose: true,
+		controlBarAutoHide: "true",
+		controlBarPosition: "bottom",
+		poster: "images/poster.png",
+		javascriptCallbackFunction: "jsbridge",
+		plugin_hls: "/flashlsOSMF.swf",
+		hls_minbufferlength: -1,
+		hls_maxbufferlength: 30,
+		hls_lowbufferlength: 3,
+		hls_seekmode: "KEYFRAME",
+		hls_startfromlevel: -1,
+		hls_seekfromlevel: -1,
+		hls_live_flushurlcache: false,
+		hls_info: true,
+		hls_debug: false,
+		hls_debug2: false,
+		hls_warn: true,
+		hls_error: true,
+		hls_fragmentloadmaxretry : -1,
+		hls_manifestloadmaxretry : -1,
+		hls_capleveltostage : false,
+		hls_maxlevelcappingmode : "downscale"
+	};
+
+	for (var i = 0; i < parameterNames.length; i++) {
+		var parameterName = parameterNames[i];
+		parameters[parameterName] = pqs.param(parameterName) ||
+		parameters[parameterName];
+	}
+
+	var wmodeValue = "direct";
+	var wmodeOptions = ["direct", "opaque", "transparent", "window"];
+	if (parameters.hasOwnProperty("wmode"))
+	{
+		if (wmodeOptions.indexOf(parameters.wmode) >= 0)
+		{
+			wmodeValue = parameters.wmode;
+		}
+		delete parameters.wmode;
+	}
+
+	// Embed the player SWF:
+	swfobject.embedSWF(
+		"GrindPlayer.swf"
+		, "GrindPlayer"
+		, 640
+		, 480
+		, "10.1.0"
+		, "expressInstall.swf"
+		, parameters
+		, {
+			allowFullScreen: "true",
+			wmode: wmodeValue
+		}
+		, {
+			name: "GrindPlayer"
+		}
+	);
+
+</script>
+<h1>Nginx-Rtmp-Server</h1>
+<p>
+	<a href="/index.html">RTMP 直播测试器</a> <a href="/stat" target="_blank">RTMP 流监控</a> <a href="http://www.nodemedia.cn/" target="_blank">获取Android & iOS RTMP 开发SDK</a>
+</p>
+<div id="GrindPlayer">
+	<p>
+		Alternative content
+	</p>
+</div>
+<br>
+<input id="userInput" value="rtmp://192.168.0.10/live/demo" size="80"> <button onclick="userSubmit()">Play RTMP or HLS Stream</button><br>
+<p>
+<script type="text/javascript">
+function userSubmit() {
+  window.location = getlink(document.getElementById('userInput').value);
+}
+</script>
+    </body>
+</html>

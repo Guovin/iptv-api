@@ -15,23 +15,30 @@ from about import AboutUI
 from default import DefaultUI
 from speed import SpeedUI
 from prefer import PreferUI
+from local import LocalUI
 from multicast import MulticastUI
 from hotel import HotelUI
 from subscribe import SubscribeUI
 from online_search import OnlineSearchUI
 from utils.speed import check_ffmpeg_installed_status
+import pystray
 
 
 class TkinterUI:
     def __init__(self, root):
         info = get_version_info()
         self.root = root
-        self.root.title(info.get("name", ""))
+        self.name = info.get("name", "")
+        self.tray_icon = None
+        self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
+        self.create_tray_icon()
+        self.root.title(self.name)
         self.version = info.get("version", "")
         self.about_ui = AboutUI()
         self.default_ui = DefaultUI()
         self.speed_ui = SpeedUI()
         self.prefer_ui = PreferUI()
+        self.local_ui = LocalUI()
         self.multicast_ui = MulticastUI()
         self.hotel_ui = HotelUI()
         self.subscribe_ui = SubscribeUI()
@@ -39,6 +46,32 @@ class TkinterUI:
         self.update_source = UpdateSource()
         self.update_running = False
         self.result_url = None
+
+    def on_closing(self):
+        if messagebox.askyesno("提示",
+                               "最小化至后台运行?",
+                               icon="question",
+                               default="yes",
+                               detail="选择“是”将最小化至后台运行，选择“否”将退出程序"
+                               ):
+            self.root.withdraw()
+            if not self.tray_icon:
+                self.create_tray_icon()
+        else:
+            self.root.destroy()
+
+    def create_tray_icon(self):
+        image = Image.open(resource_path("static/images/favicon.ico"))
+        menu = (pystray.MenuItem("显示", self.restore_window, default=True), pystray.MenuItem("退出", self.exit_app))
+        self.tray_icon = pystray.Icon("name", image, self.name, menu)
+        threading.Thread(target=self.tray_icon.run, daemon=True).start()
+
+    def restore_window(self):
+        self.root.deiconify()
+
+    def exit_app(self):
+        self.tray_icon.stop()
+        self.root.destroy()
 
     def view_result_link_callback(self, event):
         webbrowser.open_new_tab(self.result_url)
@@ -51,6 +84,7 @@ class TkinterUI:
         self.default_ui.change_entry_state(state=state)
         self.speed_ui.change_entry_state(state=state)
         self.prefer_ui.change_entry_state(state=state)
+        self.local_ui.change_entry_state(state=state)
         self.multicast_ui.change_entry_state(state=state)
         self.hotel_ui.change_entry_state(state=state)
         self.subscribe_ui.change_entry_state(state=state)
@@ -69,16 +103,17 @@ class TkinterUI:
         else:
             self.stop()
             self.update_source.stop()
-            self.run_button.config(text="开始更新", state="normal")
+            self.run_button.config(text="启动", state="normal")
             self.change_state("normal")
             self.progress_bar.pack_forget()
             self.view_result_link.pack_forget()
             self.progress_label.pack_forget()
 
     def on_run_update(self):
-        if not self.update_running and config.open_filter_resolution and not check_ffmpeg_installed_status():
+        if not self.update_running and (
+                config.open_filter_resolution or config.open_rtmp) and not check_ffmpeg_installed_status():
             if messagebox.askyesno("提示",
-                                   "使用分辨率相关功能需要安装FFmpeg，为了实现更佳的观看体验，\n是否前往官网下载？"):
+                                   "使用分辨率、推流相关功能需要安装FFmpeg，为了实现更佳的观看体验，\n是否前往官网下载？"):
                 return webbrowser.open("https://ffmpeg.org")
 
         loop = asyncio.new_event_loop()
@@ -99,7 +134,7 @@ class TkinterUI:
         self.progress_label["text"] = progress_text
         self.root.update()
         if finished:
-            self.run_button.config(text="开始更新", state="normal")
+            self.run_button.config(text="启动", state="normal")
             self.update_running = False
             self.change_state("normal")
             if url:
@@ -123,6 +158,7 @@ class TkinterUI:
         frame_default = tk.ttk.Frame(notebook)
         frame_speed = tk.ttk.Frame(notebook)
         frame_prefer = tk.ttk.Frame(notebook)
+        frame_local = tk.ttk.Frame(notebook)
         frame_hotel = tk.ttk.Frame(notebook)
         frame_multicast = tk.ttk.Frame(notebook)
         frame_subscribe = tk.ttk.Frame(notebook)
@@ -140,6 +176,10 @@ class TkinterUI:
             resource_path("static/images/prefer_icon.png")
         ).resize((16, 16))
         prefer_icon = ImageTk.PhotoImage(prefer_icon_source)
+        local_icon_source = Image.open(
+            resource_path("static/images/local_icon.png")
+        ).resize((16, 16))
+        local_icon = ImageTk.PhotoImage(local_icon_source)
         hotel_icon_source = Image.open(
             resource_path("static/images/hotel_icon.png")
         ).resize((16, 16))
@@ -162,12 +202,15 @@ class TkinterUI:
         )
         notebook.add(frame_speed, text="测速设置", image=speed_icon, compound=tk.LEFT)
         notebook.add(frame_prefer, text="偏好设置", image=prefer_icon, compound=tk.LEFT)
-        notebook.add(frame_hotel, text="酒店源", image=hotel_icon, compound=tk.LEFT)
         notebook.add(
-            frame_multicast, text="组播源", image=multicast_icon, compound=tk.LEFT
+            frame_local, text="本地源", image=local_icon, compound=tk.LEFT
         )
         notebook.add(
             frame_subscribe, text="订阅源", image=subscribe_icon, compound=tk.LEFT
+        )
+        notebook.add(frame_hotel, text="酒店源", image=hotel_icon, compound=tk.LEFT)
+        notebook.add(
+            frame_multicast, text="组播源", image=multicast_icon, compound=tk.LEFT
         )
         notebook.add(
             frame_online_search,
@@ -179,6 +222,7 @@ class TkinterUI:
         notebook.settings_icon = settings_icon
         notebook.speed_icon = speed_icon
         notebook.prefer_icon = prefer_icon
+        notebook.local_icon = local_icon
         notebook.hotel_icon = hotel_icon
         notebook.multicast_icon = multicast_icon
         notebook.subscribe_icon = subscribe_icon
@@ -187,6 +231,7 @@ class TkinterUI:
         self.default_ui.init_ui(frame_default)
         self.speed_ui.init_ui(frame_speed)
         self.prefer_ui.init_ui(frame_prefer)
+        self.local_ui.init_ui(frame_local)
         self.multicast_ui.init_ui(frame_multicast)
         self.hotel_ui.init_ui(frame_hotel)
         self.subscribe_ui.init_ui(frame_subscribe)
@@ -205,7 +250,7 @@ class TkinterUI:
         self.save_button.pack(side=tk.LEFT, padx=4, pady=8)
 
         self.run_button = tk.ttk.Button(
-            root_operate_column2, text="开始更新", command=self.on_run_update
+            root_operate_column2, text="启动", command=self.on_run_update
         )
         self.run_button.pack(side=tk.LEFT, padx=4, pady=8)
 
@@ -231,8 +276,8 @@ class TkinterUI:
 def get_root_location(root):
     screen_width = root.winfo_screenwidth()
     screen_height = root.winfo_screenheight()
-    width = 500
-    height = 700
+    width = 580
+    height = 650
     x = (screen_width / 2) - (width / 2)
     y = (screen_height / 2) - (height / 2)
     return (width, height, x, y)
@@ -247,4 +292,5 @@ if __name__ == "__main__":
     root.geometry("%dx%d+%d+%d" % get_root_location(root))
     root.iconbitmap(resource_path("static/images/favicon.ico"))
     root.after(0, config.copy)
+    root.after(0, config.copy("utils/nginx-rtmp-win32"))
     root.mainloop()

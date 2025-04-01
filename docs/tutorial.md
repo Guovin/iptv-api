@@ -85,7 +85,8 @@ IPTV-API是一个可高度自定义的IPTV接口更新项目📺，自定义频�
 
 1. 创建文件
 2. 配置文件命名为`user_config.ini`
-3. 粘贴默认配置 （创建`user_config.ini`可以只输入想要修改的配置项即可，无需全部复制 config.ini，注意配置文件上方的`[Settings]`必须保留，否则下方的自定义配置不生效）
+3. 粘贴默认配置 （创建`user_config.ini`可以只输入想要修改的配置项即可，无需全部复制 config.ini，注意配置文件上方的
+   `[Settings]`必须保留，否则下方的自定义配置不生效）
 4. 修改模板和结果文件配置：
     - source_file = config/user_demo.txt
     - final_file = output/user_result.txt
@@ -263,7 +264,7 @@ pipenv run ui
 
 ![IPTV-API 更新软件](./images/ui.png 'IPTV-API 更新软件')
 
-如果你看不懂软件的配置项，不要动，直接点开始更新即可
+如果你看不懂软件的配置项，不要动，直接点启动即可
 
 ## Docker
 
