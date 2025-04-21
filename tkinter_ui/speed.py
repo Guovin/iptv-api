@@ -122,6 +122,17 @@ class SpeedUI:
         self.min_resolution_entry.insert(0, config.min_resolution)
         self.min_resolution_entry.bind("<KeyRelease>", self.update_min_resolution)
 
+        self.max_resolution_label = tk.Label(
+            frame_default_resolution_params_column2, text="最大分辨率:", width=12
+        )
+        self.max_resolution_label.pack(side=tk.LEFT, padx=4, pady=8)
+        self.max_resolution_entry = tk.Entry(
+            frame_default_resolution_params_column2, width=10
+        )
+        self.max_resolution_entry.pack(side=tk.LEFT, padx=4, pady=8)
+        self.max_resolution_entry.insert(0, config.max_resolution)
+        self.max_resolution_entry.bind("<KeyRelease>", self.update_max_resolution)
+
         frame_default_sort_params = tk.Frame(root)
         frame_default_sort_params.pack(fill=tk.X)
 
@@ -162,6 +173,9 @@ class SpeedUI:
     def update_min_resolution(self, event):
         config.set("Settings", "min_resolution", self.min_resolution_entry.get())
 
+    def update_max_resolution(self, event):
+        config.set("Settings", "max_resolution", self.max_resolution_entry.get())
+
     def update_sort_duplicate_limit(self, event):
         config.set("Settings", "sort_duplicate_limit", self.sort_duplicate_limit_entry.get())
 
@@ -173,6 +187,7 @@ class SpeedUI:
             "min_speed_entry",
             "open_filter_resolution_checkbutton",
             "min_resolution_entry",
+            "max_resolution_entry",
             "sort_duplicate_limit_entry"
         ]:
             getattr(self, entry).config(state=state)

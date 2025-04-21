@@ -169,6 +169,14 @@ class ConfigManager:
         return get_resolution_value(self.min_resolution)
 
     @property
+    def max_resolution(self):
+        return self.config.get("Settings", "max_resolution", fallback="1920x1080")
+
+    @property
+    def max_resolution_value(self):
+        return get_resolution_value(self.max_resolution)
+
+    @property
     def urls_limit(self):
         return self.config.getint("Settings", "urls_limit", fallback=30)
 
@@ -344,7 +352,7 @@ class ConfigManager:
 
     @property
     def sort_duplicate_limit(self):
-        return self.config.getint("Settings", "sort_duplicate_limit", fallback=3)
+        return self.config.getint("Settings", "sort_duplicate_limit", fallback=1)
 
     @property
     def cdn_url(self):
@@ -352,7 +360,11 @@ class ConfigManager:
 
     @property
     def open_rtmp(self):
-        return self.config.getboolean("Settings", "open_rtmp", fallback=False)
+        return not os.environ.get("GITHUB_ACTIONS") and self.config.getboolean("Settings", "open_rtmp", fallback=True)
+
+    @property
+    def open_headers(self):
+        return self.config.getboolean("Settings", "open_headers", fallback=False)
 
     def load(self):
         """

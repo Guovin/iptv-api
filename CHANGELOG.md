@@ -1,5 +1,38 @@
 # 更新日志（Changelog）
 
+## v1.6.3
+
+### 2025/4/3
+
+- ✨ 新增支持RTMP推流（工作流不支持），支持`Live/HLS`推流，订阅结果可转换为对应模式推流输出，也可通过`config`目录内创建`live`或
+  `hls`目录定义读取本地视频源
+- ✨ Docker镜像合并为`guovern/iptv-api`，大小与精简版一致，不再区分完整版与精简版，`latest`为最新版，支持获取历史版本，如
+  `1.6.2`
+- ✨ 新增支持GUI最小化至系统托盘区运行
+- ✨ 新增支持`IPv4/IPv6`双栈访问，支持`txt`与`m3u`区分IPv协议类型访问
+- ✨ 增加构建版本号，支持保留历史版本
+- 🐛 优化黑名单非url关键字匹配问题
+- 🐛 修复Docker容器启动提示`no crontab for root`
+- 🐛 修复IPv6结果过滤问题
+
+<details>
+  <summary>English</summary>
+
+- ✨ Added support for RTMP streaming (not supported by workflows), supporting `Live/HLS` streaming. Subscription results
+  can be converted to the corresponding mode for streaming output, and local video sources can be defined by creating
+  `live` or `hls` directories in the `config` directory.
+- ✨ Merged Docker images into `guovern/iptv-api`, with the same size as the slim version. No longer distinguish between
+  full and slim versions. `latest` is the latest version, and historical versions can be obtained, such as `1.6.2`.
+- ✨ Added support for minimizing the GUI to the system tray.
+- ✨ Added support for dual-stack `IPv4/IPv6` access, supporting `txt` and `m3u` to distinguish between IPv protocol
+  types.
+- ✨ Added build version number, supporting the retention of historical versions.
+- 🐛 Optimized the issue of non-URL keyword matching in the blacklist.
+- 🐛 Fixed the `no crontab for root` prompt when starting the Docker container.
+- 🐛 Fixed the issue of filtering IPv6 results.
+
+</details>
+
 ## v1.6.2
 
 ### 2025/3/4

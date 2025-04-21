@@ -1,0 +1,23 @@
+# 这是频道名称的别名名单，用于获取接口时将多种名称映射为一个名称的结果，可以提升获取量与准确率
+# 格式：模板频道名称,别名1,别名2,别名3
+# This is the alias list for channel names, used to map multiple names to a single name when fetching from the interface, improving the fetch volume and accuracy.
+# Format: TemplateChannelName,Alias1,Alias2,Alias3
+
+CCTV-1,CCTV1综合
+CCTV-2,CCTV2财经
+CCTV-3,CCTV3综艺
+CCTV-4,CCTV4中文国际
+CCTV-5,CCTV5体育
+CCTV-5+,CCTV5+体育,CCTV5+体育赛事
+CCTV-6,CCTV6电影
+CCTV-7,CCTV7军事,CCTV7农业,CCTV7军事农业,CCTV7军农,CCTV7国防军事
+CCTV-8,CCTV8电视剧
+CCTV-9,CCTV9纪录,CCTV9记录
+CCTV-10,CCTV10科教
+CCTV-11,CCTV11戏曲
+CCTV-12,CCTV12社会与法
+CCTV-13,CCTV13新闻,CCTV新闻
+CCTV-14,CCTV14少儿
+CCTV-15,CCTV15音乐
+CCTV-16,CCTV16体育赛事,CCTV16奥林匹克
+CCTV-17,CCTV17农业农村,CCTV17农业

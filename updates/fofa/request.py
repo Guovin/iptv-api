@@ -15,7 +15,7 @@ from utils.channel import format_channel_name
 from utils.config import config
 from utils.requests.tools import get_source_requests, close_session
 from utils.retry import retry_func
-from utils.tools import merge_objects, get_pbar_remaining, add_url_info, resource_path
+from utils.tools import merge_objects, get_pbar_remaining, resource_path
 
 
 def get_fofa_urls_from_region_list():
@@ -215,8 +215,7 @@ def process_fofa_json_url(url, region, open_sort, hotel_name="酒店源"):
                             item_name = format_channel_name(item.get("name"))
                             item_url = item.get("url").strip()
                             if item_name and item_url:
-                                total_url = add_url_info(f"{url}{item_url}", f"{region}{hotel_name}")
-                                data = {"url": total_url}
+                                data = {"url": f"{url}{item_url}", "extra_info": f"{region}{hotel_name}"}
                                 if item_name not in channels:
                                     channels[item_name] = [data]
                                 else:

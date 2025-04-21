@@ -149,7 +149,7 @@ def get_resolution_value(resolution_str):
     return 0
 
 
-def get_total_urls(info_list: list[ChannelData], ipv_type_prefer, origin_type_prefer) -> list:
+def get_total_urls(info_list: list[ChannelData], ipv_type_prefer, origin_type_prefer, rtmp_type=None) -> list:
     """
     Get the total urls from info list
     """
@@ -161,53 +161,43 @@ def get_total_urls(info_list: list[ChannelData], ipv_type_prefer, origin_type_pr
         origin_type_prefer = ["all"]
     categorized_urls = {origin: {ipv_type: [] for ipv_type in ipv_type_prefer} for origin in origin_type_prefer}
     total_urls = []
-    open_url_info = config.open_url_info
     for info in info_list:
-        channel_id, url, origin, resolution, url_ipv_type = (
+        channel_id, url, origin, resolution, url_ipv_type, extra_info = (
             info["id"],
             info["url"],
             info["origin"],
             info["resolution"],
-            info["ipv_type"]
+            info["ipv_type"],
+            info.get("extra_info", ""),
         )
         if not origin:
             continue
 
-        if origin == "whitelist":
-            w_url, _, w_info = url.partition("$")
-            if open_url_info:
-                w_info_value = w_info.partition("!")[2] or "白名单"
-                w_url = add_url_info(w_url, w_info_value)
-            total_urls.append({"id": channel_id, "url": w_url, "ipv_type": url_ipv_type})
-            continue
+        if origin in ["live", "hls"]:
+            if not rtmp_type or (rtmp_type and origin in rtmp_type):
+                total_urls.append(info)
+                continue
+            else:
+                continue
 
-        if origin == "subscribe" and "/rtp/" in url:
-            origin = "multicast"
+        if origin == "whitelist":
+            total_urls.append(info)
+            continue
 
         if origin_prefer_bool and (origin not in origin_type_prefer):
             continue
 
-        if open_url_info:
-            pure_url, _, info = url.partition("$")
-            if not info:
-                origin_name = constants.origin_map[origin]
-                if origin_name:
-                    url = add_url_info(pure_url, origin_name)
-
-            if url_ipv_type == 'ipv6':
-                url = add_url_info(url, "IPv6")
-
-            if resolution:
-                url = add_url_info(url, resolution)
+        if not extra_info:
+            info["extra_info"] = constants.origin_map[origin]
 
         if not origin_prefer_bool:
             origin = "all"
 
         if ipv_prefer_bool:
             if url_ipv_type in ipv_type_prefer:
-                categorized_urls[origin][url_ipv_type].append({"id": channel_id, "url": url, "ipv_type": url_ipv_type})
+                categorized_urls[origin][url_ipv_type].append(info)
         else:
-            categorized_urls[origin]["all"].append({"id": channel_id, "url": url, "ipv_type": url_ipv_type})
+            categorized_urls[origin]["all"].append(info)
 
     ipv_num = {ipv_type: 0 for ipv_type in ipv_type_prefer}
     urls_limit = config.urls_limit
@@ -235,9 +225,6 @@ def get_total_urls(info_list: list[ChannelData], ipv_type_prefer, origin_type_pr
 
     total_urls = total_urls[:urls_limit]
 
-    if not open_url_info:
-        for item in total_urls:
-            item["url"] = item["url"].partition("$")[0]
     return total_urls
 
 
@@ -245,7 +232,6 @@ def get_total_urls_from_sorted_data(data):
     """
     Get the total urls with filter by date and duplicate from sorted data
     """
-    total_urls = []
     if len(data) > config.urls_limit:
         total_urls = [channel_data["url"] for channel_data, _ in filter_by_date(data)]
     else:
@@ -342,11 +328,11 @@ def get_ip_address():
     Get the IP address
     """
     host = os.getenv("APP_HOST", config.app_host)
-    port = os.getenv("SERVER_PORT", config.app_port)
+    port = os.getenv("APP_PORT", config.app_port)
     return f"{host}:{port}"
 
 
-def convert_to_m3u(path=None, first_channel_name=None):
+def convert_to_m3u(path=None, first_channel_name=None, data=None):
     """
     Convert result txt to m3u format
     """
@@ -375,7 +361,17 @@ def convert_to_m3u(path=None, first_channel_name=None):
                         m3u_output += f'#EXTINF:-1 tvg-name="{processed_channel_name}" tvg-logo="{join_url(config.cdn_url, f'https://raw.githubusercontent.com/fanmingming/live/main/tv/{processed_channel_name}.png')}"'
                         if current_group:
                             m3u_output += f' group-title="{current_group}"'
-                        m3u_output += f",{original_channel_name}\n{channel_link}\n"
+                        m3u_output += f",{original_channel_name}\n"
+                        if data and config.open_headers:
+                            item_list = data.get(original_channel_name, [])
+                            for item in item_list:
+                                if item["url"] == channel_link:
+                                    headers = item.get("headers")
+                                    if headers:
+                                        for key, value in headers.items():
+                                            m3u_output += f"#EXTVLCOPT:http-{key.lower()}={value}\n"
+                                    break
+                        m3u_output += f"{channel_link}\n"
             m3u_file_path = os.path.splitext(path)[0] + ".m3u"
             with open(m3u_file_path, "w", encoding="utf-8") as m3u_file:
                 m3u_file.write(m3u_output)
@@ -406,18 +402,16 @@ def get_result_file_content(path=None, show_content=False, file_type=None):
     return response
 
 
-def remove_duplicates_from_list(data_list, seen, force_str=None):
+def remove_duplicates_from_list(data_list, seen):
     """
     Remove duplicates from data list
     """
     unique_list = []
     for item in data_list:
-        item_first = item["url"]
         part = item["host"]
-        if force_str:
-            info = item_first.partition("$")[2]
-            if info and info.startswith(force_str):
-                continue
+        origin = item["origin"]
+        if origin in ["whitelist", "live", "hls"]:
+            continue
         seen_num = seen.get(part, 0)
         if (seen_num < config.sort_duplicate_limit) or (seen_num == 0 and config.sort_duplicate_limit == 0):
             seen[part] = seen_num + 1
@@ -425,15 +419,15 @@ def remove_duplicates_from_list(data_list, seen, force_str=None):
     return unique_list
 
 
-def process_nested_dict(data, seen, force_str=None):
+def process_nested_dict(data, seen):
     """
     Process nested dict
     """
     for key, value in data.items():
         if isinstance(value, dict):
-            process_nested_dict(value, seen, force_str)
+            process_nested_dict(value, seen)
         elif isinstance(value, list):
-            data[key] = remove_duplicates_from_list(value, seen, force_str)
+            data[key] = remove_duplicates_from_list(value, seen)
 
 
 def get_url_host(url):
@@ -521,17 +515,51 @@ def format_name(name: str) -> str:
     return name.lower()
 
 
-def get_name_url(content, pattern, check_url=True):
+def get_headers_key_value(content: str) -> dict:
     """
-    Get name and url from content
+    Get the headers key value from content
     """
-    matches = pattern.findall(content)
-    channels = [
-        {"name": match[0].strip(), "url": match[1].strip()}
-        for match in matches
-        if (check_url and match[1].strip()) or not check_url
-    ]
-    return channels
+    key_value = {}
+    for match in constants.key_value_pattern.finditer(content):
+        key = match.group("key").strip().replace("http-", "").lower()
+        if "refer" in key:
+            key = "referer"
+        value = match.group("value").replace('"', "").strip()
+        if key and value:
+            key_value[key] = value
+    return key_value
+
+
+def get_name_url(content, pattern, open_headers=False, check_url=True):
+    """
+    Extract name and URL from content using a regex pattern.
+    :param content: str, the input content to search.
+    :param pattern: re.Pattern, the compiled regex pattern to match.
+    :param open_headers: bool, whether to extract headers.
+    :param check_url: bool, whether to validate the presence of a URL.
+    """
+    result = []
+    for match in pattern.finditer(content):
+        group_dict = match.groupdict()
+        name = (group_dict.get("name", "") or "").strip()
+        url = (group_dict.get("url", "") or "").strip()
+        if not name or (check_url and not url):
+            continue
+        data = {"name": name, "url": url}
+        attributes = {**get_headers_key_value(group_dict.get("attributes", "")),
+                      **get_headers_key_value(group_dict.get("options", ""))}
+        headers = {
+            "User-Agent": attributes.get("useragent", ""),
+            "Referer": attributes.get("referer", ""),
+            "Origin": attributes.get("origin", "")
+        }
+        headers = {k: v for k, v in headers.items() if v}
+        if not open_headers and headers:
+            continue
+        if open_headers:
+            data["headers"] = headers
+        result.append(data)
+    return result
 
 
 def get_real_path(path) -> str:
@@ -583,6 +611,19 @@ def get_name_urls_from_file(path: str, format_name_flag: bool = False) -> dict[s
                     url = name_url[0]["url"]
                     if url not in name_urls[name]:
                         name_urls[name].append(url)
+    return name_urls
+
+
+def get_name_uri_from_dir(path: str) -> dict:
+    """
+    Get the name and uri from dir, only from file name
+    """
+    real_path = get_real_path(resource_path(path))
+    name_urls = defaultdict(list)
+    if os.path.exists(real_path):
+        for file in os.listdir(real_path):
+            filename = file.rsplit(".", 1)[0]
+            name_urls[filename].append(f"{real_path}/{file}")
     return name_urls
 
 
@@ -648,3 +689,16 @@ def custom_print(*args, **kwargs):
     """
     if not custom_print.disable:
         print(*args, **kwargs)
+
+
+def get_urls_len(data) -> int:
+    """
+    Get the dict urls length
+    """
+    urls = set(
+        url_info["url"]
+        for value in data.values()
+        for url_info_list in value.values()
+        for url_info in url_info_list
+    )
+    return len(urls)

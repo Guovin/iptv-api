@@ -29,7 +29,8 @@ from utils.tools import (
     check_ipv6_support,
     get_urls_from_file,
     get_version_info,
-    join_url
+    join_url,
+    get_urls_len
 )
 from utils.types import CategoryChannelData
 
@@ -77,7 +78,11 @@ class UpdateSource:
                         subscribe_urls = [join_url(config.cdn_url, url) if "raw.githubusercontent.com" in url else url
                                           for url in subscribe_urls]
                     task = asyncio.create_task(
-                        task_func(subscribe_urls, whitelist=whitelist_urls, callback=self.update_progress)
+                        task_func(subscribe_urls,
+                                  names=channel_names,
+                                  whitelist=whitelist_urls,
+                                  callback=self.update_progress
+                                  )
                     )
                 elif setting == "hotel_foodie" or setting == "hotel_fofa":
                     task = asyncio.create_task(task_func(callback=self.update_progress))
@@ -95,18 +100,6 @@ class UpdateSource:
                 f"正在进行{name}, 剩余{self.total - self.pbar.n}个{item_name}, 预计剩余时间: {get_pbar_remaining(n=self.pbar.n, total=self.total, start_time=self.start_time)}",
                 int((self.pbar.n / self.total) * 100),
             )
-
-    def get_urls_len(self, is_filter: bool = False) -> int:
-        data = copy.deepcopy(self.channel_data)
-        if is_filter:
-            process_nested_dict(data, seen={}, force_str="!")
-        processed_urls = set(
-            url_info["url"]
-            for channel_obj in data.values()
-            for url_info_list in channel_obj.values()
-            for url_info in url_info_list
-        )
-        return len(processed_urls)
 
     async def main(self):
         try:
@@ -138,8 +131,10 @@ class UpdateSource:
                 ipv6_support = config.ipv6_support or check_ipv6_support()
                 open_sort = config.open_sort
                 if open_sort:
-                    urls_total = self.get_urls_len()
-                    self.total = self.get_urls_len(is_filter=True)
+                    urls_total = get_urls_len(self.channel_data)
+                    data = copy.deepcopy(self.channel_data)
+                    process_nested_dict(data, seen={})
+                    self.total = get_urls_len(data)
                     print(f"Total urls: {urls_total}, need to sort: {self.total}")
                     sort_callback = lambda: self.pbar_update(name="测速", item_name="接口")
                     self.update_progress(
@@ -150,6 +145,7 @@ class UpdateSource:
                     self.pbar = tqdm(total=self.total, desc="Sorting")
                     self.channel_data = await process_sort_channel_list(
                         self.channel_data,
+                        filter_data=data,
                         ipv6=ipv6_support,
                         callback=sort_callback,
                     )
