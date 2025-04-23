@@ -1,8 +1,8 @@
 <!--
-注意！这是修复代码或添加新功能的 Pull Request，请仔细确认合并的目标仓库名称。
-不要提交无效的PR（包括个人配置或更新结果的变更），否则将会被直接关闭，严重将会被列入黑名单！
-Attention! This is a Pull Request to fix code or add new functionality. Please carefully confirm the target repository name for the merge.
-Do not submit invalid PR (including personal configuration or result changes), otherwise it will be directly closed, serious will be blacklisted!
+必读！！！请认真阅读以下内容，否则有可能会被加入黑名单（禁止使用仓库）！
+注意！这是修复代码或添加新功能的Pull Request，请再次确认上面要合并的目标仓库（箭头指向的仓库名称）。
+如果你是想要更新主仓库的代码，箭头指向的base repository一定不能是Guovin/iptv-api！
+勿提交无效的PR（包括个人配置或更新结果），如果你是小白或非开发人员，最好不要使用该功能。
 -->
 
 <!-- PULL REQUEST TEMPLATE -->

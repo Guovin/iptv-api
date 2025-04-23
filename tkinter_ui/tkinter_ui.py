@@ -20,6 +20,7 @@ from multicast import MulticastUI
 from hotel import HotelUI
 from subscribe import SubscribeUI
 from online_search import OnlineSearchUI
+from epg import EpgUI
 from utils.speed import check_ffmpeg_installed_status
 import pystray
 
@@ -43,6 +44,7 @@ class TkinterUI:
         self.hotel_ui = HotelUI()
         self.subscribe_ui = SubscribeUI()
         self.online_search_ui = OnlineSearchUI()
+        self.epg_ui = EpgUI()
         self.update_source = UpdateSource()
         self.update_running = False
         self.result_url = None
@@ -89,6 +91,7 @@ class TkinterUI:
         self.hotel_ui.change_entry_state(state=state)
         self.subscribe_ui.change_entry_state(state=state)
         self.online_search_ui.change_entry_state(state=state)
+        self.epg_ui.change_entry_state(state=state)
 
     async def run_update(self):
         self.update_running = not self.update_running
@@ -163,6 +166,7 @@ class TkinterUI:
         frame_multicast = tk.ttk.Frame(notebook)
         frame_subscribe = tk.ttk.Frame(notebook)
         frame_online_search = tk.ttk.Frame(notebook)
+        frame_epg = tk.ttk.Frame(notebook)
 
         settings_icon_source = Image.open(
             resource_path("static/images/settings_icon.png")
@@ -196,6 +200,10 @@ class TkinterUI:
             resource_path("static/images/online_search_icon.png")
         ).resize((16, 16))
         online_search_icon = ImageTk.PhotoImage(online_search_icon_source)
+        epg_icon_source = Image.open(
+            resource_path("static/images/epg_icon.png")
+        ).resize((16, 16))
+        epg_icon = ImageTk.PhotoImage(epg_icon_source)
 
         notebook.add(
             frame_default, text="通用设置", image=settings_icon, compound=tk.LEFT
@@ -218,6 +226,12 @@ class TkinterUI:
             image=online_search_icon,
             compound=tk.LEFT,
         )
+        notebook.add(
+            frame_epg,
+            text="EPG",
+            image=epg_icon,
+            compound=tk.LEFT,
+        )
 
         notebook.settings_icon = settings_icon
         notebook.speed_icon = speed_icon
@@ -227,6 +241,7 @@ class TkinterUI:
         notebook.multicast_icon = multicast_icon
         notebook.subscribe_icon = subscribe_icon
         notebook.online_search_icon = online_search_icon
+        notebook.epg_icon = epg_icon
 
         self.default_ui.init_ui(frame_default)
         self.speed_ui.init_ui(frame_speed)
@@ -236,6 +251,7 @@ class TkinterUI:
         self.hotel_ui.init_ui(frame_hotel)
         self.subscribe_ui.init_ui(frame_subscribe)
         self.online_search_ui.init_ui(frame_online_search)
+        self.epg_ui.init_ui(frame_epg)
 
         root_operate = tk.Frame(self.root)
         root_operate.pack(fill=tk.X, pady=8, padx=120)
@@ -276,8 +292,8 @@ class TkinterUI:
 def get_root_location(root):
     screen_width = root.winfo_screenwidth()
     screen_height = root.winfo_screenheight()
-    width = 580
-    height = 650
+    width = 620
+    height = 600
     x = (screen_width / 2) - (width / 2)
     y = (screen_height / 2) - (height / 2)
     return (width, height, x, y)

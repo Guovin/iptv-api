@@ -1,7 +1,13 @@
 # -*- mode: python ; coding: utf-8 -*-
+import json
+
+with open('version.json') as f:
+    version_data = json.load(f)
+    version = version_data['version']
+    name = version_data['name']
 
 a = Analysis(
-    ['tkinter_ui.py', 'about.py', 'default.py', 'speed.py', 'prefer.py', 'local.py', 'multicast.py', 'hotel.py', 'subscribe.py', 'online_search.py'],
+    ['tkinter_ui.py', 'about.py', 'default.py', 'speed.py', 'prefer.py', 'local.py', 'multicast.py', 'hotel.py', 'subscribe.py', 'online_search.py', 'epg.py'],
     pathex=[],
     binaries=[],
     datas=[
@@ -26,6 +32,7 @@ a = Analysis(
         ('../static/images/multicast_icon.png', 'static/images'),
         ('../static/images/subscribe_icon.png', 'static/images'),
         ('../static/images/online_search_icon.png', 'static/images'),
+        '../static/images/epg_icon.png', 'static/images'),
         ('about.py', '.'),
         ('default.py', '.'),
         ('speed.py', '.'),
@@ -35,6 +42,7 @@ a = Analysis(
         ('hotel.py', '.'),
         ('subscribe.py', '.'),
         ('online_search.py', '.'),
+        ('epg.py', '.'),
         ('select_combobox.py', '.'),
         ('../version.json', '.')
     ],
@@ -54,7 +62,7 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name='IPTV-API',
+    name=f'{name}-v{version}',
     debug=True,
     bootloader_ignore_signals=False,
     strip=False,

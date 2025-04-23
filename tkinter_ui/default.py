@@ -225,41 +225,6 @@ class DefaultUI:
             self.ipv_type_combo.current(2)
         self.ipv_type_combo.bind("<<ComboboxSelected>>", self.update_ipv_type)
 
-        frame_proxy_mode = tk.Frame(root)
-        frame_proxy_mode.pack(fill=tk.X)
-        frame_proxy_mode_params_column1 = tk.Frame(frame_proxy_mode)
-        frame_proxy_mode_params_column1.pack(side=tk.LEFT, fill=tk.Y)
-        frame_proxy_mode_params_column2 = tk.Frame(frame_proxy_mode)
-        frame_proxy_mode_params_column2.pack(side=tk.RIGHT, fill=tk.Y)
-
-        self.open_proxy_label = tk.Label(
-            frame_proxy_mode_params_column1, text="开启代理查询:", width=12
-        )
-        self.open_proxy_label.pack(side=tk.LEFT, padx=4, pady=8)
-        self.open_proxy_var = tk.BooleanVar(value=config.open_proxy)
-        self.open_proxy_checkbutton = ttk.Checkbutton(
-            frame_proxy_mode_params_column1,
-            variable=self.open_proxy_var,
-            onvalue=True,
-            offvalue=False,
-            command=self.update_open_proxy
-        )
-        self.open_proxy_checkbutton.pack(side=tk.LEFT, padx=4, pady=8)
-
-        self.open_keep_all_label = tk.Label(
-            frame_proxy_mode_params_column2, text="完整记录:", width=12
-        )
-        self.open_keep_all_label.pack(side=tk.LEFT, padx=4, pady=8)
-        self.open_keep_all_var = tk.BooleanVar(value=config.open_keep_all)
-        self.open_keep_all_checkbutton = ttk.Checkbutton(
-            frame_proxy_mode_params_column2,
-            variable=self.open_keep_all_var,
-            onvalue=True,
-            offvalue=False,
-            command=self.update_open_keep_all
-        )
-        self.open_keep_all_checkbutton.pack(side=tk.LEFT, padx=4, pady=8)
-
         frame_m3u = tk.Frame(root)
         frame_m3u.pack(fill=tk.X)
         frame_proxy_m3u_column1 = tk.Frame(frame_m3u)
@@ -279,6 +244,20 @@ class DefaultUI:
             command=self.update_open_m3u_result
         )
         self.open_m3u_result_checkbutton.pack(side=tk.LEFT, padx=4, pady=8)
+
+        self.open_headers_label = tk.Label(
+            frame_proxy_m3u_column1, text="使用验证信息:", width=12
+        )
+        self.open_headers_label.pack(side=tk.LEFT, padx=4, pady=8)
+        self.open_headers_var = tk.BooleanVar(value=config.open_headers)
+        self.open_headers_checkbutton = ttk.Checkbutton(
+            frame_proxy_m3u_column1,
+            variable=self.open_headers_var,
+            onvalue=True,
+            offvalue=False,
+            command=self.update_open_headers
+        )
+        self.open_headers_checkbutton.pack(side=tk.LEFT, padx=4, pady=8)
 
         self.open_driver_label = tk.Label(
             frame_proxy_m3u_column2, text="浏览器模式:", width=12
@@ -372,7 +351,7 @@ class DefaultUI:
         self.open_empty_category_checkbutton.pack(side=tk.LEFT, padx=4, pady=8)
 
         self.ipv6_support_label = tk.Label(
-            frame_default_open_empty_category_column2, text="强制支持IPv6:", width=12
+            frame_default_open_empty_category_column2, text="强制认为当前网络支持IPv6:", width=22
         )
         self.ipv6_support_label.pack(side=tk.LEFT, padx=4, pady=8)
         self.ipv6_support_var = tk.BooleanVar(value=config.ipv6_support)
@@ -488,14 +467,11 @@ class DefaultUI:
     def update_open_driver(self):
         config.set("Settings", "open_driver", str(self.open_driver_var.get()))
 
-    def update_open_proxy(self):
-        config.set("Settings", "open_proxy", str(self.open_proxy_var.get()))
-
-    def update_open_keep_all(self):
-        config.set("Settings", "open_keep_all", str(self.open_keep_all_var.get()))
-
     def update_open_m3u_result(self):
         config.set("Settings", "open_m3u_result", str(self.open_m3u_result_var.get()))
+
+    def update_open_headers(self):
+        config.set("Settings", "open_headers", str(self.open_headers_var.get()))
 
     def update_request_timeout(self, event):
         config.set("Settings", "request_timeout", self.request_timeout_entry.get())
@@ -555,7 +531,6 @@ class DefaultUI:
             "open_use_cache_checkbutton",
             "open_request_checkbutton",
             "open_driver_checkbutton",
-            "open_proxy_checkbutton",
             "request_timeout_entry",
             "source_file_entry",
             "source_file_button",
@@ -565,8 +540,8 @@ class DefaultUI:
             "final_file_entry",
             "final_file_button",
             "final_file_edit_button",
-            "open_keep_all_checkbutton",
             "open_m3u_result_checkbutton",
+            "open_headers_checkbutton",
             "urls_limit_entry",
             "update_time_position_combo",
             "open_update_time_checkbutton",
