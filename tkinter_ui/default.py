@@ -1,7 +1,7 @@
 import os
 import tkinter as tk
-from tkinter import filedialog
-from tkinter import ttk
+import webbrowser
+from tkinter import filedialog, messagebox, ttk
 
 import utils.constants as constants
 from utils.config import config
@@ -36,6 +36,13 @@ class DefaultUI:
         )
         self.source_file_button.pack(side=tk.LEFT, padx=4, pady=0)
 
+        self.source_file_edit_button = tk.ttk.Button(
+            frame_default_source_file_column2,
+            text="编辑",
+            command=lambda: self.edit_file(config.source_file),
+        )
+        self.source_file_edit_button.pack(side=tk.LEFT, padx=4, pady=0)
+
         frame_default_final_file = tk.Frame(root)
         frame_default_final_file.pack(fill=tk.X)
         frame_default_final_file_column1 = tk.Frame(frame_default_final_file)
@@ -57,6 +64,13 @@ class DefaultUI:
             command=self.select_final_file,
         )
         self.final_file_button.pack(side=tk.LEFT, padx=4, pady=0)
+
+        self.final_file_edit_button = tk.ttk.Button(
+            frame_default_final_file_column2,
+            text="编辑",
+            command=lambda: self.edit_file(config.final_file),
+        )
+        self.final_file_edit_button.pack(side=tk.LEFT, padx=4, pady=0)
 
         frame_default_open_update = tk.Frame(root)
         frame_default_open_update.pack(fill=tk.X)
@@ -109,19 +123,33 @@ class DefaultUI:
         frame_default_open_cache_column2 = tk.Frame(frame_default_open_cache)
         frame_default_open_cache_column2.pack(side=tk.RIGHT, fill=tk.Y)
 
-        self.open_use_old_result_label = tk.Label(
-            frame_default_open_cache_column1, text="使用历史结果:", width=12
+        self.open_rtmp_label = tk.Label(
+            frame_default_open_cache_column1, text="开启推流:", width=12
         )
-        self.open_use_old_result_label.pack(side=tk.LEFT, padx=4, pady=8)
-        self.open_use_old_result_var = tk.BooleanVar(value=config.open_use_old_result)
-        self.open_use_old_result_checkbutton = ttk.Checkbutton(
+        self.open_rtmp_label.pack(side=tk.LEFT, padx=4, pady=8)
+        self.open_rtmp_var = tk.BooleanVar(value=config.open_rtmp)
+        self.open_rtmp_checkbutton = ttk.Checkbutton(
             frame_default_open_cache_column1,
-            variable=self.open_use_old_result_var,
+            variable=self.open_rtmp_var,
             onvalue=True,
             offvalue=False,
-            command=self.update_open_use_old_result,
+            command=self.update_open_rtmp
         )
-        self.open_use_old_result_checkbutton.pack(side=tk.LEFT, padx=4, pady=8)
+        self.open_rtmp_checkbutton.pack(side=tk.LEFT, padx=4, pady=8)
+
+        self.open_history_label = tk.Label(
+            frame_default_open_cache_column2, text="使用历史结果:", width=12
+        )
+        self.open_history_label.pack(side=tk.LEFT, padx=4, pady=8)
+        self.open_history_var = tk.BooleanVar(value=config.open_history)
+        self.open_history_checkbutton = ttk.Checkbutton(
+            frame_default_open_cache_column2,
+            variable=self.open_history_var,
+            onvalue=True,
+            offvalue=False,
+            command=self.update_open_history,
+        )
+        self.open_history_checkbutton.pack(side=tk.LEFT, padx=4, pady=8)
 
         self.open_use_cache_label = tk.Label(
             frame_default_open_cache_column2, text="使用离线数据:", width=12
@@ -198,41 +226,6 @@ class DefaultUI:
             self.ipv_type_combo.current(2)
         self.ipv_type_combo.bind("<<ComboboxSelected>>", self.update_ipv_type)
 
-        frame_proxy_mode = tk.Frame(root)
-        frame_proxy_mode.pack(fill=tk.X)
-        frame_proxy_mode_params_column1 = tk.Frame(frame_proxy_mode)
-        frame_proxy_mode_params_column1.pack(side=tk.LEFT, fill=tk.Y)
-        frame_proxy_mode_params_column2 = tk.Frame(frame_proxy_mode)
-        frame_proxy_mode_params_column2.pack(side=tk.RIGHT, fill=tk.Y)
-
-        self.open_proxy_label = tk.Label(
-            frame_proxy_mode_params_column1, text="开启代理查询:", width=12
-        )
-        self.open_proxy_label.pack(side=tk.LEFT, padx=4, pady=8)
-        self.open_proxy_var = tk.BooleanVar(value=config.open_proxy)
-        self.open_proxy_checkbutton = ttk.Checkbutton(
-            frame_proxy_mode_params_column1,
-            variable=self.open_proxy_var,
-            onvalue=True,
-            offvalue=False,
-            command=self.update_open_proxy
-        )
-        self.open_proxy_checkbutton.pack(side=tk.LEFT, padx=4, pady=8)
-
-        self.open_keep_all_label = tk.Label(
-            frame_proxy_mode_params_column2, text="完整记录:", width=12
-        )
-        self.open_keep_all_label.pack(side=tk.LEFT, padx=4, pady=8)
-        self.open_keep_all_var = tk.BooleanVar(value=config.open_keep_all)
-        self.open_keep_all_checkbutton = ttk.Checkbutton(
-            frame_proxy_mode_params_column2,
-            variable=self.open_keep_all_var,
-            onvalue=True,
-            offvalue=False,
-            command=self.update_open_keep_all
-        )
-        self.open_keep_all_checkbutton.pack(side=tk.LEFT, padx=4, pady=8)
-
         frame_m3u = tk.Frame(root)
         frame_m3u.pack(fill=tk.X)
         frame_proxy_m3u_column1 = tk.Frame(frame_m3u)
@@ -252,6 +245,20 @@ class DefaultUI:
             command=self.update_open_m3u_result
         )
         self.open_m3u_result_checkbutton.pack(side=tk.LEFT, padx=4, pady=8)
+
+        self.open_headers_label = tk.Label(
+            frame_proxy_m3u_column1, text="使用验证信息:", width=12
+        )
+        self.open_headers_label.pack(side=tk.LEFT, padx=4, pady=8)
+        self.open_headers_var = tk.BooleanVar(value=config.open_headers)
+        self.open_headers_checkbutton = ttk.Checkbutton(
+            frame_proxy_m3u_column1,
+            variable=self.open_headers_var,
+            onvalue=True,
+            offvalue=False,
+            command=self.update_open_headers
+        )
+        self.open_headers_checkbutton.pack(side=tk.LEFT, padx=4, pady=8)
 
         self.open_driver_label = tk.Label(
             frame_proxy_m3u_column2, text="浏览器模式:", width=12
@@ -345,7 +352,7 @@ class DefaultUI:
         self.open_empty_category_checkbutton.pack(side=tk.LEFT, padx=4, pady=8)
 
         self.ipv6_support_label = tk.Label(
-            frame_default_open_empty_category_column2, text="跳过IPv6检测:", width=12
+            frame_default_open_empty_category_column2, text="强制认为当前网络支持IPv6:", width=22
         )
         self.ipv6_support_label.pack(side=tk.LEFT, padx=4, pady=8)
         self.ipv6_support_var = tk.BooleanVar(value=config.ipv6_support)
@@ -360,15 +367,32 @@ class DefaultUI:
 
         frame_time_zone = tk.Frame(root)
         frame_time_zone.pack(fill=tk.X)
+        frame_time_zone_column1 = tk.Frame(
+            frame_time_zone
+        )
+        frame_time_zone_column1.pack(side=tk.LEFT, fill=tk.Y)
+        frame_time_zone_column2 = tk.Frame(
+            frame_time_zone
+        )
+        frame_time_zone_column2.pack(side=tk.RIGHT, fill=tk.Y)
 
         self.time_zone_label = tk.Label(
-            frame_time_zone, text="时区:", width=12
+            frame_time_zone_column1, text="时区:", width=12
         )
         self.time_zone_label.pack(side=tk.LEFT, padx=4, pady=8)
-        self.time_zone_entry = tk.Entry(frame_time_zone, width=18)
+        self.time_zone_entry = tk.Entry(frame_time_zone_column1, width=16)
         self.time_zone_entry.pack(side=tk.LEFT, padx=4, pady=8)
         self.time_zone_entry.insert(0, config.time_zone)
         self.time_zone_entry.bind("<KeyRelease>", self.update_time_zone)
+
+        self.cdn_url_label = tk.Label(
+            frame_time_zone_column2, text="CDN加速地址:", width=12
+        )
+        self.cdn_url_label.pack(side=tk.LEFT, padx=4, pady=8)
+        self.cdn_url_entry = tk.Entry(frame_time_zone_column2, width=20)
+        self.cdn_url_entry.pack(side=tk.LEFT, padx=4, pady=8)
+        self.cdn_url_entry.insert(0, config.cdn_url)
+        self.cdn_url_entry.bind("<KeyRelease>", self.update_cdn_url)
 
         frame_default_url_keywords = tk.Frame(root)
         frame_default_url_keywords.pack(fill=tk.X)
@@ -387,6 +411,7 @@ class DefaultUI:
             command=self.edit_whitelist_file,
         )
         self.whitelist_file_button.pack(side=tk.LEFT, padx=4, pady=0)
+
         self.url_keywords_blacklist_label = tk.Label(
             frame_default_url_keywords_column2, text="黑名单:", width=12
         )
@@ -398,6 +423,35 @@ class DefaultUI:
         )
         self.blacklist_file_button.pack(side=tk.LEFT, padx=4, pady=0)
 
+        frame_channel_alias = tk.Frame(root)
+        frame_channel_alias.pack(fill=tk.X)
+        frame_channel_alias_column1 = tk.Frame(frame_channel_alias)
+        frame_channel_alias_column1.pack(side=tk.LEFT, fill=tk.Y)
+        frame_channel_alias_column2 = tk.Frame(frame_channel_alias)
+        frame_channel_alias_column2.pack(side=tk.RIGHT, fill=tk.Y)
+
+        self.channel_alias_label = tk.Label(
+            frame_channel_alias_column1, text="频道别名:", width=12
+        )
+        self.channel_alias_label.pack(side=tk.LEFT, padx=4, pady=8)
+        self.channel_alias_file_button = tk.ttk.Button(
+            frame_channel_alias_column1,
+            text="编辑",
+            command=self.edit_channel_alias_file,
+        )
+        self.channel_alias_file_button.pack(side=tk.LEFT, padx=4, pady=0)
+
+        self.rtmp_stat_label = tk.Label(
+            frame_channel_alias_column2, text="推流统计:", width=12
+        )
+        self.rtmp_stat_label.pack(side=tk.LEFT, padx=4, pady=8)
+        self.rtmp_stat_button = tk.ttk.Button(
+            frame_channel_alias_column2,
+            text="查看",
+            command=self.view_rtmp_stat,
+        )
+        self.rtmp_stat_button.pack(side=tk.LEFT, padx=4, pady=0)
+
     def update_open_update(self):
         config.set("Settings", "open_update", str(self.open_update_var.get()))
 
@@ -407,9 +461,12 @@ class DefaultUI:
     def update_app_port(self, event):
         config.set("Settings", "app_port", self.app_port_entry.get())
 
-    def update_open_use_old_result(self):
+    def update_open_rtmp(self):
+        config.set("Settings", "open_rtmp", str(self.open_rtmp_var.get()))
+
+    def update_open_history(self):
         config.set(
-            "Settings", "open_use_old_result", str(self.open_use_old_result_var.get())
+            "Settings", "open_history", str(self.open_history_var.get())
         )
 
     def update_open_use_cache(self):
@@ -441,14 +498,11 @@ class DefaultUI:
     def update_open_driver(self):
         config.set("Settings", "open_driver", str(self.open_driver_var.get()))
 
-    def update_open_proxy(self):
-        config.set("Settings", "open_proxy", str(self.open_proxy_var.get()))
-
-    def update_open_keep_all(self):
-        config.set("Settings", "open_keep_all", str(self.open_keep_all_var.get()))
-
     def update_open_m3u_result(self):
         config.set("Settings", "open_m3u_result", str(self.open_m3u_result_var.get()))
+
+    def update_open_headers(self):
+        config.set("Settings", "open_headers", str(self.open_headers_var.get()))
 
     def update_request_timeout(self, event):
         config.set("Settings", "request_timeout", self.request_timeout_entry.get())
@@ -458,6 +512,9 @@ class DefaultUI:
 
     def update_time_zone(self, event):
         config.set("Settings", "time_zone", self.time_zone_entry.get())
+
+    def update_cdn_url(self, event):
+        config.set("Settings", "cdn_url", self.cdn_url_entry.get())
 
     def update_open_update_time(self):
         config.set("Settings", "open_update_time", str(self.open_update_time_var.get()))
@@ -482,34 +539,46 @@ class DefaultUI:
         config.set("Settings", "update_time_position",
                    'bottom' if self.update_time_position_combo.get() == '底部' else 'top')
 
-    def edit_whitelist_file(self):
-        path = resource_path(constants.whitelist_path)
-        if os.path.exists(path):
+    def edit_file(self, path):
+        if os.path.exists(resource_path(path)):
             os.system(f'notepad.exe {path}')
+        else:
+            print(f"File {path} not found!")
+            messagebox.showerror("Error", f"File {path} not found!")
+
+    def edit_whitelist_file(self):
+        self.edit_file(constants.whitelist_path)
 
     def edit_blacklist_file(self):
-        path = resource_path(constants.blacklist_path)
-        if os.path.exists(path):
-            os.system(f'notepad.exe {path}')
+        self.edit_file(constants.blacklist_path)
+
+    def edit_channel_alias_file(self):
+        self.edit_file(constants.alias_path)
+
+    def view_rtmp_stat(self):
+        webbrowser.open_new_tab("http://localhost:8080/stat")
 
     def change_entry_state(self, state):
         for entry in [
             "open_update_checkbutton",
             "open_service_checkbutton",
             "app_port_entry",
-            "open_use_old_result_checkbutton",
+            "open_rtmp_checkbutton",
+            "open_history_checkbutton",
             "open_use_cache_checkbutton",
             "open_request_checkbutton",
             "open_driver_checkbutton",
-            "open_proxy_checkbutton",
             "request_timeout_entry",
             "source_file_entry",
             "source_file_button",
+            "source_file_edit_button",
             "time_zone_entry",
+            "cdn_url_entry",
             "final_file_entry",
             "final_file_button",
-            "open_keep_all_checkbutton",
+            "final_file_edit_button",
             "open_m3u_result_checkbutton",
+            "open_headers_checkbutton",
             "urls_limit_entry",
             "update_time_position_combo",
             "open_update_time_checkbutton",
@@ -519,5 +588,7 @@ class DefaultUI:
             "ipv6_support_checkbutton",
             "whitelist_file_button",
             "blacklist_file_button",
+            "channel_alias_file_button",
+            "rtmp_stat_button",
         ]:
             getattr(self, entry).config(state=state)

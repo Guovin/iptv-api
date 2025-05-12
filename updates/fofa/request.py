@@ -10,12 +10,11 @@ from tqdm.asyncio import tqdm_asyncio
 
 import updates.fofa.fofa_map as fofa_map
 import utils.constants as constants
-from requests_custom.utils import get_source_requests, close_session
-from updates.proxy import get_proxy, get_proxy_next
 from utils.channel import format_channel_name
 from utils.config import config
+from utils.requests.tools import get_source_requests, close_session
 from utils.retry import retry_func
-from utils.tools import merge_objects, get_pbar_remaining, add_url_info, resource_path
+from utils.tools import merge_objects, get_pbar_remaining, resource_path
 
 
 def get_fofa_urls_from_region_list():
@@ -88,20 +87,14 @@ async def get_channels_by_fofa(urls=None, multicast=False, callback=None):
                 f"正在获取Fofa{mode_name}源, 共{fofa_urls_len}个查询地址",
                 0,
             )
-        proxy = None
-        open_proxy = config.open_proxy
         open_driver = config.open_driver
         if open_driver:
-            from driver.setup import setup_driver
-        open_sort = config.open_sort
-        if open_proxy:
-            test_url = fofa_urls[0][0]
-            proxy = await get_proxy(test_url, best=True, with_test=True)
+            from utils.driver.setup import setup_driver
+        open_speed_test = config.open_speed_test
         cancel_event = threading.Event()
         hotel_name = constants.origin_map["hotel"]
 
         def process_fofa_channels(fofa_info):
-            nonlocal proxy
             if cancel_event.is_set():
                 return {}
             fofa_url = fofa_info[0]
@@ -109,15 +102,13 @@ async def get_channels_by_fofa(urls=None, multicast=False, callback=None):
             driver = None
             try:
                 if open_driver:
-                    driver = setup_driver(proxy)
+                    driver = setup_driver()
                     try:
                         retry_func(lambda: driver.get(fofa_url), name=fofa_url)
                     except Exception as e:
-                        if open_proxy:
-                            proxy = get_proxy_next()
                         driver.close()
                         driver.quit()
-                        driver = setup_driver(proxy)
+                        driver = setup_driver()
                         driver.get(fofa_url)
                     page_source = driver.page_source
                 else:
@@ -135,13 +126,13 @@ async def get_channels_by_fofa(urls=None, multicast=False, callback=None):
                     multicast_result = [(url, None, None) for url in urls]
                     results[region][type] = multicast_result
                 else:
-                    with ThreadPoolExecutor(max_workers=100) as executor:
+                    with ThreadPoolExecutor(max_workers=10) as executor:
                         futures = [
                             executor.submit(
                                 process_fofa_json_url,
                                 url,
                                 fofa_info[1],
-                                open_sort,
+                                open_speed_test,
                                 hotel_name,
                             )
                             for url in urls
@@ -194,7 +185,7 @@ async def get_channels_by_fofa(urls=None, multicast=False, callback=None):
     return fofa_results
 
 
-def process_fofa_json_url(url, region, open_sort, hotel_name="酒店源"):
+def process_fofa_json_url(url, region, open_speed_test, hotel_name="酒店源"):
     """
     Process the FOFA json url
     """
@@ -215,20 +206,11 @@ def process_fofa_json_url(url, region, open_sort, hotel_name="酒店源"):
                             item_name = format_channel_name(item.get("name"))
                             item_url = item.get("url").strip()
                             if item_name and item_url:
-                                total_url = (
-                                    add_url_info(
-                                        f"{url}{item_url}",
-                                        f"{region}{hotel_name}-cache:{url}",
-                                    )
-                                    if open_sort
-                                    else add_url_info(
-                                        f"{url}{item_url}", f"{region}{hotel_name}"
-                                    )
-                                )
+                                data = {"url": f"{url}{item_url}", "extra_info": f"{region}{hotel_name}"}
                                 if item_name not in channels:
-                                    channels[item_name] = [(total_url, None, None)]
+                                    channels[item_name] = [data]
                                 else:
-                                    channels[item_name].append((total_url, None, None))
+                                    channels[item_name].append(data)
                 except Exception as e:
                     # print(f"Error on fofa: {e}")
                     pass

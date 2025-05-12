@@ -1,5 +1,349 @@
 # 更新日志（Changelog）
 
+## v1.7.1
+
+### 2025/5/9
+
+### 🚀 新功能 ###
+
+---
+
+- 新增支持获取接口`归属地`与`运营商`（利用`纯真IP数据库`实现），支持关键字过滤，可通过配置`location`与`isp`
+  生成想要的结果，建议优先使用靠近使用环境的归属地与本机网络运营商，以提升播放效果（#1058）
+- 新增支持无需开启测速的情况下，可对接口进行`排序`，输出结果日志
+
+### 🌟 优化 ###
+
+---
+
+- 优化`IPv6`结果进入缓存
+- 调整`冻结结果的阈值`，加入`最大延迟`与`最小速率`限制
+- 调整默认配置`ipv_type_prefer = auto`，即根据网络环境自动选择排序IPv4与IPv6结果的优先级
+- 频道结果日志文件更名为`result.log`
+- 更新部分配置参数描述
+
+### 🐛 修复 ###
+
+---
+
+- 修复`IPv6含参数结果`匹配问题（#1048）
+- 修复白名单生成结果失败（#1055）
+
+### 🗑️ 移除 ###
+
+---
+
+- 移除无效的`IPv6订阅源`
+
+> [!NOTE]
+> 有小伙伴对部署后首次更新时间变长有疑问，其实这是正常的。
+> 因为从`v1.7.0`开始，为了提升频道测速准确性，默认对接口进行全量测速。
+> 目前首次运行一般`30分钟`左右，如果是新增的频道比较多首次运行时间会比较长。
+> 但这并不会影响使用，由于默认模板已经内置了部分更新结果（`output/cache.pkl.gz`），部署后可立即访问使用。
+> 同时测速阶段可根据历史数据跳过无效接口，无需担心，后续更新所需时间会明显减少。
+> 如果你介意，可开启Host共享模式（`speed_test_filter_host = True`），相同Host的接口会共享测速结果，可以大幅降低测速所需时间，但结果准确性也会下降。
+
+<details>
+  <summary>English</summary>
+
+### 🚀 New Features ###
+
+---
+
+- Added support for obtaining interface `location` and `ISP` (implemented using the `IPIP database`), supports keyword
+  filtering. You can configure `location` and `isp` to generate desired results. It is recommended to prioritize the
+  location and ISP close to the usage environment to improve playback performance (#1058).
+- Added support for sorting interfaces and outputting result logs without enabling speed testing.
+
+### 🌟 Optimizations ###
+
+---
+
+- Optimized caching of `IPv6` results.
+- Adjusted the `frozen result threshold` by adding `maximum latency` and `minimum speed` limits.
+- Adjusted the default configuration `ipv_type_prefer = auto`, which automatically prioritizes sorting of IPv4 and IPv6
+  results based on the network environment.
+- Renamed the channel result log file to `result.log`.
+- Updated descriptions of some configuration parameters.
+
+### 🐛 Bug Fixes ###
+
+---
+
+- Fixed the issue with matching `IPv6 results with parameters` (#1048).
+- Fixed the failure to generate whitelist results (#1055).
+
+### 🗑️ Removals ###
+
+---
+
+- Removed invalid `IPv6 subscription sources`.
+
+> [!NOTE]
+> Some users have raised concerns about the longer initial update time after deployment. This is actually normal.
+> Starting from `v1.7.0`, to improve the accuracy of channel speed tests,
+> full speed testing of interfaces is enabled by default.
+> The first run usually takes about `30 minutes`. If there are many new channels, the initial run time may be longer.
+> However, this does not affect usage, as the default template already includes some pre-updated results
+> (`output/cache.pkl.gz`), allowing immediate access after deployment.
+> During the speed test phase, invalid interfaces can be skipped based on historical data, so there is no need to worry.
+> Subsequent updates will take significantly less time.
+> If you are concerned, you can enable Host sharing mode (`speed_test_filter_host = True`), where interfaces with the
+> same Host share speed test results. This can greatly reduce the time required for speed testing,
+> but the accuracy of the results may decrease.
+
+</details>
+
+## v1.7.0
+
+### 2025/5/1
+
+### 🚀 新功能 ###
+
+---
+
+- 新增`频道别名`功能（`config/alias.txt`），提升频道名称匹配能力
+- 新增`EPG`功能（订阅文件配置`config/epg.txt`），显示频道预告信息
+- 支持`回放类接口`获取与生成
+- 新增`历史结果`的冻结与解冻，`冻结`：无效结果不参与测速，`解冻`：无结果时自动解冻重新测速
+- 新增`最大分辨率`限制`min_resolution`
+- 支持含`请求头`信息接口测速与生成，需播放器支持才可播放，可通过`open_headers`控制是否开启
+- 新增测速并发数量配置`speed_test_limit`，实现控制测速负载压力
+- 新增`Host数据共享`配置`speed_test_filter_host`，实现相同Host地址接口可共享测速结果
+- 新增`推流统计`GUI按钮
+
+### 🌟 优化 ###
+
+---
+
+- 重构`测速与排序`逻辑，适配更多类型接口的测速（#1009）
+- 提供`内置结果`，解决首次运行等待期间无结果问题（可能不稳定，建议使用更新后结果）
+- 优化接口测速默认为`全接口测速`，解决Host共享结果部分接口测速不准确问题
+- 调整测速结果以`速率`排序，`分辨率`不再参与，解决部分低速率接口在前的问题
+- 默认开启`推流`，调整`HLS`分片配置，推荐使用`HLS`接口，缓解卡顿情况
+- 重构接口`额外信息`处理逻辑
+- 测速相关配置项更名为`speed_test_*`，修改输出日志文案
+- 调整默认最低接口速率为`0.5M/s`
+- 更新黑名单，增加无效接口与`音频`接口
+
+### 🐛 修复 ###
+
+---
+
+- 修复工作流运行问题，更换使用最新`ubuntu`版本（#1032）
+- 修复`M3U`订阅源白名单失效问题（#1019）
+- 修复部分`组播源`测速问题（#1026）
+- 修复接口协议分类结果生成失败问题
+
+### 🗑️ 移除 ###
+
+---
+
+- 移除部分失效订阅源
+- 移除代理更新功能`open_proxy`
+- 移除保留模式`open_keep_all`
+- 移除重复执行`sort_duplicate_limit`
+
+<details>
+  <summary>English</summary>
+
+### 🚀 New Features ###
+
+---
+
+- Added `Channel Alias` feature (`config/alias.txt`) to improve channel name matching.
+- Added `EPG` feature (subscription file configuration `config/epg.txt`) to display channel program information.
+- Support for `Playback Interface` retrieval and generation.
+- Added `historical results` freezing and unfreezing. `Freezing`: Invalid results are excluded from speed testing.
+  `Unfreezing`: Automatically unfreezes and retests when no results are available.
+- Added `Maximum Resolution` limit `min_resolution`.
+- Support for speed testing and generation of interfaces with `Request Headers`. Requires player support for playback
+  and can be controlled via `open_headers`.
+- Added configuration for speed test concurrency `speed_test_limit` to control speed test load pressure.
+- Added `Host Data Sharing` configuration `speed_test_filter_host` to allow interfaces with the same Host address to
+  share speed test results.
+- Added Stream Statistics GUI button.
+
+### 🌟 Optimizations ###
+
+---
+
+- Refactored `Speed Test and Sorting` logic to adapt to more types of interfaces (#1009).
+- Provided `Built-in Results` to address the issue of no results during the first run (may be unstable, recommended to
+  use updated results).
+- Optimized interface speed testing to default to `Full Interface Speed Test`, resolving inaccuracies in speed tests for
+  some interfaces with shared Host results.
+- Adjusted speed test results to sort by `Rate`, with `Resolution` no longer included, resolving the issue of low-rate
+  interfaces appearing at the top.
+- Defaulted to enabling `Streaming`, adjusted `HLS` fragment configuration, and recommended using `HLS` interfaces to
+  alleviate stuttering.
+- Refactored the handling logic for interface `Additional Information`.
+- Renamed speed test-related configuration items to `speed_test_*` and updated output log text.
+- Adjusted the default minimum interface rate to `0.5M/s`.
+- Updated the blacklist to include invalid interfaces and `audio` interfaces.
+
+### 🐛 Bug Fixes ###
+
+---
+
+- Fixed workflow execution issues by switching to the latest `Ubuntu` version (#1032).
+- Fixed the issue where the `M3U` subscription source whitelist was not working (#1019).
+- Fixed speed test issues for some `Multicast Sources` (#1026).
+- Fixed the failure to generate results for interface protocol classification.
+
+### 🗑️ Removals ###
+
+---
+
+- Removed some invalid subscription sources.
+- Removed proxy update feature `open_proxy`.
+- Removed retention mode `open_keep_all`.
+- Removed duplicate execution `sort_duplicate_limit`.
+
+</details>
+
+## v1.6.3
+
+### 2025/4/3
+
+- ✨ 新增支持RTMP推流（工作流不支持），支持`Live/HLS`推流，订阅结果可转换为对应模式推流输出，也可通过`config`目录内创建`live`或
+  `hls`目录定义读取本地视频源
+- ✨ Docker镜像合并为`guovern/iptv-api`，大小与精简版一致，不再区分完整版与精简版，`latest`为最新版，支持获取历史版本，如
+  `1.6.2`
+- ✨ 新增支持GUI最小化至系统托盘区运行
+- ✨ 新增支持`IPv4/IPv6`双栈访问，支持`txt`与`m3u`区分IPv协议类型访问
+- ✨ 增加构建版本号，支持保留历史版本
+- 🐛 优化黑名单非url关键字匹配问题
+- 🐛 修复Docker容器启动提示`no crontab for root`
+- 🐛 修复IPv6结果过滤问题
+
+<details>
+  <summary>English</summary>
+
+- ✨ Added support for RTMP streaming (not supported by workflows), supporting `Live/HLS` streaming. Subscription results
+  can be converted to the corresponding mode for streaming output, and local video sources can be defined by creating
+  `live` or `hls` directories in the `config` directory.
+- ✨ Merged Docker images into `guovern/iptv-api`, with the same size as the slim version. No longer distinguish between
+  full and slim versions. `latest` is the latest version, and historical versions can be obtained, such as `1.6.2`.
+- ✨ Added support for minimizing the GUI to the system tray.
+- ✨ Added support for dual-stack `IPv4/IPv6` access, supporting `txt` and `m3u` to distinguish between IPv protocol
+  types.
+- ✨ Added build version number, supporting the retention of historical versions.
+- 🐛 Optimized the issue of non-URL keyword matching in the blacklist.
+- 🐛 Fixed the `no crontab for root` prompt when starting the Docker container.
+- 🐛 Fixed the issue of filtering IPv6 results.
+
+</details>
+
+## v1.6.2
+
+### 2025/3/4
+
+- ✨ 新增支持CDN代理加速，配置项：`cdn_url`，用于订阅源与频道图标资源加速访问，可关注公众号私信`获取代理地址`
+- ✨ 新增支持`rtsp`协议接口
+- ✨ 新增支持本地源频道名称模糊匹配
+- ✨ 新增订阅源`Guovin/iptv-database`，来源于新仓库[IPTV-Database](https://github.com/Guovin/iptv-database)
+- 🐛 修复支持含验证信息的接口匹配（#946）
+- 🐛 修复输出结果文件问题，接口url不完整，丢失部分信息（#925）
+- 🪄 优化运行流程，调整默认配置：关闭组播源、酒店源获取
+
+<details>
+  <summary>English</summary>
+
+- ✨ Added support for CDN proxy acceleration, configuration item: `cdn_url`, for accelerating access to subscription
+  sources and channel icon resources. You can follow the public account and send a private message to
+  `get the proxy address`
+- ✨ Added support for `rtsp` protocol interface
+- ✨ Added support for fuzzy matching of local source channel names
+- ✨ Added subscription source `Guovin/iptv-database`, from the new
+  repository [IPTV-Database](https://github.com/Guovin/iptv-database)
+- 🐛 Fixed support for matching interfaces with verification information (#946)
+- 🐛 Fixed the issue with the output result file where the interface URL was incomplete and some information was
+  missing (#925)
+- 🪄 Optimized the running process and adjusted the default configuration: disabled multicast source and hotel source
+  retrieval
+
+</details>
+
+## v1.6.1
+
+### 2025/2/21
+
+- 🎉 预告：💻[IPTV-Web](https://github.com/Guovin/iptv-web)：IPTV电视直播源管理平台，支持在线播放等功能，开发中...
+- ⚠️ 注意：若属于旧版本升级，更新该版本需要手动删除旧版本结果缓存文件`output/cache.pkl`
+- ✨ 新增支持`IPv6域名解析`，提升IPv6接口识别能力（#910）
+- ✨ Docker更新时间环境变量精简为`UPDATE_CRON`，支持多个时间设置（#920）
+- ✨ 更新组播源与酒店源离线数据
+- 🪄 移除默认代理，由于集中访问压力过大，出现失效情况，建议自行定义订阅源和结果的代理地址，或关注公众号回复获取代理地址
+- 🪄 重构频道数据格式`tuple`为`dict`，增加类型定义，优化数据处理，调整目录结构
+- 🪄 正则匹配预编译，提升效率
+- 🐛 调整Docker `FFmpeg`构建版本，解决部分域名无法获取分辨率问题（#864）
+- 🐛 修复Docker重启时创建重复定时任务问题（#916）
+- 🐛 合并默认与用户配置，用户配置只需填写变更项即可（#892，@wongsyrone）
+- 🐛 修复结果生成失败问题（#863，#870，#875）
+
+<details>
+  <summary>English</summary>
+
+- 🎉 Preview: 💻[IPTV-Web](https://github.com/Guovin/iptv-web): IPTV live stream management platform, supports online
+  playback and other features, under development...
+- ⚠️ Note: If upgrading from an older version, you need to manually delete the old version's result cache file
+  `output/cache.pkl`
+- ✨ Added support for `IPv6 domain name resolution`, improving IPv6 interface recognition capability (#910)
+- ✨ Simplified Docker update time environment variable to `UPDATE_CRON`, supporting multiple time settings (#920)
+- ✨ Updated offline data for multicast sources and hotel sources
+- 🪄 Removed default proxy due to high access pressure causing failures, it is recommended to define your own proxy
+  address for subscription sources and results, or follow the public account to get the proxy address
+- 🪄 Refactored channel data format from `tuple` to `dict`, added type definitions, optimized data processing, and
+  adjusted directory structure
+- 🪄 Precompiled regex matching to improve efficiency
+- 🐛 Adjusted Docker `FFmpeg` build version to resolve issues with some domain names not being able to get resolution (
+  #864)
+- 🐛 Fixed issue of creating duplicate scheduled tasks when Docker restarts (#916)
+- 🐛 Merged default and user configurations, users only need to fill in the changes (#892, @wongsyrone)
+- 🐛 Fixed issue of result generation failure (#863, #870, #875)
+
+</details>
+
+## v1.6.0
+
+### 2025/1/22
+
+- ✨ 新增支持`本地源`
+- ✨ 使用新的代理地址`https://ghproxy.cc`
+- ✨ 新增支持Docker修改定时任务时间，环境变量：`UPDATE_CRON1`, `UPDATE_CRON2`（#440）
+- ✨ 新增同域名重复执行测速次数配置`sort_duplicate_limit`
+- ✨ 新增`广东联通`RTP
+- 🐛 修复补偿模式结果输出问题（#813）
+- 🐛 修复无域名后缀、空格接口匹配问题（#832，#837）
+- 🐛 修复无结果状态文件写入报错（#841）
+- 🐛 修复GUI无法保存测速延迟设置
+- 🐛 修复Docker版本文件丢失（#800）
+- 🪄 `open_use_old_result`更名为`open_history`
+- 🪄 优化对接口中`%`符号的转义处理（#853）
+- 🪄 优化以接口Host去重（#846）
+- 🪄 支持协议类型偏好`ipv_type_prefer`可设置为空，可实现全部类型按速率排序输出结果
+
+<details>
+  <summary>English</summary>
+
+- ✨ Added support for `local sources`
+- ✨ Using new proxy address `https://ghproxy.cc`
+- ✨ Added support for modifying Docker scheduled task time, environment variables: `UPDATE_CRON1`, `UPDATE_CRON2` (#440)
+- ✨ Added configuration for the number of speed tests for the same domain `sort_duplicate_limit`
+- ✨ Added `Guangdong Unicom` RTP
+- 🐛 Fixed compensation mode result output issue (#813)
+- 🐛 Fixed issue with interface matching without domain suffix and spaces (#832, #837)
+- 🐛 Fixed error writing to file in no result state (#841)
+- 🐛 Fixed GUI unable to save speed test delay settings
+- 🐛 Fixed Docker version file loss issue (#800)
+- 🪄 `open_use_old_result` renamed to `open_history`
+- 🪄 Optimized escaping of `%` symbol in interfaces (#853)
+- 🪄 Optimized deduplication by interface host (#846)
+- 🪄 Supported setting `ipv_type_prefer` to empty, allowing all types to be sorted by speed for output results
+
+</details>
+
 ## v1.5.9
 
 ### 2025/1/8

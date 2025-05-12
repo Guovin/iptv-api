@@ -1,12 +1,14 @@
 import asyncio
 import copy
+import gzip
+import os
 import pickle
 from time import time
 
 from tqdm import tqdm
 
 import utils.constants as constants
-from service.app import run_service
+from updates.epg import get_epg
 from updates.fofa import get_channels_by_fofa
 from updates.hotel import get_channels_by_hotel
 from updates.multicast import get_channels_by_multicast
@@ -15,24 +17,23 @@ from updates.subscribe import get_channels_by_subscribe_urls
 from utils.channel import (
     get_channel_items,
     append_total_data,
-    process_sort_channel_list,
-    write_channel_to_file,
-    get_channel_data_cache_with_compare,
-    format_channel_url_info,
+    test_speed,
+    write_channel_to_file, sort_channel_result,
 )
 from utils.config import config
 from utils.tools import (
-    update_file,
     get_pbar_remaining,
     get_ip_address,
-    convert_to_m3u,
     process_nested_dict,
     format_interval,
     check_ipv6_support,
-    resource_path,
     get_urls_from_file,
-    get_version_info
+    get_version_info,
+    join_url,
+    get_urls_len,
+    merge_objects
 )
+from utils.types import CategoryChannelData
 
 
 class UpdateSource:
@@ -41,18 +42,19 @@ class UpdateSource:
         self.update_progress = None
         self.run_ui = False
         self.tasks = []
-        self.channel_items = {}
+        self.channel_items: CategoryChannelData = {}
         self.hotel_fofa_result = {}
         self.hotel_foodie_result = {}
         self.multicast_result = {}
         self.subscribe_result = {}
         self.online_search_result = {}
-        self.channel_data = {}
+        self.epg_result = {}
+        self.channel_data: CategoryChannelData = {}
         self.pbar = None
         self.total = 0
         self.start_time = None
 
-    async def visit_page(self, channel_names=None):
+    async def visit_page(self, channel_names: list[str] = None):
         tasks_config = [
             ("hotel_fofa", get_channels_by_fofa, "hotel_fofa_result"),
             ("multicast", get_channels_by_multicast, "multicast_result"),
@@ -63,6 +65,7 @@ class UpdateSource:
                 get_channels_by_online_search,
                 "online_search_result",
             ),
+            ("epg", get_epg, "epg_result"),
         ]
 
         for setting, task_func, result_attr in tasks_config:
@@ -74,8 +77,15 @@ class UpdateSource:
                 if setting == "subscribe":
                     subscribe_urls = get_urls_from_file(constants.subscribe_path)
                     whitelist_urls = get_urls_from_file(constants.whitelist_path)
+                    if not os.getenv("GITHUB_ACTIONS") and config.cdn_url:
+                        subscribe_urls = [join_url(config.cdn_url, url) if "raw.githubusercontent.com" in url else url
+                                          for url in subscribe_urls]
                     task = asyncio.create_task(
-                        task_func(subscribe_urls, whitelist=whitelist_urls, callback=self.update_progress)
+                        task_func(subscribe_urls,
+                                  names=channel_names,
+                                  whitelist=whitelist_urls,
+                                  callback=self.update_progress
+                                  )
                     )
                 elif setting == "hotel_foodie" or setting == "hotel_fofa":
                     task = asyncio.create_task(task_func(callback=self.update_progress))
@@ -86,25 +96,13 @@ class UpdateSource:
                 self.tasks.append(task)
                 setattr(self, result_attr, await task)
 
-    def pbar_update(self, name=""):
+    def pbar_update(self, name: str = "", item_name: str = ""):
         if self.pbar.n < self.total:
             self.pbar.update()
             self.update_progress(
-                f"正在进行{name}, 剩余{self.total - self.pbar.n}个接口, 预计剩余时间: {get_pbar_remaining(n=self.pbar.n, total=self.total, start_time=self.start_time)}",
+                f"正在进行{name}, 剩余{self.total - self.pbar.n}个{item_name}, 预计剩余时间: {get_pbar_remaining(n=self.pbar.n, total=self.total, start_time=self.start_time)}",
                 int((self.pbar.n / self.total) * 100),
             )
-
-    def get_urls_len(self, filter=False):
-        data = copy.deepcopy(self.channel_data)
-        if filter:
-            process_nested_dict(data, seen=set(), flag=r"cache:(.*)", force_str="!")
-        processed_urls = set(
-            url_info[0]
-            for channel_obj in data.values()
-            for url_info_list in channel_obj.values()
-            for url_info in url_info_list
-        )
-        return len(processed_urls)
 
     async def main(self):
         try:
@@ -124,7 +122,6 @@ class UpdateSource:
                 self.tasks = []
                 append_total_data(
                     self.channel_items.items(),
-                    channel_names,
                     self.channel_data,
                     self.hotel_fofa_result,
                     self.multicast_result,
@@ -132,54 +129,65 @@ class UpdateSource:
                     self.subscribe_result,
                     self.online_search_result,
                 )
-                channel_data_cache = copy.deepcopy(self.channel_data)
                 ipv6_support = config.ipv6_support or check_ipv6_support()
-                open_sort = config.open_sort
-                if open_sort:
-                    urls_total = self.get_urls_len()
-                    self.total = self.get_urls_len(filter=True)
-                    print(f"Total urls: {urls_total}, need to sort: {self.total}")
-                    sort_callback = lambda: self.pbar_update(name="测速")
+                cache_result = self.channel_data
+                test_result = {}
+                if config.open_speed_test:
+                    urls_total = get_urls_len(self.channel_data)
+                    test_data = copy.deepcopy(self.channel_data)
+                    process_nested_dict(
+                        test_data,
+                        seen=set(),
+                        filter_host=config.speed_test_filter_host,
+                        ipv6_support=ipv6_support
+                    )
+                    self.total = get_urls_len(test_data)
+                    print(f"Total urls: {urls_total}, need to test speed: {self.total}")
                     self.update_progress(
-                        f"正在测速排序, 共{urls_total}个接口, {self.total}个接口需要进行测速",
+                        f"正在进行测速, 共{urls_total}个接口, {self.total}个接口需要进行测速",
                         0,
                     )
                     self.start_time = time()
-                    self.pbar = tqdm(total=self.total, desc="Sorting")
-                    self.channel_data = await process_sort_channel_list(
-                        self.channel_data,
+                    self.pbar = tqdm(total=self.total, desc="Speed test")
+                    test_result = await test_speed(
+                        test_data,
                         ipv6=ipv6_support,
-                        callback=sort_callback,
+                        callback=lambda: self.pbar_update(name="测速", item_name="接口"),
                     )
-                else:
-                    format_channel_url_info(self.channel_data)
-                self.total = self.get_urls_len()
-                self.pbar = tqdm(total=self.total, desc="Writing")
-                self.start_time = time()
+                    cache_result = merge_objects(cache_result, test_result, match_key="url")
+                    self.pbar.close()
+                self.channel_data = sort_channel_result(
+                    self.channel_data,
+                    result=test_result,
+                    filter_host=config.speed_test_filter_host,
+                    ipv6_support=ipv6_support
+                )
+                self.update_progress(
+                    f"正在生成结果文件",
+                    0,
+                )
                 write_channel_to_file(
                     self.channel_data,
+                    epg=self.epg_result,
                     ipv6=ipv6_support,
-                    callback=lambda: self.pbar_update(name="写入结果"),
+                    first_channel_name=channel_names[0],
                 )
-                self.pbar.close()
-                update_file(user_final_file, constants.result_path)
-                if config.open_use_old_result:
-                    if open_sort:
-                        get_channel_data_cache_with_compare(
-                            channel_data_cache, self.channel_data
-                        )
-                    with open(
-                            resource_path(constants.cache_path, persistent=True),
-                            "wb",
-                    ) as file:
-                        pickle.dump(channel_data_cache, file)
-                convert_to_m3u(channel_names[0])
+                if config.open_history:
+                    if os.path.exists(constants.cache_path):
+                        with gzip.open(constants.cache_path, "rb") as file:
+                            try:
+                                cache = pickle.load(file)
+                            except EOFError:
+                                cache = {}
+                            cache_result = merge_objects(cache, cache_result, match_key="url")
+                    with gzip.open(constants.cache_path, "wb") as file:
+                        pickle.dump(cache_result, file)
                 print(
                     f"🥳 Update completed! Total time spent: {format_interval(time() - main_start_time)}. Please check the {user_final_file} file!"
                 )
             if self.run_ui:
                 open_service = config.open_service
-                service_tip = ", 可使用以下链接观看直播:" if open_service else ""
+                service_tip = ", 可使用以下地址进行观看:" if open_service else ""
                 tip = (
                     f"✅ 服务启动成功{service_tip}"
                     if open_service and config.open_update == False
@@ -191,8 +199,6 @@ class UpdateSource:
                     True,
                     url=f"{get_ip_address()}" if open_service else None,
                 )
-                if open_service:
-                    run_service()
         except asyncio.exceptions.CancelledError:
             print("Update cancelled!")
 

@@ -1,55 +1,66 @@
-FROM python:3.13 AS builder
+FROM python:3.13-alpine AS builder
 
-ARG LITE=False
+ARG NGINX_VER=1.27.4
+ARG RTMP_VER=1.2.2
 
 WORKDIR /app
 
 COPY Pipfile* ./
 
-RUN pip install pipenv \
-  && PIPENV_VENV_IN_PROJECT=1 pipenv install --deploy \
-  && if [ "$LITE" = False ]; then pipenv install selenium; fi
+RUN apk update && apk add --no-cache gcc musl-dev python3-dev libffi-dev zlib-dev jpeg-dev wget make pcre-dev openssl-dev \
+  && pip install pipenv \
+  && PIPENV_VENV_IN_PROJECT=1 pipenv install --deploy
 
-RUN apt-get update && apt-get install -y --no-install-recommends wget tar xz-utils
+RUN wget https://nginx.org/download/nginx-${NGINX_VER}.tar.gz && \
+    tar xzf nginx-${NGINX_VER}.tar.gz
 
-RUN mkdir /usr/bin-new \
-    && ARCH=$(dpkg --print-architecture) \
-    && wget -O /tmp/ffmpeg.tar.gz https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-${ARCH}-static.tar.xz \
-    && tar -xvf /tmp/ffmpeg.tar.gz -C /usr/bin-new/
+RUN wget https://github.com/arut/nginx-rtmp-module/archive/v${RTMP_VER}.tar.gz && \
+    tar xzf v${RTMP_VER}.tar.gz
 
-FROM python:3.13-slim
+WORKDIR /app/nginx-${NGINX_VER}
+RUN ./configure \
+    --add-module=/app/nginx-rtmp-module-${RTMP_VER} \
+    --conf-path=/etc/nginx/nginx.conf \
+    --error-log-path=/var/log/nginx/error.log \
+    --http-log-path=/var/log/nginx/access.log \
+    --with-http_ssl_module && \
+    make && \
+    make install
+
+FROM python:3.13-alpine
 
 ARG APP_WORKDIR=/iptv-api
-ARG LITE=False
-ARG APP_PORT=8000
 
 ENV APP_WORKDIR=$APP_WORKDIR
-ENV LITE=$LITE
-ENV APP_PORT=$APP_PORT
-ENV PATH="/.venv/bin:$PATH"
+ENV APP_HOST="http://localhost"
+ENV APP_PORT=8000
+ENV PATH="/.venv/bin:/usr/local/nginx/sbin:$PATH"
+ENV UPDATE_CRON="0 22,10 * * *"
 
 WORKDIR $APP_WORKDIR
 
 COPY . $APP_WORKDIR
 
 COPY --from=builder /app/.venv /.venv
+COPY --from=builder /usr/local/nginx /usr/local/nginx
 
-COPY --from=builder /usr/bin-new/* /usr/bin
+RUN mkdir -p /var/log/nginx && \
+  ln -sf /dev/stdout /var/log/nginx/access.log && \
+  ln -sf /dev/stderr /var/log/nginx/error.log
 
-RUN apt-get update && apt-get install -y --no-install-recommends cron \
-  && if [ "$LITE" = False ]; then apt-get install -y --no-install-recommends chromium chromium-driver; fi \
-  && apt-get clean \
-  && rm -rf /var/lib/apt/lists/*
+RUN apk update && apk add --no-cache dcron ffmpeg pcre
 
-RUN (crontab -l ; \
-  echo "0 22 * * * cd $APP_WORKDIR && /.venv/bin/python main.py"; \
-  echo "0 10 * * * cd $APP_WORKDIR && /.venv/bin/python main.py") | crontab -
-
-EXPOSE $APP_PORT
+EXPOSE $APP_PORT 8080 1935
 
 COPY entrypoint.sh /iptv-api-entrypoint.sh
 
 COPY config /iptv-api-config
+
+COPY nginx.conf /etc/nginx/nginx.conf
+
+RUN mkdir -p /usr/local/nginx/html
+
+COPY stat.xsl /usr/local/nginx/html/stat.xsl
 
 RUN chmod +x /iptv-api-entrypoint.sh
 

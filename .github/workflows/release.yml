@@ -30,18 +30,24 @@ jobs:
       - name: List dist directory contents
         run: dir dist
 
+      - name: Get info from version.json
+        id: get_info
+        run: |
+          $json = Get-Content version.json | ConvertFrom-Json
+          echo "version=$($json.version)" >> $env:GITHUB_ENV
+          echo "name=$($json.name)" >> $env:GITHUB_ENV
+        shell: pwsh
+
+      - name: Compress dist directory
+        run: |
+          Compress-Archive -Path dist\* -DestinationPath dist\${{ env.name }}-v${{ env.version }}.zip
+        shell: pwsh
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: IPTV-API
-          path: dist
-
-      - name: Get version from version.json
-        id: get_info
-        run: |
-          $version = (Get-Content version.json | ConvertFrom-Json).version
-          echo "version=$version" >> $env:GITHUB_ENV
-        shell: pwsh
+          name: ${{ env.name }}-v${{ env.version }}
+          path: dist\${{ env.name }}-v${{ env.version }}.zip
 
       - name: Install jq
         run: choco install jq
@@ -50,11 +56,10 @@ jobs:
         id: get_changelog
         run: |
           $version = "${{ env.version }}"
-          $changelog = (Get-Content CHANGELOG.md) -join "`n"
-          $changelog = $changelog -replace "(?s).*?## v$version", ""
-          $changelog = $changelog -replace "(?s)## v.*", ""
-          $changelog = $changelog -replace "(?s).*?###", "###"
-          $changelog = $changelog.TrimEnd("`n")
+          $changelog = (Get-Content CHANGELOG.md -Raw)
+          $changelog = [regex]::Match($changelog, "(?s)## v$version.*?(?=## v)").Value
+          $changelog = $changelog -replace "(?s)^## v$version.*?\n", ""
+          $changelog = $changelog.Trim()
           $changelog | jq -Rs '.' | ForEach-Object { echo "changelog=$_"; echo "changelog=$_" >> $env:GITHUB_ENV }
         shell: pwsh
 
@@ -76,6 +81,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: dist/IPTV-API.exe
-          asset_name: IPTV-API.exe
-          asset_content_type: application/octet-stream
+          asset_path: dist/${{ env.name }}-v${{ env.version }}.zip
+          asset_name: ${{ env.name }}-v${{ env.version }}.zip
+          asset_content_type: application/zip

@@ -1,8 +1,8 @@
 dist
 build
-**/*.log
 docs
 tkinter_ui
+**/*.log
 **/*.md
 **/*.jpg
 **/*.png
@@ -10,3 +10,4 @@ tkinter_ui
 .github
 .gitignore
 .gitattributes
+utils/nginx-rtmp-win32
