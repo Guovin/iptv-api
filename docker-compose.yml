@@ -1,0 +1,12 @@
+version: '3.7'
+services:
+  iptv_api:
+    image: docker.1ms.run/guovern/iptv-api:latest
+    restart: always
+    volumes:
+      - ./config:/iptv-api/config
+      - ./output:/iptv-api/output
+    container_name: iptv
+    network_mode: host
+    environment:
+      - UPDATE_CRON="0 22,10 * * *"

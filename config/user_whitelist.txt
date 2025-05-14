@@ -1,0 +1,11 @@
+# 这是接口或订阅源的白名单，白名单内的接口或订阅源获取的接口将不会参与测速，优先排序至结果最前。
+# 填写频道名称会直接保留该记录至最终结果，如：CCTV-1,接口地址，只填写接口地址则对所有频道生效，多条记录换行输入。
+# This is the whitelist of the interface or subscription source. The interface in the whitelist or the interface obtained by the subscription source will not participate in the speed measurement and will be prioritized in the result.
+# Filling in the channel name will directly retain the record to the final result, such as: CCTV-1,url, only fill in the interface address will be effective for all channels, multiple records newline input.
+
+#akamaized.net
+#cztv.com
+http://otttv.bj.chinamobile.com
+jdshipin.com
+hkstv.tv
+fengshows.cn
