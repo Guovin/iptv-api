@@ -25,8 +25,10 @@
 
 [中文](./README.md) | English
 
-🎉💻[IPTV-Web](https://github.com/Guovin/iptv-web): IPTV live stream management platform, supports online playback and
+🎉💻 [IPTV-Web](https://github.com/Guovin/iptv-web): IPTV live stream management platform, supports online playback and
 other features, under development...
+
+💖 [Channel Alias Collection Plan](https://github.com/Guovin/iptv-api/discussions/1082)
 
 - [✅ Features](#features)
 - [🔗 Latest results](#latest-results)
@@ -211,8 +213,8 @@ pipenv run service
 
 ### GUI Software
 
-1. Download [IPTV-API update software](https://github.com/Guovin/iptv-api/releases), open the software, click update to
-   complete the update
+1. Download the [IPTV-API Update Software](https://github.com/Guovin/iptv-api/releases), open the software, and click
+   Start to perform the update
 
 2. Or run the following command in the project directory to open the GUI software:
 

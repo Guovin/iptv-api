@@ -305,8 +305,8 @@ pipenv run service
 
 ## GUI Software
 
-1. Download the [IPTV-API update software](https://github.com/Guovin/iptv-api/releases), open the software, and click
-   update to complete the update.
+1. Download the [IPTV-API Update Software](https://github.com/Guovin/iptv-api/releases), open the software, and click
+   Start to perform the update.
 
 2. Or run the following command in the project directory to open the GUI software:
 

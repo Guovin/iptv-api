@@ -106,7 +106,7 @@
 - 新增`EPG`功能（订阅文件配置`config/epg.txt`），显示频道预告信息
 - 支持`回放类接口`获取与生成
 - 新增`历史结果`的冻结与解冻，`冻结`：无效结果不参与测速，`解冻`：无结果时自动解冻重新测速
-- 新增`最大分辨率`限制`min_resolution`
+- 新增`最大分辨率`限制`max_resolution`
 - 支持含`请求头`信息接口测速与生成，需播放器支持才可播放，可通过`open_headers`控制是否开启
 - 新增测速并发数量配置`speed_test_limit`，实现控制测速负载压力
 - 新增`Host数据共享`配置`speed_test_filter_host`，实现相同Host地址接口可共享测速结果
@@ -156,7 +156,7 @@
 - Support for `Playback Interface` retrieval and generation.
 - Added `historical results` freezing and unfreezing. `Freezing`: Invalid results are excluded from speed testing.
   `Unfreezing`: Automatically unfreezes and retests when no results are available.
-- Added `Maximum Resolution` limit `min_resolution`.
+- Added `Maximum Resolution` limit `max_resolution`.
 - Support for speed testing and generation of interfaces with `Request Headers`. Requires player support for playback
   and can be controlled via `open_headers`.
 - Added configuration for speed test concurrency `speed_test_limit` to control speed test load pressure.

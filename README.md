@@ -25,7 +25,9 @@
 
 [English](./README_en.md) | 中文
 
-🎉💻[IPTV-Web](https://github.com/Guovin/iptv-web)：IPTV电视直播源管理平台，支持在线播放等功能，开发中...
+🎉💻 [IPTV-Web](https://github.com/Guovin/iptv-web)：IPTV电视直播源管理平台，支持在线播放等功能，开发中...
+
+💖 [频道别名收集计划](https://github.com/Guovin/iptv-api/discussions/1082)
 
 - [✅ 特点](#特点)
 - [🔗 最新结果](#最新结果)
@@ -205,7 +207,7 @@ pipenv run service
 
 ### GUI 软件
 
-1. 下载[IPTV-API 更新软件](https://github.com/Guovin/iptv-api/releases)，打开软件，点击更新，即可完成更新
+1. 下载[IPTV-API 更新软件](https://github.com/Guovin/iptv-api/releases)，打开软件，点击启动，即可进行更新
 
 2. 或者在项目目录下运行以下命令，即可打开 GUI 软件：
 
