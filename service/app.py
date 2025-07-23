@@ -173,12 +173,12 @@ def show_content():
 
 @app.route("/epg/epg.xml")
 def show_epg():
-    return get_result_file_content(path=constants.epg_result_path, show_content=False)
+    return get_result_file_content(path=constants.epg_result_path, file_type="xml", show_content=False)
 
 
 @app.route("/epg/epg.gz")
 def show_epg_gz():
-    return get_result_file_content(path=constants.epg_gz_result_path, show_content=False)
+    return get_result_file_content(path=constants.epg_gz_result_path, file_type="gz", show_content=False)
 
 
 @app.route("/log")
