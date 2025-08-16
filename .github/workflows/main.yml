@@ -1,66 +1,108 @@
-name: 'Update schedule'
+name: Update schedule
 
 on:
   schedule:
-    - cron: '0 22,10 * * *'
-  workflow_dispatch:
-    branches:
-      - master
-      - dev
-      - gd
+    - cron: '0 22 * * *'
+    - cron: '0 10 */2 * *'
+  workflow_dispatch: {}   # 允许手动触发
+
+permissions:
+  contents: write         # 允许后面推送变更
+
 jobs:
   push:
-    runs-on: ${{ matrix.operating-system }}
+    runs-on: ${{ matrix['operating-system'] }}
+    timeout-minutes: 120
     strategy:
       matrix:
-        operating-system: [ 'ubuntu-latest' ]
+        operating-system: ['ubuntu-20.04']
+
     steps:
       - name: Set branch name
         id: vars
-        run: echo "BRANCH_NAME=${{ github.repository_owner == 'Guovin' && 'gd' || 'master' }}" >> $GITHUB_ENV
-      - uses: actions/checkout@v3
+        run: echo "BRANCH_NAME=${{ github.repository_owner == 'Guovin' && 'gd' || 'master' }}" >> "$GITHUB_ENV"
+
+      - uses: actions/checkout@v4
         with:
           ref: ${{ env.BRANCH_NAME }}
-      - name: Run with setup-python 3.13
+
+      - name: Set up Python 3.13
         uses: actions/setup-python@v4
         with:
           python-version: '3.13'
           update-environment: true
           cache: 'pipenv'
+
       - name: Check open_driver config
         id: check_driver
         run: |
-          echo "OPEN_DRIVER=$(python -c '
+          echo "OPEN_DRIVER=$(python - <<'PY'
           try:
-            from utils.config import config
-            open_driver = config.open_driver
-          except:
-            open_driver = False
-          print(open_driver)')" >> $GITHUB_ENV
+              from utils.config import config
+              print(bool(getattr(config, "open_driver", False)))
+          except Exception:
+              print(False)
+          PY
+          )" >> "$GITHUB_ENV"
+
       - name: Set up Chrome
         if: env.OPEN_DRIVER == 'True'
         uses: browser-actions/setup-chrome@latest
         with:
           chrome-version: stable
-      - name: Download chrome driver
+
+      - name: Download chromedriver
         if: env.OPEN_DRIVER == 'True'
         uses: nanasess/setup-chromedriver@master
+
       - name: Install FFmpeg
         run: sudo apt-get update && sudo apt-get install -y ffmpeg
+
       - name: Install pipenv
-        run: pip3 install --user pipenv
-      - name: Install dependecies
+        run: python -m pip install --upgrade pip pipenv
+
+      - name: Install dependencies
         run: pipenv --python 3.13 && pipenv install --deploy
-      - name: Install selenium
+
+      - name: Install selenium (only when driver is open)
         if: env.OPEN_DRIVER == 'True'
         run: pipenv install selenium
+
       - name: Update
         run: pipenv run dev
+
       - name: Commit and push if changed
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add .
+
+          final_file=$(python - <<'PY'
+          try:
+              from utils.config import config
+              print(getattr(config, "final_file", "output/result.txt"))
+          except Exception:
+              print("output/result.txt")
+          PY
+          )
+
+          final_m3u_file=$(python - <<'PY'
+          try:
+              from utils.config import config
+              import os
+              f = getattr(config, "final_file", "output/result.txt")
+              print(os.path.splitext(f)[0] + ".m3u")
+          except Exception:
+              print("output/result.m3u")
+          PY
+          )
+
+          [ -f "$final_file" ] && git add -f "$final_file"
+          [ -f "$final_m3u_file" ] && git add -f "$final_m3u_file"
+          [ -f "output/cache.pkl" ] && git add -f "output/cache.pkl"
+          [ -f "output/sort.log" ] && git add -f "output/sort.log"
+          [ -f "updates/fofa/fofa_hotel_region_result.pkl" ] && git add -f "updates/fofa/fofa_hotel_region_result.pkl"
+          [ -f "updates/fofa/fofa_multicast_region_result.pkl" ] && git add -f "updates/fofa/fofa_multicast_region_result.pkl"
+
           if ! git diff --staged --quiet; then
             git commit -m "Github Action Auto Updated"
             git push --force
