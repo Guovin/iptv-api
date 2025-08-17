@@ -3,6 +3,7 @@ import http.cookies
 import json
 import re
 import subprocess
+from logging import INFO
 from time import time
 from urllib.parse import quote, urljoin
 
@@ -12,7 +13,7 @@ from multidict import CIMultiDictProxy
 
 import utils.constants as constants
 from utils.config import config
-from utils.tools import get_resolution_value
+from utils.tools import get_resolution_value, get_logger
 from utils.types import TestResult, ChannelTestResult, TestResultCacheData
 
 http.cookies._is_legal_key = lambda _: True
@@ -33,6 +34,7 @@ default_ipv6_result = {
     'delay': default_ipv6_delay,
     'resolution': default_ipv6_resolution
 }
+logger = get_logger(constants.speed_test_log_path, level=INFO, init=True)
 
 
 async def get_speed_with_download(url: str, headers: dict = None, session: ClientSession = None,
@@ -366,6 +368,9 @@ async def get_speed(data, headers=None, ipv6_proxy=None, filter_resolution=open_
     finally:
         if callback:
             callback()
+        logger.info(
+            f"Name: {data.get('name')}, URL: {data.get('url')}, IPv_Type: {data.get("ipv_type")}, Location: {data.get('location')}, ISP: {data.get('isp')}, Date: {data["date"]}, Delay: {result.get('delay') or -1} ms, Speed: {result.get('speed') or 0:.2f} M/s, Resolution: {result.get('resolution')}"
+        )
         return result
 
 

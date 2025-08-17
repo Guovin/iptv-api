@@ -59,8 +59,6 @@
 - [iptv-org/iptv](https://github.com/iptv-org/iptv)
 - [suxuang/myIPTV](https://github.com/suxuang/myIPTV)
 - [kimwang1978/collect-tv-txt](https://github.com/kimwang1978/collect-tv-txt)
-- [asdjkl6/tv](https://github.com/asdjkl6/tv)
-- [fanmingming/live](https://github.com/fanmingming/live)
 - [vbskycn/iptv](https://github.com/vbskycn/iptv)
 
 📍频道图标来自：
@@ -259,19 +257,20 @@ docker run -d -p 8000:8000 guovern/iptv-api
 
 #### 3. 更新结果
 
-| 接口        | 描述         |
-|:----------|:-----------|
-| /         | 默认接口       |
-| /m3u      | m3u 格式接口   |
-| /txt      | txt 格式接口   |
-| /ipv4     | ipv4 默认接口  |
-| /ipv6     | ipv6 默认接口  |
-| /ipv4/txt | ipv4 txt接口 |
-| /ipv6/txt | ipv6 txt接口 |
-| /ipv4/m3u | ipv4 m3u接口 |
-| /ipv6/m3u | ipv6 m3u接口 |
-| /content  | 接口文本内容     |
-| /log      | 测速日志       |
+| 接口              | 描述          |
+|:----------------|:------------|
+| /               | 默认接口        |
+| /m3u            | m3u 格式接口    |
+| /txt            | txt 格式接口    |
+| /ipv4           | ipv4 默认接口   |
+| /ipv6           | ipv6 默认接口   |
+| /ipv4/txt       | ipv4 txt接口  |
+| /ipv6/txt       | ipv6 txt接口  |
+| /ipv4/m3u       | ipv4 m3u接口  |
+| /ipv6/m3u       | ipv6 m3u接口  |
+| /content        | 接口文本内容      |
+| /log/result     | 有效结果的日志     |
+| /log/speed-test | 所有参与测速接口的日志 |
 
 - RTMP 推流：
 

@@ -1,7 +1,9 @@
 # 这是频道名称的别名名单，用于获取接口时将多种名称映射为一个名称的结果，可以提升获取量与准确率
-# 格式：模板频道名称,别名1,别名2,别名3
+# 格式：主名（对应demo.txt模板中的频道名称）,别名1,别名2,别名3
+# 支持别名正则模糊匹配，使用*匹配任意字符，如：CCTV-10,CCTV-10*
 # This is the alias list for channel names, used to map multiple names to a single name when fetching from the interface, improving the fetch volume and accuracy.
-# Format: TemplateChannelName,Alias1,Alias2,Alias3
+# Format: Main name (corresponds to channel name in demo.txt template), alias1, alias2, alias3
+# Aliases support regex fuzzy matching, use * to match any characters, e.g.: CCTV-10, CCTV-10*
 
 CCTV-1,CCTV1,CCTV-01,CCTV-01_ITV,CCTV-01北联,CCTV-01电信,CCTV-01东联,CCTV-01高码,CCTV-01高清,CCTV-01广西,CCTV-01梅州,CCTV-01咪咕,CCTV-01汝阳,CCTV-01山东,CCTV-01上海,CCTV-01斯特,CCTV-01四川,CCTV-01太原,CCTV-01天津,CCTV-01影视,CCTV-01浙江,CCTV-01重庆,CCTV1综合,CCTV-1综合,CCTV1(B),CCTV1[1920*1080],CCTV1「IPV6」,CCTV1HD,CCTV-1HD,CCTV1-标清,CCTV1港澳牿,CCTV-1高清,CCTV1-综合,CCTV-1综合ᴴᴰ
 CCTV-2,CCTV2,CCTV-02,CCTV-02_ITV,CCTV-02北联,CCTV-02电信,CCTV-02东联,CCTV-02高码,CCTV-02高清,CCTV-02广西,CCTV-02梅州,CCTV-02咪咕,CCTV-02汝阳,CCTV-02山东,CCTV-02上海,CCTV-02斯特,CCTV-02四川,CCTV-02太原,CCTV-02天津,CCTV-02影视,CCTV-02浙江,CCTV-02重庆,CCTV2财经,CCTV-2财经,CCTV2[1280*720],CCTV2「IPV6」,CCTV20241,CCTV22,CCTV250,CCTV2HD,CCTV-2HD,CCTV2-标清,CCTV2-财经,CCTV-2财经ᴴᴰ,CCTV-2高清
@@ -51,3 +53,55 @@ CGTN英语,CGTN英语新闻
 CGTN俄语,CGTN俄罗斯语
 
 广东珠江,GDTV-2,珠江,珠江频道,珠江台,广东珠江高清,珠江高清
+
+翡翠台,TVb翡翠台,tvb翡翠台,TVB翡翠台
+明珠台,TVb明珠台,tvb明珠台,TVB明珠台,TVB Pearl
+北京卫视,北京卫视4K,北京卫视4K超高清
+凤凰中文,凤凰卫视中文台
+凤凰香港,凤凰卫视香港台
+福建文体,福建体育
+福建经济,福建经视
+FZTV1,FZTV-1,福州综合,福州1-新闻
+FZTV3,FZTV-3,福州生活,福州3-生活
+
+无线新闻台,無綫新聞台,無線新聞台,无线新闻,TVB无线新闻,TVB无线新闻台
+
+港台电视 31,港台電視 31,RTHK31,RTHK 31,RTHK-31
+港台电视 32,港台電視 32,RTHK32,RTHK 32,RTHK-32
+中央電視台綜合頻道,中央電視台綜合頻道（CCTV-1綜合),CCTV-1綜合,RTHK33,RTHK 33,RTHK-33
+中國環球電視網紀錄頻道,中國環球電視網紀錄頻道 (CGTN紀錄頻道),CGTN紀錄頻道,RTHK34,RTHK 34,RTHK-34
+CGTN 英語頻道,RTHK35,RTHK 35,RTHK-35
+港台电视 36,港台電視 36,RTHK36,RTHK 36,RTHK-36
+
+*HOY 國際財經台,HOY 國際財經台,*HOY 国际财经台,HOY 国际财经台,HOY国际财经台
+*HOY TV,HOY TV
+*HOY 資訊台,HOY 資訊台,*HOY 资讯台,HOY 资讯台,HOY资讯台
+
+赣州新闻,GZSXW,GZSNews
+
+北京卡酷少儿,卡酷少儿,卡酷少儿高清,卡酷少儿HD,北京卡酷少儿HD,卡酷少儿高码,北京卡酷少儿高码,KAKU,kaku,KaKu,卡酷动画,卡酷动画HD
+
+黑莓电影,NewTV黑莓电影
+黑莓动画,NewTV黑莓动画
+家庭剧场,NewTV家庭剧场
+惊悚悬疑,NewTV惊悚悬疑
+超级电影,NewTV超级电影
+动作电影,NewTV动作电影
+哒啵电竞,NewTV哒啵电竞
+
+游戏风云,SiTV游戏风云
+动漫秀场,SiTV动漫秀场
+游戏风云.SiTV游戏风云
+
+爱动漫,iHOT爱动漫
+新动漫,iHOT新动漫
+爱幼教,iHOT爱幼教
+爱电竞,iHOT爱电竞
+
+电竞天堂,BesTV电竞天堂
+宝宝动画,BesTV宝宝动画
+
+嘉佳卡通,广东嘉佳卡通
+金鹰卡通,湖南金鹰卡通
+哈哈炫动,炫动卡通,上海哈哈炫动
+优漫卡通,江苏优漫卡通

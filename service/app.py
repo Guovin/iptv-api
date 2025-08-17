@@ -181,10 +181,22 @@ def show_epg_gz():
     return get_result_file_content(path=constants.epg_gz_result_path, file_type="gz", show_content=False)
 
 
-@app.route("/log")
+@app.route("/log/result")
 def show_log():
     if os.path.exists(constants.result_log_path):
         with open(constants.result_log_path, "r", encoding="utf-8") as file:
+            content = file.read()
+    else:
+        content = constants.waiting_tip
+    response = make_response(content)
+    response.mimetype = "text/plain"
+    return response
+
+
+@app.route("/log/speed-test")
+def show_log():
+    if os.path.exists(constants.speed_test_log_path):
+        with open(constants.speed_test_log_path, "r", encoding="utf-8") as file:
             content = file.read()
     else:
         content = constants.waiting_tip
