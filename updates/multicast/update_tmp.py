@@ -9,6 +9,7 @@ from utils.config import config
 import utils.constants as constants
 from utils.channel import format_channel_name
 from utils.tools import get_pbar_remaining, resource_path, get_name_url
+from utils.requests.tools import get_local_proxy
 import json
 
 # import asyncio
@@ -88,7 +89,7 @@ def get_multicast_region_type_result_txt():
         session = Session()
         for region, value in region_url.items():
             for type, url in value.items():
-                response = session.get(url)
+                response = session.get(url, proxies=get_local_proxy())
                 content = response.text
                 with open(
                         resource_path(f"config/rtp/{region}_{type}.txt"),

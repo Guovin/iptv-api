@@ -337,7 +337,8 @@ def get_epg_url():
     if os.getenv("GITHUB_ACTIONS"):
         repository = os.getenv("GITHUB_REPOSITORY", "Guovin/iptv-api")
         ref = os.getenv("GITHUB_REF", "gd")
-        return join_url(config.cdn_url, f"https://raw.githubusercontent.com/{repository}/{ref}/output/epg/epg.gz")
+        url = f"https://raw.githubusercontent.com/{repository}/{ref}/output/epg/epg.gz"
+        return join_url(config.cdn_url, url) if not config.have_local_proxy else url
     else:
         return f"{get_ip_address()}/epg/epg.gz"
 
@@ -368,7 +369,9 @@ def convert_to_m3u(path=None, first_channel_name=None, data=None):
                                       + ("+" if m.group(3) else ""),
                             first_channel_name if current_group == "🕘️更新时间" else original_channel_name,
                         )
-                        m3u_output += f'#EXTINF:-1 tvg-name="{processed_channel_name}" tvg-logo="{join_url(config.cdn_url, f'https://raw.githubusercontent.com/fanmingming/live/main/tv/{processed_channel_name}.png')}"'
+                        tv_logo_url =f'https://raw.githubusercontent.com/fanmingming/live/main/tv/{processed_channel_name}.png'
+                        url = join_url(config.cdn_url, tv_logo_url) if not config.have_local_proxy else tv_logo_url
+                        m3u_output += f'#EXTINF:-1 tvg-name="{processed_channel_name}" tvg-logo="{url}"'
                         if current_group:
                             m3u_output += f' group-title="{current_group}"'
                         item_data = {}

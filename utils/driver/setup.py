@@ -11,6 +11,11 @@ def setup_driver(proxy=None):
     """
     Setup the driver for selenium
     """
+    if config.https_proxy:
+        proxy = config.https_proxy
+    elif config.http_proxy:
+        proxy = config.http_proxy
+
     options = webdriver.ChromeOptions()
     options.add_argument("start-maximized")
     options.add_argument("--headless")
