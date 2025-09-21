@@ -81,6 +81,10 @@ def get_multicast_region_type_result_txt():
     """
     Get multicast region type result txt
     """
+    proxies = {
+        'http':config.http_proxy,
+        'https':config.http_proxy
+    }
     with open(
             resource_path("updates/multicast/multicast_map.json"), "r", encoding="utf-8"
     ) as f:
@@ -88,7 +92,7 @@ def get_multicast_region_type_result_txt():
         session = Session()
         for region, value in region_url.items():
             for type, url in value.items():
-                response = session.get(url)
+                response = session.get(url,proxies=proxies)
                 content = response.text
                 with open(
                         resource_path(f"config/rtp/{region}_{type}.txt"),

@@ -17,13 +17,12 @@ def get_source_requests(url, data=None, proxy=None, timeout=30):
     """
     Get the source by requests
     """
-    proxies = {"http": proxy}
     if data:
         response = session.post(
-            url, headers=headers, data=data, proxies=proxies, timeout=timeout
+            url, headers=headers, data=data, proxies=proxy, timeout=timeout
         )
     else:
-        response = session.get(url, headers=headers, proxies=proxies, timeout=timeout)
+        response = session.get(url, headers=headers, proxies=proxy, timeout=timeout)
     source = re.sub(
         r"<!--.*?-->",
         "",

@@ -316,6 +316,10 @@ class ConfigManager:
         return os.getenv("APP_HOST") or self.config.get("Settings", "app_host", fallback="http://localhost")
 
     @property
+    def http_proxy(self):
+        return self.config.get("Settings", "http_proxy", fallback=None)
+
+    @property
     def app_port(self):
         return os.getenv("APP_PORT") or self.config.getint("Settings", "app_port", fallback=8000)
 

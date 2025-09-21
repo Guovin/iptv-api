@@ -58,6 +58,10 @@ async def get_channels_by_hotel(callback=None):
             name = f"{region}"
             info_list = []
             driver = None
+            proxies = {
+                'http':config.http_proxy,
+                'https':config.http_proxy
+            }
             try:
                 if open_driver:
                     driver = setup_driver()
@@ -78,11 +82,11 @@ async def get_channels_by_hotel(callback=None):
                     code = None
                     try:
                         page_soup = retry_func(
-                            lambda: get_soup_requests(page_url, data=post_form),
+                            lambda: get_soup_requests(page_url, proxy=proxies, data=post_form),
                             name=f"Foodie hotel search:{name}",
                         )
                     except Exception as e:
-                        page_soup = get_soup_requests(page_url, data=post_form)
+                        page_soup = get_soup_requests(page_url, proxy=proxies, data=post_form)
                     if not page_soup:
                         print(f"{name}:Request fail.")
                         return info_list
@@ -118,7 +122,7 @@ async def get_channels_by_hotel(callback=None):
                                     f"{page_url}?net={name}&page={page}&code={code}"
                                 )
                                 page_soup = retry_func(
-                                    lambda: get_soup_requests(request_url),
+                                    lambda: get_soup_requests(request_url, proxy=proxies),
                                     name=f"hotel search:{name}, page:{page}",
                                 )
                         soup = get_soup(driver.page_source) if open_driver else page_soup

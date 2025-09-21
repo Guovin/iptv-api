@@ -65,7 +65,10 @@ async def get_epg(names=None, callback=None):
     result = defaultdict(list)
     all_result_verify = set()
     session = Session()
-
+    proxies = {
+        'http':config.http_proxy,
+        'https':config.http_proxy
+    }
     def process_run(url):
         nonlocal all_result_verify, result
         try:
@@ -74,7 +77,7 @@ async def get_epg(names=None, callback=None):
                 response = (
                     retry_func(
                         lambda: session.get(
-                            url, timeout=config.request_timeout
+                            url, proxies=proxies, timeout=config.request_timeout
                         ),
                         name=url,
                     )
