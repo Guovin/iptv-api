@@ -320,6 +320,18 @@ class ConfigManager:
         return self.config.get("Settings", "http_proxy", fallback=None)
 
     @property
+    def https_proxy(self):
+        return self.config.get("Settings", "https_proxy", fallback=None)
+
+    @property
+    def socks_proxy(self):
+        return self.config.get("Settings", "socks_proxy", fallback=None)
+
+    @property
+    def have_local_proxy(self):
+        return True if self.http_proxy or self.https_proxy or self.socks_proxy else False
+
+    @property
     def app_port(self):
         return os.getenv("APP_PORT") or self.config.getint("Settings", "app_port", fallback=8000)
 

@@ -108,7 +108,7 @@ async def get_url_content(url: str, headers: dict = None, session: ClientSession
         created_session = False
     content = ""
     try:
-        async with session.get(url, headers=headers, timeout=timeout) as response:
+        async with session.get(url, headers=headers, proxies=config.get_local_proxy, timeout=timeout) as response:
             if response.status == 200:
                 content = await response.text()
             else:

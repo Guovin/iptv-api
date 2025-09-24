@@ -53,7 +53,7 @@ def parse_epg(epg_content):
 
 async def get_epg(names=None, callback=None):
     urls = get_urls_from_file(constants.epg_path)
-    if not os.getenv("GITHUB_ACTIONS") and config.cdn_url:
+    if not os.getenv("GITHUB_ACTIONS") and not config.have_local_proxy and config.cdn_url:
         urls = [join_url(config.cdn_url, url) if "raw.githubusercontent.com" in url else url
                 for url in urls]
     urls_len = len(urls)
@@ -65,10 +65,6 @@ async def get_epg(names=None, callback=None):
     result = defaultdict(list)
     all_result_verify = set()
     session = Session()
-    proxies = {
-        'http':config.http_proxy,
-        'https':config.http_proxy
-    }
     def process_run(url):
         nonlocal all_result_verify, result
         try:
@@ -77,7 +73,7 @@ async def get_epg(names=None, callback=None):
                 response = (
                     retry_func(
                         lambda: session.get(
-                            url, proxies=proxies, timeout=config.request_timeout
+                            url, proxies=config.get_local_proxy, timeout=config.request_timeout
                         ),
                         name=url,
                     )

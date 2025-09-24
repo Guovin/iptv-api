@@ -2,6 +2,7 @@ import re
 
 import requests
 from bs4 import BeautifulSoup
+from utils.config import config
 
 headers = {
     "Accept": "*/*",
@@ -17,6 +18,11 @@ def get_source_requests(url, data=None, proxy=None, timeout=30):
     """
     Get the source by requests
     """
+
+    if (proxy == None and config.have_local_proxy())
+    {
+        proxy = get_local_proxy()
+    }
     if data:
         response = session.post(
             url, headers=headers, data=data, proxies=proxy, timeout=timeout
@@ -40,6 +46,34 @@ def get_soup_requests(url, data=None, proxy=None, timeout=30):
     soup = BeautifulSoup(source, "html.parser")
     return soup
 
+def get_local_proxy():
+    """
+    Get the peoxy from config.ini
+    """
+    open_driver = config.open_driver
+
+    http_proxy = config.http_proxy
+    https_proxy = config.https_proxy
+    socks_proxy = config.socks_proxy
+
+    proxies = []
+
+    if socks_proxy:
+        proxies['http'] = socks_proxy
+        proxies['https'] = socks_proxy
+    elif http_proxy and https_proxy:
+            proxies['http'] = http_proxy
+            proxies['https'] = https_proxy
+    elif http_proxy:
+            proxies['http'] = http_proxy
+            proxies['https'] = http_proxy
+    elif https_proxy:
+            proxies['http'] = https_proxy
+            proxies['https'] = https_proxy
+    else:
+        return None
+
+    return proxies
 
 def close_session():
     """
