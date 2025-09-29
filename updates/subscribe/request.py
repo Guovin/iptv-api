@@ -14,6 +14,7 @@ from utils.tools import (
     get_pbar_remaining,
     get_name_url
 )
+from utils.requests.tools import get_local_proxy
 
 
 async def get_channels_by_subscribe_urls(
@@ -58,6 +59,8 @@ async def get_channels_by_subscribe_urls(
         channels = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
         in_whitelist = whitelist and (subscribe_url in whitelist)
         session = Session()
+        if config.have_local_proxy:
+            session.proxies = get_local_proxy()
         try:
             response = None
             try:

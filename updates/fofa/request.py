@@ -12,7 +12,7 @@ import updates.fofa.fofa_map as fofa_map
 import utils.constants as constants
 from utils.channel import format_channel_name
 from utils.config import config
-from utils.requests.tools import get_source_requests, close_session
+from utils.requests.tools import get_source_requests, close_session, get_local_proxy
 from utils.retry import retry_func
 from utils.tools import merge_objects, get_pbar_remaining, resource_path
 
@@ -196,7 +196,7 @@ def process_fofa_json_url(url, region, open_speed_test, hotel_name="酒店源"):
         #     lambda: get(final_url, timeout=timeout),
         #     name=final_url,
         # )
-        response = get(final_url, timeout=config.request_timeout)
+        response = get(final_url, proxies=get_local_proxy(), timeout=config.request_timeout)
         try:
             json_data = response.json()
             if json_data["code"] == 0:

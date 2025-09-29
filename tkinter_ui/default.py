@@ -461,6 +461,29 @@ class DefaultUI:
         )
         self.rtmp_stat_button.pack(side=tk.LEFT, padx=4, pady=0)
 
+        frame_time_zone1 = tk.Frame(root)
+        frame_time_zone1.pack(fill=tk.X)
+        frame_time_zone_column3 = tk.Frame(
+            frame_time_zone1
+        )
+        frame_time_zone_column3.pack(side=tk.RIGHT, fill=tk.Y)
+
+        self.local_proxy_label = tk.Label(
+            frame_time_zone_column3, text="本地代理:", width=12
+        )
+        self.local_proxy_label.pack(side=tk.LEFT, padx=4, pady=8)
+        self.local_proxy_entry = tk.Entry(frame_time_zone_column3, width=20)
+        self.local_proxy_entry.pack(side=tk.LEFT, padx=4, pady=8)
+        self.local_proxy_entry.insert(0, config.http_proxy)
+        self.local_proxy_entry.bind("<KeyRelease>", self.update_local_proxy)
+
+        frame_default_url_keywords = tk.Frame(root)
+        frame_default_url_keywords.pack(fill=tk.X)
+        frame_default_url_keywords_column1 = tk.Frame(frame_default_url_keywords)
+        frame_default_url_keywords_column1.pack(side=tk.LEFT, fill=tk.Y)
+        frame_default_url_keywords_column2 = tk.Frame(frame_default_url_keywords)
+        frame_default_url_keywords_column2.pack(side=tk.RIGHT, fill=tk.Y)
+
     def update_open_update(self):
         config.set("Settings", "open_update", str(self.open_update_var.get()))
 
@@ -528,6 +551,9 @@ class DefaultUI:
     def update_cdn_url(self, event):
         config.set("Settings", "cdn_url", self.cdn_url_entry.get())
 
+    def update_local_proxy(self, event):
+        config.set("Settings", "http_proxy", self.local_proxy_entry.get())
+
     def update_open_update_time(self):
         config.set("Settings", "open_update_time", str(self.open_update_time_var.get()))
 
@@ -587,6 +613,7 @@ class DefaultUI:
             "source_file_edit_button",
             "time_zone_entry",
             "cdn_url_entry",
+            "local_proxy_entry",
             "final_file_entry",
             "final_file_button",
             "final_file_edit_button",

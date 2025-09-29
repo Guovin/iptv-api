@@ -15,6 +15,7 @@ import utils.constants as constants
 from utils.config import config
 from utils.tools import get_resolution_value, get_logger
 from utils.types import TestResult, ChannelTestResult, TestResultCacheData
+from utils.requests.tools import get_local_proxy
 
 http.cookies._is_legal_key = lambda _: True
 cache: TestResultCacheData = {}
@@ -108,7 +109,7 @@ async def get_url_content(url: str, headers: dict = None, session: ClientSession
         created_session = False
     content = ""
     try:
-        async with session.get(url, headers=headers, timeout=timeout) as response:
+        async with session.get(url, headers=headers, proxies=get_local_proxy(), timeout=timeout) as response:
             if response.status == 200:
                 content = await response.text()
             else:

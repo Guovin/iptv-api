@@ -14,7 +14,7 @@ from utils.channel import format_channel_name
 from utils.config import config
 from utils.retry import retry_func
 from utils.tools import get_pbar_remaining, get_urls_from_file, opencc_t2s, join_url
-
+from utils.requests.tools import get_local_proxy
 
 def parse_epg(epg_content):
     try:
@@ -53,7 +53,7 @@ def parse_epg(epg_content):
 
 async def get_epg(names=None, callback=None):
     urls = get_urls_from_file(constants.epg_path)
-    if not os.getenv("GITHUB_ACTIONS") and config.cdn_url:
+    if not os.getenv("GITHUB_ACTIONS") and not config.have_local_proxy and config.cdn_url:
         urls = [join_url(config.cdn_url, url) if "raw.githubusercontent.com" in url else url
                 for url in urls]
     urls_len = len(urls)
@@ -65,7 +65,8 @@ async def get_epg(names=None, callback=None):
     result = defaultdict(list)
     all_result_verify = set()
     session = Session()
-
+    if config.have_local_proxy:
+        session.proxies = get_local_proxy()
     def process_run(url):
         nonlocal all_result_verify, result
         try:
