@@ -115,6 +115,7 @@ class UpdateSource:
             main_start_time = time()
             if config.open_update:
                 self.channel_items = get_channel_items()
+                self.channel_data = {}
                 channel_names = [
                     name
                     for channel_obj in self.channel_items.values()
