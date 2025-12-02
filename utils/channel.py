@@ -91,7 +91,7 @@ def check_channel_need_frozen(info: TestResult) -> bool:
     return False
 
 
-def get_channel_data_from_file(channels, file, whitelist, open_local=config.open_local,
+def get_channel_data_from_file(channels, file, whitelist, blacklist,
                                local_data=None, live_data=None, hls_data=None) -> CategoryChannelData:
     """
     Get the channel data from the file
@@ -127,7 +127,8 @@ def get_channel_data_from_file(channels, file, whitelist, open_local=config.open
                         for alias_name in alias_names:
                             if alias_name in local_data:
                                 for local_url in local_data[alias_name]:
-                                    category_dict[name].append(format_channel_data(local_url, "local"))
+                                    if not check_url_by_keywords(local_url, blacklist):
+                                        category_dict[name].append(format_channel_data(local_url, "local"))
                             elif alias_name.startswith("re:"):
                                 raw_pattern = alias_name[3:]
                                 try:
@@ -135,11 +136,13 @@ def get_channel_data_from_file(channels, file, whitelist, open_local=config.open
                                     for local_name in local_data:
                                         if re.match(pattern, local_name):
                                             for local_url in local_data[local_name]:
-                                                category_dict[name].append(format_channel_data(local_url, "local"))
+                                                if not check_url_by_keywords(local_url, blacklist):
+                                                    category_dict[name].append(format_channel_data(local_url, "local"))
                                 except re.error:
                                     pass
                 if open_local and url:
-                    category_dict[name].append(format_channel_data(url, "local"))
+                    if not check_url_by_keywords(url, blacklist):
+                        category_dict[name].append(format_channel_data(url, "local"))
     return channels
 
 
@@ -156,6 +159,7 @@ def get_channel_items() -> CategoryChannelData:
         hls_data = get_name_uri_from_dir(constants.hls_path)
     local_data = get_name_urls_from_file(config.local_file)
     whitelist = get_name_urls_from_file(constants.whitelist_path)
+    blacklist = get_urls_from_file(constants.blacklist_path, pattern_search=False)
     whitelist_len = len(list(whitelist.keys()))
     if whitelist_len:
         print(f"Found {whitelist_len} channel in whitelist")
@@ -163,7 +167,7 @@ def get_channel_items() -> CategoryChannelData:
     if os.path.exists(user_source_file):
         with open(user_source_file, "r", encoding="utf-8") as file:
             channels = get_channel_data_from_file(
-                channels, file, whitelist, config.open_local, local_data, live_data, hls_data
+                channels, file, whitelist, blacklist, local_data, live_data, hls_data
             )
 
     if config.open_history:
@@ -183,22 +187,27 @@ def get_channel_items() -> CategoryChannelData:
                                     channel_data = channels[cate][name]
                                     for info in old_result[cate][name]:
                                         if info:
+                                            info_url = info["url"]
                                             try:
-                                                if info["origin"] in retain_origin:
+                                                if info["origin"] in retain_origin or check_url_by_keywords(info_url,
+                                                                                                            blacklist):
                                                     continue
                                                 if check_channel_need_frozen(info):
-                                                    frozen_channels.add(info["url"])
+                                                    frozen_channels.add(info_url)
                                                     continue
                                             except:
                                                 pass
-                                            if info["url"] not in urls:
+                                            if info_url not in urls:
                                                 channel_data.append(info)
 
                                     if not channel_data:
                                         for info in old_result[cate][name]:
-                                            if info and info["origin"] not in retain_origin and info["url"] not in urls:
+                                            old_result_url = info["url"]
+                                            if info and info[
+                                                "origin"] not in retain_origin and old_result_url not in urls and not check_url_by_keywords(
+                                                old_result_url, blacklist):
                                                 channel_data.append(info)
-                                                frozen_channels.discard(info["url"])
+                                                frozen_channels.discard(old_result_url)
 
                                     channel_urls = {d["url"] for d in channel_data}
                                     if channel_urls.issubset(frozen_channels):
@@ -579,7 +588,7 @@ def append_data_to_info_data(
                 continue
 
             if url_origin not in retain_origin:
-                if url in frozen_channels or check_url_by_keywords(url, blacklist):
+                if url in frozen_channels or blacklist and check_url_by_keywords(url, blacklist):
                     continue
 
                 if not ipv_type:
@@ -603,7 +612,6 @@ def append_data_to_info_data(
 
                 if isp and isp_list and not any(item in isp for item in isp_list):
                     continue
-
             channel_list.append({
                 "id": channel_id,
                 "url": url,

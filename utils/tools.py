@@ -276,7 +276,7 @@ def check_url_by_keywords(url, keywords=None):
     Check by URL keywords
     """
     if not keywords:
-        return True
+        return False
     else:
         return any(keyword in url for keyword in keywords)
 

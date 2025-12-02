@@ -12,7 +12,7 @@ import updates.fofa.fofa_map as fofa_map
 import utils.constants as constants
 from utils.channel import format_channel_name
 from utils.config import config
-from utils.requests.tools import get_source_requests
+from utils.requests.tools import get_requests
 from utils.retry import retry_func
 from utils.tools import merge_objects, get_pbar_remaining, resource_path
 
@@ -112,9 +112,10 @@ async def get_channels_by_fofa(urls=None, multicast=False, callback=None):
                         driver.get(fofa_url)
                     page_source = driver.page_source
                 else:
-                    page_source = retry_func(
-                        lambda: get_source_requests(fofa_url), name=fofa_url
+                    page_response = retry_func(
+                        lambda: get_requests(fofa_url), name=fofa_url
                     )
+                    page_source = page_response.text
                 if any(keyword in page_source for keyword in ["访问异常", "禁止访问", "资源访问每天限制"]):
                     cancel_event.set()
                     raise ValueError("Limited access to fofa page")

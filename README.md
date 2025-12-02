@@ -12,19 +12,19 @@
 
 <p align="center">
   <a href="https://github.com/Guovin/iptv-api/releases/latest">
-    <img src="https://img.shields.io/github/v/release/guovin/iptv-api" />
+    <img src="https://img.shields.io/github/v/release/guovin/iptv-api?label=Version" />
   </a>
   <a href="https://www.python.org/">
-    <img src="https://img.shields.io/badge/python-%20%3D%203.13-47c219" />
+    <img src="https://img.shields.io/badge/python-3.13-47c219?label=Python" />
   </a>
   <a href="https://github.com/Guovin/iptv-api/releases/latest">
-    <img src="https://img.shields.io/github/downloads/guovin/iptv-api/total" />
+    <img src="https://img.shields.io/github/downloads/guovin/iptv-api/total?label=GUI%20Downloads" />
   </a>
   <a href="https://hub.docker.com/repository/docker/guovern/iptv-api">
-    <img src="https://img.shields.io/docker/pulls/guovern/iptv-api" />
+    <img src="https://img.shields.io/docker/pulls/guovern/iptv-api?label=Docker%20Pulls" />
   </a>
   <a href="https://github.com/Guovin/iptv-api/fork">
-    <img src="https://img.shields.io/github/forks/guovin/iptv-api" />
+    <img src="https://img.shields.io/github/forks/guovin/iptv-api?label=Forks" />
   </a>
 </p>
 
@@ -383,46 +383,53 @@ docker run -d -p 8000:8000 guovern/iptv-api
 
 衷心感谢每一位捐赠者！您的慷慨帮助我们改进和完善项目，感谢您的支持！❤️
 
-| 名称            | 来源  | 网站 | 留言              | 金额   |
-|:--------------|:----|:---|:----------------|:-----|
-| Fernando 杨    | 公众号 |    |                 | 100  |
-| Chief         | 赞赏码 |    |                 | 66   |
-| 中国人（陈特光）      | 公众号 |    |                 | 50   |
-| James Zong    | 赞赏码 |    |                 | 50   |
-| Peike         | 赞赏码 |    |                 | 50   |
-| 陈启跃           | 赞赏码 |    |                 | 50   |
-| **彬           | 支付宝 |    |                 | 30   |
-| 戒烟            | 公众号 |    | 大佬辛苦了           | 25   |
-| 搂着猫的老鼠        | 公众号 |    | 受教了，非常感谢您的付出    | 25   |
-| 米多            | 赞赏码 |    | 非常强大，加油         | 20   |
-| pakysr        | 赞赏码 |    |                 | 20   |
-| 随波            | 公众号 |    |                 | 20   |
-| 公子            | 公众号 |    |                 | 20   |
-| 迎着风雨成长        | 公众号 |    |                 | 20   |
-| 丨说好的幸福呢       | 公众号 |    |                 | 20   |
-| 大胖雷蒙德         | 公众号 |    | 加油！             | 20   |
-| 科技=未来～随心所欲=幸福 | 公众号 |    |                 | 20   |
-| 钦             | 公众号 |    | 广东珠江台可以流畅点吗，谢谢你 | 20   |
-| 王炫茗           | 赞赏码 |    |                 | 20   |
-| *会            | 支付宝 |    |                 | 20   |
-| 李老师（杠爷）       | 公众号 |    | 已留言请教，望有空回复     | 10   |
-| 威记            | 公众号 |    |                 | 10   |
-| zxx           | 公众号 |    | 不懂的可以请教吗        | 10   |
-| zzj           | 赞赏码 |    |                 | 10   |
-| 彪             | 赞赏码 |    |                 | 10   |
-| *洁            | 支付宝 |    |                 | 10   |
-| *胜            | 支付宝 |    |                 | 10   |
-| **翔           | 支付宝 |    |                 | 10   |
-| *宇            | 支付宝 |    |                 | 10   |
-| **欣           | 支付宝 |    |                 | 10   |
-| **高           | 支付宝 |    |                 | 10   |
-| **胜           | 支付宝 |    |                 | 10   |
-| 烊             | 公众号 |    |                 | 8.88 |
-| 骑着蜗牛追火箭       | 公众号 |    | 大佬威武！！！！！       | 5    |
-| 大胖雷蒙德         | 公众号 |    | 加油。             | 5    |
-| 韶梦年华          | 公众号 |    |                 | 5    |
-| BlueSymphony  | 公众号 |    |                 | 5    |
-| **勇           | 支付宝 |    |                 | 5    |
+| 名称            | 来源  | 留言            | 金额   |
+|:--------------|:----|:--------------|:-----|
+| Fernando 杨    | 公众号 |               | 100  |
+| Chief         | 赞赏码 |               | 66   |
+| 陈启跃           | 赞赏码 | 继续加油，已关注      | 50   |
+| 中国人（陈特光）      | 公众号 |               | 50   |
+| James Zong    | 赞赏码 |               | 50   |
+| Peike         | 赞赏码 |               | 50   |
+| 孟敬人           | 赞赏码 |               | 50   |
+| **彬           | 支付宝 |               | 30   |
+| 戒烟            | 公众号 | 大佬辛苦了         | 25   |
+| 搂着猫的老鼠        | 公众号 | 受教了，非常感谢您的付出  | 25   |
+| 米多            | 赞赏码 | 非常强大，加油       | 20   |
+| pakysr        | 赞赏码 |               | 20   |
+| 随波            | 公众号 |               | 20   |
+| 公子            | 公众号 |               | 20   |
+| 迎着风雨成长        | 公众号 |               | 20   |
+| 丨说好的幸福呢       | 公众号 |               | 20   |
+| 大胖雷蒙德         | 公众号 | 加油！           | 20   |
+| 科技=未来～随心所欲=幸福 | 公众号 |               | 20   |
+| 钦             | 公众号 | 谢谢你           | 20   |
+| 王炫茗           | 赞赏码 |               | 20   |
+| *会            | 支付宝 |               | 20   |
+| 草草不恭先生        | 赞赏码 | 简直就是造福人民的项目   | 10   |
+| 匿名8708        | 赞赏码 | 造福大众🥰        | 10   |
+| dysenan       | 赞赏码 |               | 10   |
+| zzj           | 赞赏码 |               | 10   |
+| 彪             | 赞赏码 |               | 10   |
+| 李老师（杠爷）       | 公众号 |               | 10   |
+| 威记            | 公众号 |               | 10   |
+| zxx           | 公众号 |               | 10   |
+| *洁            | 支付宝 |               | 10   |
+| *胜            | 支付宝 |               | 10   |
+| **翔           | 支付宝 |               | 10   |
+| *宇            | 支付宝 |               | 10   |
+| **欣           | 支付宝 |               | 10   |
+| **高           | 支付宝 |               | 10   |
+| **胜           | 支付宝 |               | 10   |
+| 烊             | 公众号 |               | 8.88 |
+| 阿雨辰           | 赞赏码 | 虽然没看懂，但觉得挺牛逼的 | 6.66 |
+| 骑着蜗牛追火箭       | 公众号 | 大佬威武！！！！！     | 5    |
+| 大胖雷蒙德         | 公众号 | 加油。           | 5    |
+| ð苹果邱邱         | 公众号 |               | 5    |
+| 韶梦年华          | 公众号 |               | 5    |
+| BlueSymphony  | 公众号 |               | 5    |
+| 青山碧水间         | 公众号 |               | 5    |
+| **勇           | 支付宝 |               | 5    |
 
 ## 免责声明
 

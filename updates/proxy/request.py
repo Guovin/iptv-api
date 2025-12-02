@@ -38,7 +38,7 @@ def get_proxy_list(page_count=1):
                 try:
                     soup = retry_func(lambda: get_soup_requests(url), name=url)
                 except Exception as e:
-                    soup = get_soup_requests(url)
+                    print(f"Error fetching {url} with requests: {e}")
             table = soup.find("table")
             trs = table.find_all("tr") if table else []
             for tr in trs[1:]:

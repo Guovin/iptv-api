@@ -11,9 +11,9 @@ headers = {
 }
 
 
-def get_source_requests(url, data=None, proxy=None, timeout=30):
+def get_requests(url, data=None, proxy=None, timeout=30):
     """
-    Get the source by requests
+    Get the response by requests
     """
     proxies = {"http": proxy} if proxy is not None else None
     response = None
@@ -25,21 +25,24 @@ def get_source_requests(url, data=None, proxy=None, timeout=30):
                 )
             else:
                 response = session.get(url, headers=headers, proxies=proxies, timeout=timeout)
-    except requests.RequestException:
-        return ""
-    source = re.sub(
-        r"<!--.*?-->",
-        "",
-        response.text if response is not None else "",
-        flags=re.DOTALL,
-    )
-    return source
+    except requests.RequestException as e:
+        raise e
+
+    if response is None:
+        raise requests.RequestException(f"No response from {url}")
+
+    text = re.sub(r"<!--.*?-->", "", response.text or "", flags=re.DOTALL)
+    if not text.strip():
+        raise requests.RequestException(f"Empty response from {url}")
+
+    return response
 
 
 def get_soup_requests(url, data=None, proxy=None, timeout=30):
     """
     Get the soup by requests
     """
-    source = get_source_requests(url, data, proxy, timeout)
+    response = get_requests(url, data, proxy, timeout)
+    source = re.sub(r"<!--.*?-->", "", response.text or "", flags=re.DOTALL)
     soup = BeautifulSoup(source, "html.parser")
     return soup
