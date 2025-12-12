@@ -16,6 +16,7 @@ from requests import Session
 from collections import defaultdict
 from time import time
 from tqdm import tqdm
+from utils.i18n import t
 
 
 def get_region_urls_from_IPTV_Multicast_source():
@@ -67,7 +68,7 @@ async def get_multicast_region_result():
     """
     multicast_region_urls_info = get_multicast_urls_info_from_region_list()
     multicast_result = await get_channels_by_subscribe_urls(
-        multicast_region_urls_info, multicast=True, pbar_desc="Processing get multicast region ip"
+        multicast_region_urls_info, multicast=True, pbar_desc=t("msg.processing_get_multicast_region_ip")
     )
     with open(
             resource_path("updates/multicast/multicast_region_result.json"),
@@ -117,9 +118,9 @@ def get_multicast_region_result_by_rtp_txt(callback=None):
 
     total_files = len(rtp_file_list)
     if callback:
-        callback(f"正在读取本地组播数据, 共{total_files}个文件", 0)
+        callback(t("msg.loading_multicast_rtp"), 0)
 
-    pbar = tqdm(total=total_files, desc="Loading local multicast rtp files")
+    pbar = tqdm(total=total_files, desc=t("msg.loading_multicast_rtp"))
     multicast_result = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
     start_time = time()
 
@@ -140,7 +141,9 @@ def get_multicast_region_result_by_rtp_txt(callback=None):
             remaining_files = total_files - pbar.n
             estimated_time = get_pbar_remaining(pbar.n, total_files, start_time)
             callback(
-                f"正在读取{region}_{type}的组播数据, 剩余{remaining_files}个文件, 预计剩余时间: {estimated_time}",
+                t("msg.progress_loading_region_type_rtp").format(region=region, type=type,
+                                                                 remaining_files=remaining_files,
+                                                                 remaining_time=estimated_time),
                 int((pbar.n / total_files) * 100),
             )
 

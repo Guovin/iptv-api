@@ -1,6 +1,8 @@
 import tkinter as tk
-from PIL import Image, ImageTk
 import webbrowser
+
+from PIL import Image, ImageTk
+
 from utils.tools import resource_path
 
 
@@ -87,4 +89,4 @@ class AboutUI:
         about_window.geometry(
             f"{about_window_width}x{about_window_height}+{pos_x}+{pos_y}"
         )
-        about_window.iconbitmap(resource_path("static/images/favicon.ico"))
+        about_window.iconbitmap(resource_path("favicon.ico"))

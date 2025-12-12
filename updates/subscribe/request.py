@@ -8,6 +8,7 @@ from tqdm.asyncio import tqdm_asyncio
 import utils.constants as constants
 from utils.channel import format_channel_name
 from utils.config import config
+from utils.i18n import t
 from utils.requests.tools import get_soup_requests
 from utils.retry import retry_func
 from utils.tools import (
@@ -41,10 +42,10 @@ async def get_channels_by_subscribe_urls(
         desc=pbar_desc,
     )
     start_time = time()
-    mode_name = "组播" if multicast else "酒店" if hotel else "订阅"
+    mode_name = t("name.multicast") if multicast else t("name.hotel") if hotel else t("name.subscribe")
     if callback:
         callback(
-            f"正在获取{mode_name}源, 共{subscribe_urls_len}个{mode_name}源",
+            f"{t("pbar.getting_name").format(name=mode_name)}",
             0,
         )
     hotel_name = constants.origin_map["hotel"]
@@ -126,10 +127,13 @@ async def get_channels_by_subscribe_urls(
         finally:
             logger.handlers.clear()
             pbar.update()
-            remain = subscribe_urls_len - pbar.n
             if callback:
                 callback(
-                    f"正在获取{mode_name}源, 剩余{remain}个{mode_name}源待获取, 预计剩余时间: {get_pbar_remaining(n=pbar.n, total=pbar.total, start_time=start_time)}",
+                    t("msg.progress_desc").format(name=f"{t("pbar.get")}{mode_name}",
+                                                  remaining_total=subscribe_urls_len - pbar.n,
+                                                  item_name=mode_name,
+                                                  remaining_time=get_pbar_remaining(n=pbar.n, total=pbar.total,
+                                                                                    start_time=start_time)),
                     int((pbar.n / subscribe_urls_len) * 100),
                 )
             return channels

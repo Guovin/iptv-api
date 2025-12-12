@@ -17,6 +17,7 @@ from utils.channel import (
 from utils.config import config
 from utils.driver.setup import setup_driver
 from utils.driver.tools import search_submit
+from utils.i18n import t
 from utils.requests.tools import get_soup_requests
 from utils.retry import (
     retry_func,
@@ -66,7 +67,7 @@ async def get_channels_by_hotel(callback=None):
                     try:
                         retry_func(
                             lambda: driver.get(page_url),
-                            name=f"Foodie hotel search:{name}",
+                            name=t("msg.mode_search_name").format(mode=t("name.hotel_foodie"), name=name)
                         )
                     except Exception as e:
                         print(e)
@@ -80,12 +81,12 @@ async def get_channels_by_hotel(callback=None):
                     try:
                         page_soup = retry_func(
                             lambda: get_soup_requests(page_url, data=post_form),
-                            name=f"Foodie hotel search:{name}",
+                            name=t("msg.mode_search_name").format(mode=t("name.hotel_foodie"), name=name)
                         )
                     except Exception as e:
                         print(e)
                     if not page_soup:
-                        print(f"{name}:Request fail.")
+                        print(t("msg.request_failed").format(name=name))
                         return info_list
                     else:
                         a_tags = page_soup.find_all("a", href=True)
@@ -120,7 +121,8 @@ async def get_channels_by_hotel(callback=None):
                                 )
                                 page_soup = retry_func(
                                     lambda: get_soup_requests(request_url),
-                                    name=f"hotel search:{name}, page:{page}",
+                                    name=t("msg.mode_search_name_page").format(mode=t("name.hotel_foodie"), name=name,
+                                                                               page=page)
                                 )
                         soup = get_soup(driver.page_source) if open_driver else page_soup
                         if soup:
@@ -133,19 +135,19 @@ async def get_channels_by_hotel(callback=None):
                                     soup, hotel=True
                                 )
                             )
-                            print(name, "page:", page, "results num:", len(results))
+                            print(t("msg.name_page_results_number").format(name=name, page=page, number=len(results)))
                             if len(results) == 0:
-                                print(f"{name}:No results found")
+                                print(t("msg.name_no_results").format(name=name))
                             info_list = info_list + results
                         else:
-                            print(f"{name}:No page soup found")
+                            print(t("msg.name_page_element_empty").format(name=name))
                             if page != page_num and open_driver:
                                 driver.refresh()
                     except Exception as e:
-                        print(f"{name}:Error on page {page}: {e}")
+                        print(t("msg.name_page_error_info").format(name=name, page=page, info=e))
                         continue
             except Exception as e:
-                print(f"{name}:Error on search: {e}")
+                print(t("msg.name_search_error_info").format(name=name, info=e))
                 pass
             finally:
                 if driver:
@@ -154,15 +156,19 @@ async def get_channels_by_hotel(callback=None):
                 pbar.update()
                 if callback:
                     callback(
-                        f"正在获取Foodie酒店源, 剩余{region_list_len - pbar.n}个地区待查询, 预计剩余时间: {get_pbar_remaining(n=pbar.n, total=pbar.total, start_time=start_time)}",
+                        t("msg.progress_desc").format(name=t("name.hotel_foodie"),
+                                                      remaining_total=region_list_len - pbar.n,
+                                                      item_name=t("name.region"),
+                                                      remaining_time=get_pbar_remaining(n=pbar.n, total=pbar.total,
+                                                                                        start_time=start_time)),
                         int((pbar.n / region_list_len) * 100),
                     )
                 return info_list
 
         region_list_len = len(region_list)
-        pbar = tqdm_asyncio(total=region_list_len, desc="Foodie hotel search")
+        pbar = tqdm_asyncio(total=region_list_len, desc=t("pbar.name_search").format(name=t("name.hotel_foodie")))
         if callback:
-            callback(f"正在获取Foodie酒店源, 共{region_list_len}个地区", 0)
+            callback(f"{t("pbar.getting_name").format(name=t("name.hotel_foodie"))}", 0)
         search_region_result = defaultdict(list)
         with ThreadPoolExecutor(max_workers=3) as executor:
             futures = {
@@ -186,7 +192,7 @@ async def get_channels_by_hotel(callback=None):
             for item in result
         ]
         request_channels = await get_channels_by_subscribe_urls(
-            urls, hotel=True, retry=False, error_print=False, pbar_desc="Processing get hotel json"
+            urls, hotel=True, retry=False, error_print=False, pbar_desc=t("msg.processing_get_hotel_json")
         )
         channels = merge_objects(channels, request_channels)
         pbar.close()

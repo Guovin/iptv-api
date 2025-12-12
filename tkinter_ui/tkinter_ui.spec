@@ -26,7 +26,6 @@ a = Analysis(
         ('../updates/multicast/cache.pkl', 'updates/multicast'),
         ('../utils/ip_checker/data/qqwry.ipdb', 'utils/ip_checker/data'),
         ('../utils/nginx-rtmp-win32', 'utils/nginx-rtmp-win32'),
-        ('../static/images/favicon.ico', 'static/images'),
         ('../static/images/alipay.jpg', 'static/images'),
         ('../static/images/settings_icon.png', 'static/images'),
         ('../static/images/speed_icon.png', 'static/images'),
@@ -37,6 +36,7 @@ a = Analysis(
         ('../static/images/subscribe_icon.png', 'static/images'),
         ('../static/images/online_search_icon.png', 'static/images'),
         ('../static/images/epg_icon.png', 'static/images'),
+        ('favicon.ico', '.'),
         ('about.py', '.'),
         ('default.py', '.'),
         ('speed.py', '.'),
@@ -79,5 +79,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon='../static/images/favicon.ico'
+    icon='favicon.ico'
 )

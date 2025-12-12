@@ -21,6 +21,7 @@ from utils.channel import (
 from utils.config import config
 from utils.driver.setup import setup_driver
 from utils.driver.tools import search_submit
+from utils.i18n import t
 from utils.requests.tools import get_soup_requests
 from utils.retry import (
     retry_func,
@@ -81,7 +82,8 @@ async def get_channels_by_multicast(names, callback=None):
                     driver = setup_driver()
                     try:
                         retry_func(
-                            lambda: driver.get(pageUrl), name=f"multicast search:{name}"
+                            lambda: driver.get(pageUrl),
+                            name=t("msg.mode_search_name").format(mode=t("name.multicast"), name=name)
                         )
                     except Exception as e:
                         print(e)
@@ -95,12 +97,12 @@ async def get_channels_by_multicast(names, callback=None):
                     try:
                         page_soup = retry_func(
                             lambda: get_soup_requests(pageUrl, data=post_form),
-                            name=f"multicast search:{name}",
+                            name=t("msg.mode_search_name").format(mode=t("name.multicast"), name=name)
                         )
                     except Exception as e:
                         print(e)
                     if not page_soup:
-                        print(f"{name}:Request fail.")
+                        print(t("msg.request_failed").format(name=name))
                         return {"region": region, "type": type, "data": info_list}
                     else:
                         a_tags = page_soup.find_all("a", href=True)
@@ -130,7 +132,8 @@ async def get_channels_by_multicast(names, callback=None):
                                 )
                                 page_soup = retry_func(
                                     lambda: get_soup_requests(request_url),
-                                    name=f"multicast search:{name}, page:{page}",
+                                    name=t("msg.mode_search_name_page").format(mode=t("name.multicast"), name=name,
+                                                                               page=page)
                                 )
                         soup = get_soup(driver.page_source) if open_driver else page_soup
                         if soup:
@@ -141,19 +144,19 @@ async def get_channels_by_multicast(names, callback=None):
                                 if open_driver
                                 else get_results_from_multicast_soup_requests(soup)
                             )
-                            print(name, "page:", page, "results num:", len(results))
+                            print(t("msg.name_page_results_number").format(name=name, page=page, number=len(results)))
                             if len(results) == 0:
-                                print(f"{name}:No results found")
+                                print(t("msg.name_no_results").format(name=name))
                             info_list = info_list + results
                         else:
-                            print(f"{name}:No page soup found")
+                            print(t("msg.name_page_element_empty").format(name=name))
                             if page != page_num and open_driver:
                                 driver.refresh()
                     except Exception as e:
-                        print(f"{name}:Error on page {page}: {e}")
+                        print(t("msg.name_page_error_info").format(name=name, page=page, info=e))
                         continue
             except Exception as e:
-                print(f"{name}:Error on search: {e}")
+                print(t("msg.name_search_error_info").format(name=name, info=e))
                 pass
             finally:
                 if driver:
@@ -162,17 +165,21 @@ async def get_channels_by_multicast(names, callback=None):
                 pbar.update()
                 if callback:
                     callback(
-                        f"正在进行Foodie组播更新, 剩余{region_type_list_len - pbar.n}个地区待查询, 预计剩余时间: {get_pbar_remaining(n=pbar.n, total=pbar.total, start_time=start_time)}",
+                        t("msg.progress_desc").format(name=t("name.multicast"),
+                                                      remaining_total=region_type_list_len - pbar.n,
+                                                      item_name=t("name.region"),
+                                                      remaining_time=get_pbar_remaining(n=pbar.n, total=pbar.total,
+                                                                                        start_time=start_time)),
                         int((pbar.n / region_type_list_len) * 100),
                     )
                 return {"region": region, "type": type, "data": info_list}
 
         if config.open_multicast_foodie:
             region_type_list_len = len(region_type_list)
-            pbar = tqdm_asyncio(total=region_type_list_len, desc="Multicast search")
+            pbar = tqdm_asyncio(total=region_type_list_len, desc=t("pbar.name_search").format(name=t("name.multicast")))
             if callback:
                 callback(
-                    f"正在进行Foodie组播更新, {len(names)}个频道, 共{region_type_list_len}个地区",
+                    f"{t("pbar.getting_name").format(name=t("name.multicast"))}",
                     0,
                 )
             start_time = time()

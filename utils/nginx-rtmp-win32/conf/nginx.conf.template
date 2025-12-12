@@ -1,48 +1,45 @@
-worker_processes 1;
+worker_processes  1;
 
-error_log /var/log/nginx/error.log error;
+error_log  logs/error.log error;
 
 events {
-    worker_connections 1024;
+    worker_connections  1024;
 }
 
 rtmp {
     server {
-        listen 1935;
+        listen ${NGINX_RTMP_PORT};
 
         application hls {
             live on;
             hls on;
-            hls_path /tmp/hls;
+            hls_path temp/hls;
             hls_fragment 3s;
-            on_publish http://127.0.0.1:5180/on_publish;
-            on_done    http://127.0.0.1:5180/on_done;
+            on_publish http://127.0.0.1:${APP_PORT}/on_publish;
+            on_done    http://127.0.0.1:${APP_PORT}/on_done;
         }
     }
 }
 
 http {
     server {
-        listen 8080;
+        listen ${NGINX_HTTP_PORT};
 
-        # This URL provides RTMP statistics in XML
+        location / {
+            root html;
+        }
+
         location /stat {
             rtmp_stat all;
-
-            # Use this stylesheet to view XML as web page
-            # in browser
             rtmp_stat_stylesheet stat.xsl;
         }
 
         location /stat.xsl {
-            # XML stylesheet to view RTMP stats.
-            # Copy stat.xsl wherever you want
-            # and put the full directory path here
-            root /usr/local/nginx/html;
+            root html;
         }
 
         location ~ ^/hls/(.+)\.ts$ {
-            root /tmp;
+            root   temp;
             types {
                 video/mp2t ts;
             }
@@ -51,7 +48,7 @@ http {
         }
 
         location ~ ^/hls/(.+)\.m3u8$ {
-            proxy_pass http://127.0.0.1:5180/hls_proxy/$1;
+            proxy_pass http://127.0.0.1:${APP_PORT}/hls_proxy/$1;
             proxy_set_header Host $host;
             proxy_set_header X-Real-IP $remote_addr;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;

@@ -66,7 +66,7 @@ class TkinterUI:
             self.root.destroy()
 
     def create_tray_icon(self):
-        image = Image.open(resource_path("static/images/favicon.ico"))
+        image = Image.open(resource_path("favicon.ico"))
         menu = (pystray.MenuItem("显示", self.restore_window, default=True), pystray.MenuItem("退出", self.exit_app))
         self.tray_icon = pystray.Icon("name", image, self.name, menu)
         threading.Thread(target=self.tray_icon.run, daemon=True).start()
@@ -316,7 +316,7 @@ if __name__ == "__main__":
     screen_width = root.winfo_screenwidth()
     screen_height = root.winfo_screenheight()
     root.geometry("%dx%d+%d+%d" % get_root_location(root))
-    root.iconbitmap(resource_path("static/images/favicon.ico"))
+    root.iconbitmap(resource_path("favicon.ico"))
     root.after(0, config.copy("config"))
     root.after(0, config.copy("utils/nginx-rtmp-win32"))
     root.after(0, config.copy("output"))

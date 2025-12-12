@@ -32,7 +32,9 @@ FROM python:3.13-alpine
 ARG APP_WORKDIR=/iptv-api
 
 ENV APP_WORKDIR=$APP_WORKDIR
-ENV APP_PORT=8000
+ENV APP_PORT=5180
+ENV NGINX_HTTP_PORT=8080
+ENV NGINX_RTMP_PORT=1935
 ENV PATH="/.venv/bin:/usr/local/nginx/sbin:$PATH"
 
 WORKDIR $APP_WORKDIR
@@ -48,13 +50,13 @@ RUN mkdir -p /var/log/nginx && \
 
 RUN apk update && apk add --no-cache ffmpeg pcre
 
-EXPOSE $APP_PORT 8080 1935
+EXPOSE $APP_PORT $NGINX_HTTP_PORT $NGINX_RTMP_PORT
 
 COPY entrypoint.sh /iptv-api-entrypoint.sh
 
 COPY config /iptv-api-config
 
-COPY nginx.conf /etc/nginx/nginx.conf
+COPY nginx.conf.template /etc/nginx/nginx.conf.template
 
 RUN mkdir -p /usr/local/nginx/html
 

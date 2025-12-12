@@ -1,5 +1,7 @@
 from time import sleep
+
 from utils.config import config
+from utils.i18n import t
 
 if config.open_driver:
     try:
@@ -22,16 +24,16 @@ def retry_func(func, retries=max_retries, name=""):
             return func()
         except Exception as e:
             if name and i < retries - 1:
-                print(f"Failed to connect to the {name}. Retrying {i+1}...")
+                print(t("msg.failed_retrying_count").format(name=name, count=i + 1))
             elif i == retries - 1:
                 raise Exception(
-                    f"Failed to connect to the {name} reached the maximum retries."
+                    t("msg.failed_retry_max").format(name=name)
                 )
-    raise Exception(f"Failed to connect to the {name} reached the maximum retries.")
+    raise Exception(t("msg.failed_retry_max").format(name=name))
 
 
 def locate_element_with_retry(
-    driver, locator, timeout=config.request_timeout, retries=max_retries
+        driver, locator, timeout=config.request_timeout, retries=max_retries
 ):
     """
     Locate the element with retry
@@ -46,7 +48,7 @@ def locate_element_with_retry(
 
 
 def find_clickable_element_with_retry(
-    driver, locator, timeout=config.request_timeout, retries=max_retries
+        driver, locator, timeout=config.request_timeout, retries=max_retries
 ):
     """
     Find the clickable element with retry

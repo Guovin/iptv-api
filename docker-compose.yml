@@ -1,0 +1,23 @@
+services:
+  iptv-api:
+    image: guovern/iptv-api:latest
+    container_name: iptv-api
+    restart: unless-stopped
+
+    ports:
+      # APP_PORT
+      - "5180:5180"
+      # NGINX_HTTP_PORT
+      - "8080:8080"
+
+    volumes:
+      - /iptv-api/config:/iptv-api/config
+      - /iptv-api/output:/iptv-api/output
+
+    environment:
+      PUBLIC_SCHEME: "http"
+      PUBLIC_DOMAIN: "127.0.0.1"
+      APP_PORT: "5180"
+      NGINX_HTTP_PORT: "8080"
+      NGINX_RTMP_PORT: "1935"
+      CDN_URL: ""

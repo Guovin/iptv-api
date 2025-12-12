@@ -12,6 +12,7 @@ import updates.fofa.fofa_map as fofa_map
 import utils.constants as constants
 from utils.channel import format_channel_name
 from utils.config import config
+from utils.i18n import t
 from utils.requests.tools import get_requests
 from utils.retry import retry_func
 from utils.tools import merge_objects, get_pbar_remaining, resource_path
@@ -76,15 +77,15 @@ async def get_channels_by_fofa(urls=None, multicast=False, callback=None):
     if config.open_request:
         fofa_urls = urls if urls else get_fofa_urls_from_region_list()
         fofa_urls_len = len(fofa_urls)
+        mode_name = t("name.multicast") if multicast else t("name.hotel")
         pbar = tqdm_asyncio(
             total=fofa_urls_len,
-            desc=f"Processing fofa for {'multicast' if multicast else 'hotel'}",
+            desc=t("msg.fofa_processing_name").format(name=mode_name)
         )
         start_time = time()
-        mode_name = "组播" if multicast else "酒店"
         if callback:
             callback(
-                f"正在获取Fofa{mode_name}源, 共{fofa_urls_len}个查询地址",
+                f"{t("pbar.getting_name").format(name=mode_name)}",
                 0,
             )
         open_driver = config.open_driver
@@ -150,10 +151,13 @@ async def get_channels_by_fofa(urls=None, multicast=False, callback=None):
                     driver.close()
                     driver.quit()
                 pbar.update()
-                remain = fofa_urls_len - pbar.n
                 if callback:
                     callback(
-                        f"正在获取Fofa{mode_name}源, 剩余{remain}个查询地址待获取, 预计剩余时间: {get_pbar_remaining(n=pbar.n, total=pbar.total, start_time=start_time)}",
+                        t("msg.progress_desc").format(name=f"{t("pbar.get")} FOFA {mode_name}",
+                                                      remaining_total=fofa_urls_len - pbar.n,
+                                                      item_name=mode_name,
+                                                      remaining_time=get_pbar_remaining(n=pbar.n, total=pbar.total,
+                                                                                        start_time=start_time)),
                         int((pbar.n / fofa_urls_len) * 100),
                     )
 
@@ -177,14 +181,14 @@ async def get_channels_by_fofa(urls=None, multicast=False, callback=None):
         pbar.update(0)
         if callback:
             callback(
-                f"正在获取Fofa{mode_name}源",
+                f"{t("pbar.getting_name").format(name=mode_name)}",
                 100,
             )
         pbar.close()
     return fofa_results
 
 
-def process_fofa_json_url(url, region, open_speed_test, hotel_name="酒店源"):
+def process_fofa_json_url(url, region, open_speed_test, hotel_name=t("name.hotel")):
     """
     Process the FOFA json url
     """

@@ -12,6 +12,7 @@ from multidict import CIMultiDictProxy
 
 import utils.constants as constants
 from utils.config import config
+from utils.i18n import t
 from utils.tools import get_resolution_value
 from utils.types import TestResult, ChannelTestResult, TestResultCacheData
 
@@ -218,6 +219,10 @@ def check_ffmpeg_installed_status():
     except Exception as e:
         print(e)
     finally:
+        if status:
+            print(t("msg.ffmpeg_installed"))
+        else:
+            print(t("msg.ffmpeg_not_installed"))
         return status
 
 
