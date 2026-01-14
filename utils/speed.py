@@ -517,3 +517,11 @@ def get_sort_result(
         total_result.append(result)
     total_result.sort(key=lambda item: item.get("speed") or 0, reverse=True)
     return total_result
+
+
+def clear_cache():
+    """
+    Clear the speed test cache
+    """
+    global cache
+    cache = {}
