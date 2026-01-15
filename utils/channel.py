@@ -5,6 +5,7 @@ import math
 import os
 import pickle
 import re
+import tempfile
 from collections import defaultdict
 from logging import INFO
 
@@ -12,6 +13,7 @@ import utils.constants as constants
 from utils.alias import Alias
 from utils.config import config
 from utils.db import get_db_connection, return_db_connection
+from utils.frozen import is_url_frozen, mark_url_bad, mark_url_good
 from utils.i18n import t
 from utils.ip_checker import IPChecker
 from utils.speed import (
@@ -38,15 +40,13 @@ from utils.tools import (
     get_resolution_value,
     get_public_url
 )
-from utils.types import ChannelData, OriginType, CategoryChannelData, TestResult, WhitelistMaps
+from utils.types import ChannelData, OriginType, CategoryChannelData, WhitelistMaps
 from utils.whitelist import is_url_whitelisted, get_whitelist_url, get_whitelist_total_count
 
 channel_alias = Alias()
 ip_checker = IPChecker()
-frozen_channels = set()
 location_list = config.location
 isp_list = config.isp
-max_delay = config.speed_test_timeout * 1000
 min_resolution_value = config.min_resolution_value
 open_history = config.open_history
 open_local = config.open_local
@@ -74,12 +74,12 @@ def format_channel_data(url: str, origin: OriginType) -> ChannelData:
     }
 
 
-def check_channel_need_frozen(info: TestResult) -> bool:
+def check_channel_need_frozen(info) -> bool:
     """
     Check if the channel need to be frozen
     """
     delay = info.get("delay", 0)
-    if (delay == -1 or delay > max_delay) or info.get("speed", 0) == 0:
+    if delay == -1 or info.get("speed", 0) == 0:
         return True
     if info.get("resolution"):
         if get_resolution_value(info["resolution"]) < min_resolution_value:
@@ -210,7 +210,7 @@ def get_channel_items(whitelist_maps, blacklist) -> CategoryChannelData:
                                                                                                             blacklist):
                                                     continue
                                                 if check_channel_need_frozen(info):
-                                                    frozen_channels.add(info_url)
+                                                    mark_url_bad(info_url, initial=True)
                                                     continue
                                             except:
                                                 pass
@@ -224,11 +224,6 @@ def get_channel_items(whitelist_maps, blacklist) -> CategoryChannelData:
                                                 "origin"] not in retain_origin and old_result_url not in urls and not check_url_by_keywords(
                                                 old_result_url, blacklist):
                                                 channel_data.append(info)
-                                                frozen_channels.discard(old_result_url)
-
-                                    channel_urls = {d["url"] for d in channel_data}
-                                    if channel_urls.issubset(frozen_channels):
-                                        frozen_channels.difference_update(channel_urls)
 
             except Exception as e:
                 print(t("msg.error_load_cache").format(info=e))
@@ -335,7 +330,7 @@ def append_data_to_info_data(
 
             if url_origin not in retain_origin:
                 url = get_channel_url(url)
-                if not url or url in frozen_channels or blacklist and check_url_by_keywords(url, blacklist):
+                if not url or is_url_frozen(url) or blacklist and check_url_by_keywords(url, blacklist):
                     continue
 
                 if not ipv_type:
@@ -517,6 +512,11 @@ async def test_speed(data, ipv6=False, callback=None, on_task_complete=None):
         merged = {**info, **result}
         grouped_results[cate][name].append(merged)
 
+        if check_channel_need_frozen(merged):
+            mark_url_bad(merged.get("url"))
+        else:
+            mark_url_good(merged.get("url"))
+
         completed += 1
         completed_by_channel[(cate, name)] += 1
 
@@ -610,13 +610,13 @@ def process_write_content(
     """
     Get channel write content
     :param path: write into path
+    :param data: channel data
     :param hls_url: hls url
     :param open_empty_category: show empty category
     :param ipv_type_prefer: ipv type prefer
     :param origin_type_prefer: origin type prefer
     :param first_channel_name: the first channel name
     :param enable_log: enable log
-    :param logger: logger
     :param is_last: is last write
     """
     content = ""
@@ -692,9 +692,30 @@ def process_write_content(
                 conn.commit()
             finally:
                 return_db_connection(constants.rtmp_data_path, conn)
-    with open(path, "w", encoding="utf-8") as f:
-        f.write(content)
-    convert_to_m3u(path, first_channel_name, data=result_data)
+    try:
+        target_dir = os.path.dirname(path) or "."
+        os.makedirs(target_dir, exist_ok=True)
+        with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", delete=False, dir=target_dir,
+                                         prefix=os.path.basename(path) + ".tmp.") as tmpf:
+            tmpf.write(content)
+            tmp_path = tmpf.name
+        os.replace(tmp_path, path)
+        try:
+            os.chmod(path, 0o644)
+        except Exception:
+            pass
+    except Exception as e:
+        print(e)
+        try:
+            with open(path, "w", encoding="utf-8") as f:
+                f.write(content)
+        except Exception as e2:
+            print(t("msg.write_error").format(info=e2))
+            return
+    try:
+        convert_to_m3u(path, first_channel_name, data=result_data)
+    except Exception:
+        pass
 
 
 def write_channel_to_file(data, ipv6=False, first_channel_name=None, skip_print=False, is_last=False):

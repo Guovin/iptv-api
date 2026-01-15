@@ -8,10 +8,7 @@
 </div>
 
 📺 IPTV live-source auto-update platform — 🤖 fully automated collection, filtering, speed-testing, and generation
-pipeline 🚀. Supports extensive customization; paste the resulting URL into your player to watch
-
-> [!NOTE]
-> Remote deployment or customized paid services (paid) are available. Contact email: `360996299@qq.com`
+pipeline 🚀. Supports extensive customization; paste the resulting URL into your player to watch.
 
 There are four installation and operation methods in total, choose the one that suits you.
 

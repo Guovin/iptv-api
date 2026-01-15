@@ -48,31 +48,33 @@ pipeline 🚀. Supports extensive customization; paste the resulting URL into yo
 - [❤️ Donations](#donations)
 - [👀 Follow](#follow)
 - [⭐️ Star History](#star-history)
+- [⚠️ Disclaimer](#disclaimer)
 - [⚖️ License](#license)
 
 > [!IMPORTANT]
-> 1. Visit the `Govin` WeChat official account and reply with `cdn` to get a proxy acceleration address to improve
-     access speed for subscription sources and channel icons.
-> 2. The default subscription sources are no longer provided; please add them yourself.
-> 3. This project does not guarantee or explain the stability of the interface results.
-> 4. To achieve optimal stability, it is recommended to maintain the data sources yourself.
+> 1. Go to the `Govin` WeChat public account and reply with `cdn` to get an acceleration address to improve access speed
+     for subscription sources and channel logos.
+> 2. This project does not provide data sources. Please add your own before generating results.
+> 3. The quality of generated results depends on the data sources and network conditions; please adjust
+     the [configuration](#Config) accordingly to obtain results that better meet your needs.
 
 ## Core Features
 
-| Feature                       | Support | Description                                                                               |
-|:------------------------------|:-------:|:------------------------------------------------------------------------------------------|
-| **Custom templates**          |    ✅    | Generate custom channel playlists                                                         |
-| **Channel aliases**           |    ✅    | Improve channel matching and accuracy, supports regular expressions                       |
-| **Multi-source aggregation**  |    ✅    | Local sources and subscription sources                                                    |
-| **Stream relay**              |    ✅    | Improve playback on weak networks, supports direct browser playback                       |
-| **Replay/VOD interfaces**     |    ✅    | Fetching and generating replay/VOD interfaces                                             |
-| **EPG**                       |    ✅    | Fetch and display channel program guides                                                  |
-| **Channel logos**             |    ✅    | Custom channel logo library sources                                                       |
-| **Speed test & validation**   |    ✅    | Obtain latency, bitrate, resolution; filter invalid interfaces; supports real-time output |
-| **Advanced preferences**      |    ✅    | Rate, resolution, blacklist/whitelist, location and ISP custom filters                    |
-| **Scheduled tasks**           |    ✅    | Scheduled or interval updates                                                             |
-| **Multi-platform deployment** |    ✅    | Workflows, CLI, GUI, Docker (amd64/arm64/arm v7)                                          |
-| **More features**             |    ✨    | See [Configuration](#Config) section for details                                          |
+| Feature                       | Support | Description                                                                                                                                                 |
+|:------------------------------|:-------:|:------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Custom templates**          |    ✅    | Generate custom channel playlists                                                                                                                           |
+| **Channel aliases**           |    ✅    | Improve channel matching and accuracy, supports regular expressions                                                                                         |
+| **Multi-source aggregation**  |    ✅    | Local sources and subscription sources                                                                                                                      |
+| **Stream relay**              |    ✅    | Improve playback on weak networks, supports direct browser playback                                                                                         |
+| **Replay/VOD interfaces**     |    ✅    | Fetching and generating replay/VOD interfaces                                                                                                               |
+| **EPG**                       |    ✅    | Fetch and display channel program guides                                                                                                                    |
+| **Channel logos**             |    ✅    | Custom channel logo library sources                                                                                                                         |
+| **Speed test & validation**   |    ✅    | Obtain latency, bitrate, resolution; filter invalid interfaces; supports real-time output                                                                   |
+| **Advanced preferences**      |    ✅    | Rate, resolution, blacklist/whitelist, location and ISP custom filters                                                                                      |
+| **Results management**        |    ✅    | Categorized storage and access of results, log recording, unmatched channel records, statistical analysis, freeze filtering/unfreeze rollback, data caching |
+| **Scheduled tasks**           |    ✅    | Scheduled or interval updates                                                                                                                               |
+| **Multi-platform deployment** |    ✅    | Workflows, CLI, GUI, Docker (amd64/arm64/arm v7)                                                                                                            |
+| **More features**             |    ✨    | See [Configuration](#Config) section for details                                                                                                            |
 
 ## Config
 
@@ -150,19 +152,18 @@ iptv-api/                  # Project root directory
 │   └── subscribe.txt      # Channel subscription sources list
 │   └── local.txt          # Local source file
 │   └── epg.txt            # EPG subscription sources list
-├── output                 # Output files directory, includes generated result files, etc.
-│   └── data               # Result data cache directory
-│   └── epg                # EPG result directory
-│   └── ipv4               # IPv4 result directory
-│   └── ipv6               # IPv6 result directory
-│   └── result.m3u/txt     # m3u/txt result
-│   └── hls.m3u/txt        # RTMP hls stream result
-│   └── log                # Log files directory
-│       └── result.log     # Valid result log
-│       └── speed_test.log # Speed test log
-│       └── statistic.log  # Statistics result log
-│       └── nomatch.log    # Unmatched channel records
-└── source.json            # VOD source configuration file
+└── output                 # Output files directory, includes generated result files, etc.
+    └── data               # Result data cache directory
+    └── epg                # EPG result directory
+    └── ipv4               # IPv4 result directory
+    └── ipv6               # IPv6 result directory
+    └── result.m3u/txt     # m3u/txt result
+    └── hls.m3u/txt        # RTMP hls stream result
+    └── log                # Log files directory
+        └── result.log     # Valid result log
+        └── speed_test.log # Speed test log
+        └── statistic.log  # Statistics result log
+        └── nomatch.log    # Unmatched channel records
 ```
 
 ### Workflow
@@ -324,9 +325,9 @@ WeChat public account search for Govin, or scan the code to receive updates and 
 
 ![Wechat public account](./static/images/qrcode.jpg)
 
-### Customization (Paid)
+### Need more help?
 
-For remote deployment or custom services, please contact: `360996299@qq.com`
+Contact via email: `360996299@qq.com`
 
 ## Star History
 
@@ -339,6 +340,18 @@ For remote deployment or custom services, please contact: `360996299@qq.com`
 | Alipay                                | Wechat                                    |
 |---------------------------------------|-------------------------------------------|
 | ![Alipay](./static/images/alipay.jpg) | ![Wechat](./static/images/appreciate.jpg) |
+
+## Disclaimer
+
+- This project is provided as a tool/framework only; it does not include or provide any live streams, copyrighted
+  programs, or other third-party content. Users must add their own data sources and ensure that the data sources used
+  and their use comply with applicable laws and regulations in their jurisdiction.
+- Users are solely responsible for any content obtained, distributed, or played through this project. Do not use it to
+  distribute, share, or watch copyrighted content without authorization.
+- When using this project, comply with local laws, regulations, and supervisory requirements. The author is not liable
+  for any legal responsibility arising from users' use of this project.
+- For commercial, corporate, or production use, it is recommended to consult legal counsel and perform a compliance
+  review.
 
 ## License
 

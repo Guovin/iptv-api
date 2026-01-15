@@ -35,7 +35,9 @@ hls_ipv4_result_path = os.path.join(output_dir, "ipv4/hls.txt")
 
 hls_ipv6_result_path = os.path.join(output_dir, "ipv6/hls.txt")
 
-cache_path = os.path.join(output_dir, "data/cache.pkl.gz")
+cache_path = os.path.join(output_dir, "data/cache.gz")
+
+frozen_path = os.path.join(output_dir, "data/frozen.gz")
 
 speed_test_log_path = os.path.join(output_dir, "log/speed_test.log")
 
