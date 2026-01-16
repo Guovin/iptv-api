@@ -1,76 +1,118 @@
 #EXTM3U x-tvg-url="https://raw.githubusercontent.com/dongweiqi1/iptv-api/refs/heads/master/output/epg/epg.gz"
-#EXTINF:-1 tvg-name="CCTV1" tvg-logo="CCTV1.png" group-title="🕘️更新时间",2026-01-16 06:30:14
-http://223.72.47.217:4022/rtp/228.1.1.28:8008
+#EXTINF:-1 tvg-name="CCTV1" tvg-logo="CCTV1.png" group-title="🕘️更新时间",2026-01-16 09:37:15
+http://223.72.11.153:8022/rtp/228.1.1.28:8008
 #EXTINF:-1 tvg-name="CCTV1" tvg-logo="CCTV1.png" group-title="☘️央视频道",CCTV-1
-http://223.72.47.217:4022/rtp/228.1.1.28:8008
+http://223.72.11.153:8022/rtp/228.1.1.28:8008
+#EXTINF:-1 tvg-name="CCTV1" tvg-logo="CCTV1.png" group-title="☘️央视频道",CCTV-1
+http://101.19.8.78:4000/rtp/239.253.92.83:8012
 #EXTINF:-1 tvg-name="CCTV2" tvg-logo="CCTV2.png" group-title="☘️央视频道",CCTV-2
-http://223.72.47.217:4022/rtp/228.1.1.24:8084
+http://101.19.8.78:4000/rtp/239.253.92.190:6065
+#EXTINF:-1 tvg-name="CCTV2" tvg-logo="CCTV2.png" group-title="☘️央视频道",CCTV-2
+http://223.72.11.153:8022/rtp/228.1.1.24:8084
 #EXTINF:-1 tvg-name="CCTV3" tvg-logo="CCTV3.png" group-title="☘️央视频道",CCTV-3
-http://223.72.47.217:4022/rtp/228.1.1.191:8002
+http://114.240.41.217:8888/rtp/239.3.1.172:8001
+#EXTINF:-1 tvg-name="CCTV3" tvg-logo="CCTV3.png" group-title="☘️央视频道",CCTV-3
+http://101.19.8.78:4000/rtp/239.253.92.191:6057
+#EXTINF:-1 tvg-name="CCTV3" tvg-logo="CCTV3.png" group-title="☘️央视频道",CCTV-3
+http://223.72.11.153:8022/rtp/228.1.1.191:8002
 #EXTINF:-1 tvg-name="CCTV4" tvg-logo="CCTV4.png" group-title="☘️央视频道",CCTV-4
-http://223.72.47.217:4022/rtp/228.1.1.25:8092
+http://101.19.8.78:4000/rtp/239.253.93.192:6370
 #EXTINF:-1 tvg-name="CCTV4" tvg-logo="CCTV4.png" group-title="☘️央视频道",CCTV-4
-http://223.72.47.217:4022/rtp/228.1.1.213:4220
+http://101.19.8.78:4000/rtp/239.253.92.251:6141
 #EXTINF:-1 tvg-name="CCTV4" tvg-logo="CCTV4.png" group-title="☘️央视频道",CCTV-4
-http://223.72.47.217:4022/rtp/228.1.1.203:4220
+http://223.72.11.153:8022/rtp/228.1.1.203:4220
+#EXTINF:-1 tvg-name="CCTV4" tvg-logo="CCTV4.png" group-title="☘️央视频道",CCTV-4
+http://223.72.11.153:8022/rtp/228.1.1.25:8092
+#EXTINF:-1 tvg-name="CCTV4" tvg-logo="CCTV4.png" group-title="☘️央视频道",CCTV-4
+http://223.72.11.153:8022/rtp/228.1.1.213:4220
+#EXTINF:-1 tvg-name="CCTV4" tvg-logo="CCTV4.png" group-title="☘️央视频道",CCTV-4
+http://101.19.8.78:4000/rtp/239.253.93.193:6371
 #EXTINF:-1 tvg-name="CCTV5" tvg-logo="CCTV5.png" group-title="☘️央视频道",CCTV-5
-http://223.72.47.217:4022/rtp/228.1.1.192:8002
+http://101.19.8.78:4000/rtp/239.253.92.181:6046
 #EXTINF:-1 tvg-name="CCTV5+" tvg-logo="CCTV5+.png" group-title="☘️央视频道",CCTV-5+
-http://223.72.47.217:4022/rtp/228.1.1.23:8004
+http://101.19.8.78:4000/rtp/239.253.92.82:8013
 #EXTINF:-1 tvg-name="CCTV6" tvg-logo="CCTV6.png" group-title="☘️央视频道",CCTV-6
-http://223.72.47.217:4022/rtp/228.1.1.193:8002
+http://101.19.8.78:4000/rtp/239.253.92.193:6058
 #EXTINF:-1 tvg-name="CCTV7" tvg-logo="CCTV7.png" group-title="☘️央视频道",CCTV-7
-http://223.72.47.217:4022/rtp/228.1.1.26:8104
+http://101.19.8.78:4000/rtp/239.253.92.194:6059
 #EXTINF:-1 tvg-name="CCTV8" tvg-logo="CCTV8.png" group-title="☘️央视频道",CCTV-8
-http://223.72.47.217:4022/rtp/228.1.1.194:8002
+http://114.240.41.217:8888/rtp/239.3.1.175:8001
+#EXTINF:-1 tvg-name="CCTV8" tvg-logo="CCTV8.png" group-title="☘️央视频道",CCTV-8
+http://223.72.11.153:8022/rtp/228.1.1.194:8002
+#EXTINF:-1 tvg-name="CCTV8" tvg-logo="CCTV8.png" group-title="☘️央视频道",CCTV-8
+http://101.19.8.78:4000/rtp/239.253.92.195:6060
 #EXTINF:-1 tvg-name="CCTV9" tvg-logo="CCTV9.png" group-title="☘️央视频道",CCTV-9
-http://223.72.47.217:4022/rtp/228.1.1.27:8112
+http://101.19.8.78:4000/rtp/239.253.92.107:6020
+#EXTINF:-1 tvg-name="CCTV9" tvg-logo="CCTV9.png" group-title="☘️央视频道",CCTV-9
+http://223.72.11.153:8022/rtp/228.1.1.27:8112
 #EXTINF:-1 tvg-name="CCTV10" tvg-logo="CCTV10.png" group-title="☘️央视频道",CCTV-10
-http://223.72.47.217:4022/rtp/228.1.1.29:8116
+http://101.19.8.78:4000/rtp/239.253.92.196:6061
+#EXTINF:-1 tvg-name="CCTV10" tvg-logo="CCTV10.png" group-title="☘️央视频道",CCTV-10
+http://223.72.11.153:8022/rtp/228.1.1.29:8116
 #EXTINF:-1 tvg-name="CCTV11" tvg-logo="CCTV11.png" group-title="☘️央视频道",CCTV-11
-http://223.72.47.217:4022/rtp/228.1.1.182:8120
+http://101.19.8.78:4000/rtp/239.253.93.153:6321
+#EXTINF:-1 tvg-name="CCTV11" tvg-logo="CCTV11.png" group-title="☘️央视频道",CCTV-11
+http://223.72.11.153:8022/rtp/228.1.1.182:8120
 #EXTINF:-1 tvg-name="CCTV12" tvg-logo="CCTV12.png" group-title="☘️央视频道",CCTV-12
-http://223.72.47.217:4022/rtp/228.1.1.30:8124
+http://101.19.8.78:4000/rtp/239.253.92.197:6062
+#EXTINF:-1 tvg-name="CCTV12" tvg-logo="CCTV12.png" group-title="☘️央视频道",CCTV-12
+http://223.72.11.153:8022/rtp/228.1.1.30:8124
 #EXTINF:-1 tvg-name="CCTV13" tvg-logo="CCTV13.png" group-title="☘️央视频道",CCTV-13
-http://223.72.47.217:4022/rtp/228.1.1.212:8128
+http://114.240.41.217:8888/rtp/239.3.1.124:8128
+#EXTINF:-1 tvg-name="CCTV13" tvg-logo="CCTV13.png" group-title="☘️央视频道",CCTV-13
+http://101.19.8.78:4000/rtp/239.253.92.13:8008
+#EXTINF:-1 tvg-name="CCTV13" tvg-logo="CCTV13.png" group-title="☘️央视频道",CCTV-13
+http://223.72.11.153:8022/rtp/228.1.1.212:8128
 #EXTINF:-1 tvg-name="CCTV14" tvg-logo="CCTV14.png" group-title="☘️央视频道",CCTV-14
-http://223.72.47.217:4022/rtp/228.1.1.31:8132
+http://101.19.8.78:4000/rtp/239.253.92.198:6063
+#EXTINF:-1 tvg-name="CCTV14" tvg-logo="CCTV14.png" group-title="☘️央视频道",CCTV-14
+http://223.72.11.153:8022/rtp/228.1.1.31:8132
 #EXTINF:-1 tvg-name="CCTV15" tvg-logo="CCTV15.png" group-title="☘️央视频道",CCTV-15
-http://223.72.47.217:4022/rtp/228.1.1.183:8136
+http://223.72.11.153:8022/rtp/228.1.1.183:8136
+#EXTINF:-1 tvg-name="CCTV15" tvg-logo="CCTV15.png" group-title="☘️央视频道",CCTV-15
+http://101.19.8.78:4000/rtp/239.253.93.154:6322
 #EXTINF:-1 tvg-name="CCTV16" tvg-logo="CCTV16.png" group-title="☘️央视频道",CCTV-16
-http://223.72.47.217:4022/rtp/228.1.1.215:8002
+http://223.72.11.153:8022/rtp/228.1.1.215:8002
 #EXTINF:-1 tvg-name="CCTV17" tvg-logo="CCTV17.png" group-title="☘️央视频道",CCTV-17
-http://223.72.47.217:4022/rtp/228.1.1.181:8144
+http://101.19.8.78:4000/rtp/239.253.93.150:6318
+#EXTINF:-1 tvg-name="CCTV17" tvg-logo="CCTV17.png" group-title="☘️央视频道",CCTV-17
+http://223.72.11.153:8022/rtp/228.1.1.181:8144
 #EXTINF:-1 tvg-name="CCTV4K" tvg-logo="CCTV4K.png" group-title="☘️央视频道",CCTV-4K
-http://223.72.47.217:4022/rtp/228.1.1.227:2000
+http://101.19.8.78:4000/rtp/239.253.93.134:6631
+#EXTINF:-1 tvg-name="CCTV4K" tvg-logo="CCTV4K.png" group-title="☘️央视频道",CCTV-4K
+http://223.72.11.153:8022/rtp/228.1.1.227:2000
 #EXTINF:-1 tvg-name="CCTV4K" tvg-logo="CCTV4K.png" group-title="☘️超高清频道",CCTV4K
 http://223.72.47.217:4022/rtp/228.1.1.227:2000
 #EXTINF:-1 tvg-name="北京卫视4K" tvg-logo="北京卫视4K.png" group-title="☘️超高清频道",北京卫视4K
-http://223.72.47.217:4022/rtp/228.1.1.235:8002
+http://223.72.11.153:8022/rtp/228.1.1.115:8000
 #EXTINF:-1 tvg-name="北京卫视4K" tvg-logo="北京卫视4K.png" group-title="☘️超高清频道",北京卫视4K
-http://223.72.47.217:4022/rtp/228.1.1.115:8000
+http://101.19.8.78:4000/rtp/239.253.92.87:8014
 #EXTINF:-1 tvg-name="东方卫视4K" tvg-logo="东方卫视4K.png" group-title="☘️超高清频道",东方卫视4K
-http://223.72.47.217:4022/rtp/228.1.1.43:3006
+http://223.72.11.153:8022/rtp/228.1.1.43:3006
 #EXTINF:-1 tvg-name="广东卫视4K" tvg-logo="广东卫视4K.png" group-title="☘️超高清频道",广东卫视4K
-http://223.72.47.217:4022/rtp/228.1.1.241:2000
+http://223.72.11.153:8022/rtp/228.1.1.241:2000
 #EXTINF:-1 tvg-name="深圳卫视4K" tvg-logo="深圳卫视4K.png" group-title="☘️超高清频道",深圳卫视4K
-http://223.72.47.217:4022/rtp/228.1.1.240:2000
+http://223.72.11.153:8022/rtp/228.1.1.240:2000
+#EXTINF:-1 tvg-name="深圳卫视4K" tvg-logo="深圳卫视4K.png" group-title="☘️超高清频道",深圳卫视4K
+http://114.240.41.217:8888/rtp/239.3.1.202:2000
 #EXTINF:-1 tvg-name="湖南卫视4K" tvg-logo="湖南卫视4K.png" group-title="☘️超高清频道",湖南卫视4K
-http://223.72.47.217:4022/rtp/228.1.1.40:3002
-#EXTINF:-1 tvg-name="湖南卫视4K" tvg-logo="湖南卫视4K.png" group-title="☘️超高清频道",湖南卫视4K
-http://223.72.47.217:4022/rtp/228.1.1.33:8012
+http://101.19.8.78:4000/rtp/239.253.92.84:8015
 #EXTINF:-1 tvg-name="山东卫视4K" tvg-logo="山东卫视4K.png" group-title="☘️超高清频道",山东卫视4K
 http://223.72.47.217:4022/rtp/228.1.1.46:3006
 #EXTINF:-1 tvg-name="四川卫视4K" tvg-logo="四川卫视4K.png" group-title="☘️超高清频道",四川卫视4K
-http://223.72.47.217:4022/rtp/228.1.1.47:3000
+http://223.72.11.153:8022/rtp/228.1.1.47:3000
+#EXTINF:-1 tvg-name="四川卫视4K" tvg-logo="四川卫视4K.png" group-title="☘️超高清频道",四川卫视4K
+http://101.19.8.78:4000/rtp/239.253.92.16:6043
 #EXTINF:-1 tvg-name="浙江卫视4K" tvg-logo="浙江卫视4K.png" group-title="☘️超高清频道",浙江卫视4K
-http://223.72.47.217:4022/rtp/228.1.1.45:3004
+http://223.72.11.153:8022/rtp/228.1.1.45:3004
 #EXTINF:-1 tvg-name="江苏卫视4K" tvg-logo="江苏卫视4K.png" group-title="☘️超高清频道",江苏卫视4K
-http://223.72.47.217:4022/rtp/228.1.1.41:3002
+http://114.240.41.217:8888/rtp/239.3.1.113:3003
+#EXTINF:-1 tvg-name="江苏卫视4K" tvg-logo="江苏卫视4K.png" group-title="☘️超高清频道",江苏卫视4K
+http://223.72.11.153:8022/rtp/228.1.1.41:3002
 #EXTINF:-1 tvg-name="北京4K超清" tvg-logo="北京4K超清.png" group-title="☘️超高清频道",北京4K超清
-http://223.72.47.217:4022/rtp/228.1.1.123:8001
+http://223.72.11.153:8022/rtp/228.1.1.123:8001
 #EXTINF:-1 tvg-name="北京纪实科教8K" tvg-logo="北京纪实科教8K.png" group-title="☘️超高清频道",北京纪实科教8K
-http://223.72.47.217:4022/rtp/228.1.1.217:8002
+http://223.72.11.153:8022/rtp/228.1.1.217:8002
 #EXTINF:-1 tvg-name="湖南卫视" tvg-logo="湖南卫视.png" group-title="📡卫视频道",湖南卫视
 http://223.72.47.217:4022/rtp/228.1.1.40:3002
 #EXTINF:-1 tvg-name="湖南卫视" tvg-logo="湖南卫视.png" group-title="📡卫视频道",湖南卫视
@@ -82,17 +124,17 @@ http://223.72.47.217:4022/rtp/228.1.1.115:8000
 #EXTINF:-1 tvg-name="四川卫视" tvg-logo="四川卫视.png" group-title="📡卫视频道",四川卫视
 http://223.72.47.217:4022/rtp/228.1.1.47:3000
 #EXTINF:-1 tvg-name="北京新闻HD" tvg-logo="北京新闻HD.png" group-title="☘️北京频道",北京新闻HD
-http://223.72.47.217:4022/rtp/228.1.1.189:8000
+http://223.72.11.153:8022/rtp/228.1.1.189:8000
 #EXTINF:-1 tvg-name="北京生活HD" tvg-logo="北京生活HD.png" group-title="☘️北京频道",北京生活HD
-http://223.72.47.217:4022/rtp/228.1.1.198:8000
+http://223.72.11.153:8022/rtp/228.1.1.198:8000
 #EXTINF:-1 tvg-name="北京影视HD" tvg-logo="北京影视HD.png" group-title="☘️北京频道",北京影视HD
-http://223.72.47.217:4022/rtp/228.1.1.190:8000
+http://223.72.11.153:8022/rtp/228.1.1.190:8000
 #EXTINF:-1 tvg-name="北京文艺HD" tvg-logo="北京文艺HD.png" group-title="☘️北京频道",北京文艺HD
 http://223.72.47.217:4022/rtp/228.1.1.116:8000
 #EXTINF:-1 tvg-name="北京体育休闲HD" tvg-logo="北京体育休闲HD.png" group-title="☘️北京频道",北京体育休闲HD
-http://223.72.47.217:4022/rtp/228.1.1.117:8000
+http://223.72.11.153:8022/rtp/228.1.1.117:8000
 #EXTINF:-1 tvg-name="北京纪实科教HD" tvg-logo="北京纪实科教HD.png" group-title="☘️北京频道",北京纪实科教HD
-http://223.72.47.217:4022/rtp/228.1.1.196:8000
+http://223.72.11.153:8022/rtp/228.1.1.196:8000
 #EXTINF:-1 tvg-name="北京财经HD" tvg-logo="北京财经HD.png" group-title="☘️北京频道",北京财经HD
 http://223.72.47.217:4022/rtp/228.1.1.197:8000
 #EXTINF:-1 tvg-name="北京国际HD" tvg-logo="北京国际HD.png" group-title="☘️北京频道",北京国际HD
@@ -110,9 +152,9 @@ http://190.11.225.124:5000/live/playboy_hd/playlist.m3u8
 #EXTINF:-1 tvg-name="Playboy Plus" tvg-logo="Playboy Plus.png" group-title="☘️香港频道",Playboy Plus
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/6242/index.m3u8
 #EXTINF:-1 tvg-name="Playboy Plus" tvg-logo="Playboy Plus.png" group-title="☘️香港频道",Playboy Plus
-http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6242/index.m3u8
-#EXTINF:-1 tvg-name="Playboy Plus" tvg-logo="Playboy Plus.png" group-title="☘️香港频道",Playboy Plus
 http://a0bn5xro.rostelekom.xyz/iptv/ESMHU7B3S7N5NW/6242/index.m3u8
+#EXTINF:-1 tvg-name="Playboy Plus" tvg-logo="Playboy Plus.png" group-title="☘️香港频道",Playboy Plus
+http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6242/index.m3u8
 #EXTINF:-1 tvg-name="MetArt FHD" tvg-logo="MetArt FHD.png" group-title="☘️香港频道",MetArt FHD
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/12160/index.m3u8
 #EXTINF:-1 tvg-name="SexArt" tvg-logo="SexArt.png" group-title="☘️香港频道",SexArt
@@ -172,9 +214,9 @@ http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/6225/index.m3u8
 #EXTINF:-1 tvg-name="Japan HDV" tvg-logo="Japan HDV.png" group-title="☘️俄语频道",Japan HDV
 http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6225/index.m3u8
 #EXTINF:-1 tvg-name="Hitzefrei HD" tvg-logo="Hitzefrei HD.png" group-title="☘️俄语频道",Hitzefrei HD
-http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6220/index.m3u8
-#EXTINF:-1 tvg-name="Hitzefrei HD" tvg-logo="Hitzefrei HD.png" group-title="☘️俄语频道",Hitzefrei HD
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/6220/index.m3u8
+#EXTINF:-1 tvg-name="Hitzefrei HD" tvg-logo="Hitzefrei HD.png" group-title="☘️俄语频道",Hitzefrei HD
+http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6220/index.m3u8
 #EXTINF:-1 tvg-name="Babes" tvg-logo="Babes.png" group-title="☘️俄语频道",Babes
 http://88.212.7.11/live/test_basbes_hd_hevc/playlist.m3u8
 #EXTINF:-1 tvg-name="FemJoy" tvg-logo="FemJoy.png" group-title="☘️俄语频道",FemJoy
@@ -190,9 +232,9 @@ http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/6181/index.m3u8
 #EXTINF:-1 tvg-name="Brazzers eXXtra" tvg-logo="Brazzers eXXtra.png" group-title="☘️俄语频道",Brazzers eXXtra
 http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6181/index.m3u8
 #EXTINF:-1 tvg-name="Brazzers HD" tvg-logo="Brazzers HD.png" group-title="☘️俄语频道",Brazzers HD
-http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6182/index.m3u8
-#EXTINF:-1 tvg-name="Brazzers HD" tvg-logo="Brazzers HD.png" group-title="☘️俄语频道",Brazzers HD
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/6182/index.m3u8
+#EXTINF:-1 tvg-name="Brazzers HD" tvg-logo="Brazzers HD.png" group-title="☘️俄语频道",Brazzers HD
+http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6182/index.m3u8
 #EXTINF:-1 tvg-name="Brazzers TV Europe" tvg-logo="Brazzers TV Europe.png" group-title="☘️俄语频道",Brazzers TV Europe
 http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/910/index.m3u8
 #EXTINF:-1 tvg-name="EROCOM TV" tvg-logo="EROCOM TV.png" group-title="☘️俄语频道",EROCOM TV
@@ -208,29 +250,29 @@ http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/6197/index.m3u8
 #EXTINF:-1 tvg-name="Dorcel Club" tvg-logo="Dorcel Club.png" group-title="☘️俄语频道",Dorcel Club
 http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6197/index.m3u8
 #EXTINF:-1 tvg-name="Dorcel HD orig" tvg-logo="Dorcel HD orig.png" group-title="☘️俄语频道",Dorcel HD orig
-http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/9064/index.m3u8
-#EXTINF:-1 tvg-name="Dorcel HD orig" tvg-logo="Dorcel HD orig.png" group-title="☘️俄语频道",Dorcel HD orig
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/9064/index.m3u8
-#EXTINF:-1 tvg-name="Dorcel TV HD" tvg-logo="Dorcel TV HD.png" group-title="☘️俄语频道",Dorcel TV HD
-http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/245/index.m3u8
+#EXTINF:-1 tvg-name="Dorcel HD orig" tvg-logo="Dorcel HD orig.png" group-title="☘️俄语频道",Dorcel HD orig
+http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/9064/index.m3u8
 #EXTINF:-1 tvg-name="Dorcel TV HD" tvg-logo="Dorcel TV HD.png" group-title="☘️俄语频道",Dorcel TV HD
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/245/index.m3u8
 #EXTINF:-1 tvg-name="Dorcel TV HD" tvg-logo="Dorcel TV HD.png" group-title="☘️俄语频道",Dorcel TV HD
 http://a0bn5xro.rostelekom.xyz/iptv/ESMHU7B3S7N5NW/245/index.m3u8
+#EXTINF:-1 tvg-name="Dorcel TV HD" tvg-logo="Dorcel TV HD.png" group-title="☘️俄语频道",Dorcel TV HD
+http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/245/index.m3u8
 #EXTINF:-1 tvg-name="Fake Taxi HD" tvg-logo="Fake Taxi HD.png" group-title="☘️俄语频道",Fake Taxi HD
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/6202/index.m3u8
 #EXTINF:-1 tvg-name="Fake Taxi HD" tvg-logo="Fake Taxi HD.png" group-title="☘️俄语频道",Fake Taxi HD
 http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6202/index.m3u8
 #EXTINF:-1 tvg-name="Penthouse Gold HD" tvg-logo="Penthouse Gold HD.png" group-title="☘️俄语频道",Penthouse Gold HD
-http://a0bn5xro.rostelekom.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/5011/index.m3u8
-#EXTINF:-1 tvg-name="Penthouse Gold HD" tvg-logo="Penthouse Gold HD.png" group-title="☘️俄语频道",Penthouse Gold HD
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/5011/index.m3u8
+#EXTINF:-1 tvg-name="Penthouse Gold HD" tvg-logo="Penthouse Gold HD.png" group-title="☘️俄语频道",Penthouse Gold HD
+http://a0bn5xro.rostelekom.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/5011/index.m3u8
 #EXTINF:-1 tvg-name="Penthouse Gold HD" tvg-logo="Penthouse Gold HD.png" group-title="☘️俄语频道",Penthouse Gold HD
 http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/5011/index.m3u8
 #EXTINF:-1 tvg-name="Penthouse Quickies HD" tvg-logo="Penthouse Quickies HD.png" group-title="☘️俄语频道",Penthouse Quickies HD
-http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/5013/index.m3u8
-#EXTINF:-1 tvg-name="Penthouse Quickies HD" tvg-logo="Penthouse Quickies HD.png" group-title="☘️俄语频道",Penthouse Quickies HD
 http://a0bn5xro.rostelekom.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/5013/index.m3u8
+#EXTINF:-1 tvg-name="Penthouse Quickies HD" tvg-logo="Penthouse Quickies HD.png" group-title="☘️俄语频道",Penthouse Quickies HD
+http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/5013/index.m3u8
 #EXTINF:-1 tvg-name="Playboy Plus" tvg-logo="Playboy Plus.png" group-title="☘️俄语频道",Playboy Plus
 http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6242/index.m3u8
 #EXTINF:-1 tvg-name="Playboy Plus" tvg-logo="Playboy Plus.png" group-title="☘️俄语频道",Playboy Plus
@@ -266,9 +308,9 @@ http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/2162/index.m3u8
 #EXTINF:-1 tvg-name="Vivid Red HD" tvg-logo="Vivid Red HD.png" group-title="☘️俄语频道",Vivid Red HD
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/2162/index.m3u8
 #EXTINF:-1 tvg-name="Vixen HD" tvg-logo="Vixen HD.png" group-title="☘️俄语频道",Vixen HD
-http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6265/index.m3u8
-#EXTINF:-1 tvg-name="Vixen HD" tvg-logo="Vixen HD.png" group-title="☘️俄语频道",Vixen HD
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/6265/index.m3u8
+#EXTINF:-1 tvg-name="Vixen HD" tvg-logo="Vixen HD.png" group-title="☘️俄语频道",Vixen HD
+http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6265/index.m3u8
 #EXTINF:-1 tvg-name="HOTWIFE PREMIUM" tvg-logo="HOTWIFE PREMIUM.png" group-title="☘️俄语频道",HOTWIFE PREMIUM
 http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/12187/index.m3u8
 #EXTINF:-1 tvg-name="Hustler HD Europe" tvg-logo="Hustler HD Europe.png" group-title="☘️俄语频道",Hustler HD Europe
@@ -280,19 +322,19 @@ http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/9065/index.m3u8
 #EXTINF:-1 tvg-name="MAD SEX PARTY" tvg-logo="MAD SEX PARTY.png" group-title="☘️俄语频道",MAD SEX PARTY
 http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/12194/index.m3u8
 #EXTINF:-1 tvg-name="MetArt HD" tvg-logo="MetArt HD.png" group-title="☘️俄语频道",MetArt HD
-http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6233/index.m3u8
-#EXTINF:-1 tvg-name="MetArt HD" tvg-logo="MetArt HD.png" group-title="☘️俄语频道",MetArt HD
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/6233/index.m3u8
 #EXTINF:-1 tvg-name="MetArt HD" tvg-logo="MetArt HD.png" group-title="☘️俄语频道",MetArt HD
 http://a0bn5xro.rostelekom.xyz/iptv/ESMHU7B3S7N5NW/6233/index.m3u8
+#EXTINF:-1 tvg-name="MetArt HD" tvg-logo="MetArt HD.png" group-title="☘️俄语频道",MetArt HD
+http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6233/index.m3u8
 #EXTINF:-1 tvg-name="MILF TV" tvg-logo="MILF TV.png" group-title="☘️俄语频道",MILF TV
 http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/12173/index.m3u8
 #EXTINF:-1 tvg-name="Monsters of Cock" tvg-logo="Monsters of Cock.png" group-title="☘️俄语频道",Monsters of Cock
 http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6235/index.m3u8
 #EXTINF:-1 tvg-name="Naughty America" tvg-logo="Naughty America.png" group-title="☘️俄语频道",Naughty America
-http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6237/index.m3u8
-#EXTINF:-1 tvg-name="Naughty America" tvg-logo="Naughty America.png" group-title="☘️俄语频道",Naughty America
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/6237/index.m3u8
+#EXTINF:-1 tvg-name="Naughty America" tvg-logo="Naughty America.png" group-title="☘️俄语频道",Naughty America
+http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6237/index.m3u8
 #EXTINF:-1 tvg-name="Desire" tvg-logo="Desire.png" group-title="☘️俄语频道",Desire
 http://88.212.7.11/live/test_desire_hd_hevc/playlist.m3u8
 #EXTINF:-1 tvg-name="Leo HD" tvg-logo="Leo HD.png" group-title="☘️俄语频道",Leo HD
@@ -302,23 +344,23 @@ http://88.212.7.11/live/test_realitykings_sd_hevc/playlist.m3u8
 #EXTINF:-1 tvg-name="Eroxxx" tvg-logo="Eroxxx.png" group-title="☘️俄语频道",Eroxxx
 http://88.212.7.11/live/test_eroxxx_hd_hevc/playlist.m3u8
 #EXTINF:-1 tvg-name="21 Sextury" tvg-logo="21 Sextury.png" group-title="☘️俄语频道",21 Sextury
+http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/6164/index.m3u8
+#EXTINF:-1 tvg-name="21 Sextury" tvg-logo="21 Sextury.png" group-title="☘️俄语频道",21 Sextury
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/12205/index.m3u8
 #EXTINF:-1 tvg-name="21 Sextury" tvg-logo="21 Sextury.png" group-title="☘️俄语频道",21 Sextury
 http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6164/index.m3u8
-#EXTINF:-1 tvg-name="21 Sextury" tvg-logo="21 Sextury.png" group-title="☘️俄语频道",21 Sextury
-http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/6164/index.m3u8
 #EXTINF:-1 tvg-name="A3 Bikini" tvg-logo="A3 Bikini.png" group-title="☘️俄语频道",A3 Bikini
 http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6165/index.m3u8
 #EXTINF:-1 tvg-name="A3 Bikini" tvg-logo="A3 Bikini.png" group-title="☘️俄语频道",A3 Bikini
 http://a0bn5xro.rostelekom.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6165/index.m3u8
 #EXTINF:-1 tvg-name="Adult Time" tvg-logo="Adult Time.png" group-title="☘️俄语频道",Adult Time
-http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6166/index.m3u8
-#EXTINF:-1 tvg-name="Adult Time" tvg-logo="Adult Time.png" group-title="☘️俄语频道",Adult Time
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/6166/index.m3u8
-#EXTINF:-1 tvg-name="Alba 1 HD" tvg-logo="Alba 1 HD.png" group-title="☘️俄语频道",Alba 1 HD
-http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/12105/index.m3u8
+#EXTINF:-1 tvg-name="Adult Time" tvg-logo="Adult Time.png" group-title="☘️俄语频道",Adult Time
+http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6166/index.m3u8
 #EXTINF:-1 tvg-name="Alba 1 HD" tvg-logo="Alba 1 HD.png" group-title="☘️俄语频道",Alba 1 HD
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/12105/index.m3u8
+#EXTINF:-1 tvg-name="Alba 1 HD" tvg-logo="Alba 1 HD.png" group-title="☘️俄语频道",Alba 1 HD
+http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/12105/index.m3u8
 #EXTINF:-1 tvg-name="Alba 2 HD" tvg-logo="Alba 2 HD.png" group-title="☘️俄语频道",Alba 2 HD
 http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/12107/index.m3u8
 #EXTINF:-1 tvg-name="Alba 2" tvg-logo="Alba 2.png" group-title="☘️俄语频道",Alba 2
@@ -338,15 +380,15 @@ http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6170/index.m3u8
 #EXTINF:-1 tvg-name="AST TV 2" tvg-logo="AST TV 2.png" group-title="☘️俄语频道",AST TV 2
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/6170/index.m3u8
 #EXTINF:-1 tvg-name="Babes TV HD" tvg-logo="Babes TV HD.png" group-title="☘️俄语频道",Babes TV HD
+http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/6172/index.m3u8
+#EXTINF:-1 tvg-name="Babes TV HD" tvg-logo="Babes TV HD.png" group-title="☘️俄语频道",Babes TV HD
 http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6172/index.m3u8
 #EXTINF:-1 tvg-name="Babes TV HD" tvg-logo="Babes TV HD.png" group-title="☘️俄语频道",Babes TV HD
 http://a0bn5xro.rostelekom.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6172/index.m3u8
-#EXTINF:-1 tvg-name="Babes TV HD" tvg-logo="Babes TV HD.png" group-title="☘️俄语频道",Babes TV HD
-http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/6172/index.m3u8
-#EXTINF:-1 tvg-name="Balkan Erotic" tvg-logo="Balkan Erotic.png" group-title="☘️俄语频道",Balkan Erotic
-http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6270/index.m3u8
 #EXTINF:-1 tvg-name="Balkan Erotic" tvg-logo="Balkan Erotic.png" group-title="☘️俄语频道",Balkan Erotic
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/6270/index.m3u8
+#EXTINF:-1 tvg-name="Balkan Erotic" tvg-logo="Balkan Erotic.png" group-title="☘️俄语频道",Balkan Erotic
+http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6270/index.m3u8
 #EXTINF:-1 tvg-name="Bang Bros HD" tvg-logo="Bang Bros HD.png" group-title="☘️俄语频道",Bang Bros HD
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/6173/index.m3u8
 #EXTINF:-1 tvg-name="Bang Bros HD" tvg-logo="Bang Bros HD.png" group-title="☘️俄语频道",Bang Bros HD
@@ -356,9 +398,9 @@ http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/12114/index.m3u8
 #EXTINF:-1 tvg-name="Bang U" tvg-logo="Bang U.png" group-title="☘️俄语频道",Bang U
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/12114/index.m3u8
 #EXTINF:-1 tvg-name="Bang!" tvg-logo="Bang!.png" group-title="☘️俄语频道",Bang!
-http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6174/index.m3u8
-#EXTINF:-1 tvg-name="Bang!" tvg-logo="Bang!.png" group-title="☘️俄语频道",Bang!
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/6174/index.m3u8
+#EXTINF:-1 tvg-name="Bang!" tvg-logo="Bang!.png" group-title="☘️俄语频道",Bang!
+http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6174/index.m3u8
 #EXTINF:-1 tvg-name="BANGBROS UHD 4K" tvg-logo="BANGBROS UHD 4K.png" group-title="☘️俄语频道",BANGBROS UHD 4K
 http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/12181/index.m3u8
 #EXTINF:-1 tvg-name="Barely legal" tvg-logo="Barely legal.png" group-title="☘️俄语频道",Barely legal
@@ -366,11 +408,11 @@ http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/871/index.m3u8
 #EXTINF:-1 tvg-name="Barely legal" tvg-logo="Barely legal.png" group-title="☘️俄语频道",Barely legal
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/871/index.m3u8
 #EXTINF:-1 tvg-name="Blacked HD" tvg-logo="Blacked HD.png" group-title="☘️俄语频道",Blacked HD
+http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/6178/index.m3u8
+#EXTINF:-1 tvg-name="Blacked HD" tvg-logo="Blacked HD.png" group-title="☘️俄语频道",Blacked HD
 http://a0bn5xro.rostelekom.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6178/index.m3u8
 #EXTINF:-1 tvg-name="Blacked HD" tvg-logo="Blacked HD.png" group-title="☘️俄语频道",Blacked HD
 http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6178/index.m3u8
-#EXTINF:-1 tvg-name="Blacked HD" tvg-logo="Blacked HD.png" group-title="☘️俄语频道",Blacked HD
-http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/6178/index.m3u8
 #EXTINF:-1 tvg-name="BLACKED TV ELITE" tvg-logo="BLACKED TV ELITE.png" group-title="☘️俄语频道",BLACKED TV ELITE
 http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/12191/index.m3u8
 #EXTINF:-1 tvg-name="BLACKED TV PREMIUM" tvg-logo="BLACKED TV PREMIUM.png" group-title="☘️俄语频道",BLACKED TV PREMIUM
@@ -388,9 +430,9 @@ http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6185/index.m3u8
 #EXTINF:-1 tvg-name="Club 17" tvg-logo="Club 17.png" group-title="☘️俄语频道",Club 17
 http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6186/index.m3u8
 #EXTINF:-1 tvg-name="Cum Louder" tvg-logo="Cum Louder.png" group-title="☘️俄语频道",Cum Louder
-http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6189/index.m3u8
-#EXTINF:-1 tvg-name="Cum Louder" tvg-logo="Cum Louder.png" group-title="☘️俄语频道",Cum Louder
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/6189/index.m3u8
+#EXTINF:-1 tvg-name="Cum Louder" tvg-logo="Cum Louder.png" group-title="☘️俄语频道",Cum Louder
+http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6189/index.m3u8
 #EXTINF:-1 tvg-name="Day with a Pornstar" tvg-logo="Day with a Pornstar.png" group-title="☘️俄语频道",Day with a Pornstar
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/6192/index.m3u8
 #EXTINF:-1 tvg-name="Day with a Pornstar" tvg-logo="Day with a Pornstar.png" group-title="☘️俄语频道",Day with a Pornstar
@@ -398,9 +440,9 @@ http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6192/index.m3u8
 #EXTINF:-1 tvg-name="DDF Busty" tvg-logo="DDF Busty.png" group-title="☘️俄语频道",DDF Busty
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/6193/index.m3u8
 #EXTINF:-1 tvg-name="DDF Busty" tvg-logo="DDF Busty.png" group-title="☘️俄语频道",DDF Busty
-http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6193/index.m3u8
-#EXTINF:-1 tvg-name="DDF Busty" tvg-logo="DDF Busty.png" group-title="☘️俄语频道",DDF Busty
 http://a0bn5xro.rostelekom.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6193/index.m3u8
+#EXTINF:-1 tvg-name="DDF Busty" tvg-logo="DDF Busty.png" group-title="☘️俄语频道",DDF Busty
+http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6193/index.m3u8
 #EXTINF:-1 tvg-name="DDF Network" tvg-logo="DDF Network.png" group-title="☘️俄语频道",DDF Network
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/6194/index.m3u8
 #EXTINF:-1 tvg-name="DDF Network" tvg-logo="DDF Network.png" group-title="☘️俄语频道",DDF Network
@@ -412,17 +454,17 @@ http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/12179/index.m3u8
 #EXTINF:-1 tvg-name="Digital Desire HD" tvg-logo="Digital Desire HD.png" group-title="☘️俄语频道",Digital Desire HD
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/6195/index.m3u8
 #EXTINF:-1 tvg-name="Digital Desire HD" tvg-logo="Digital Desire HD.png" group-title="☘️俄语频道",Digital Desire HD
-http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6195/index.m3u8
-#EXTINF:-1 tvg-name="Digital Desire HD" tvg-logo="Digital Desire HD.png" group-title="☘️俄语频道",Digital Desire HD
 http://a0bn5xro.rostelekom.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6195/index.m3u8
+#EXTINF:-1 tvg-name="Digital Desire HD" tvg-logo="Digital Desire HD.png" group-title="☘️俄语频道",Digital Desire HD
+http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6195/index.m3u8
 #EXTINF:-1 tvg-name="DIRTY HOBBY" tvg-logo="DIRTY HOBBY.png" group-title="☘️俄语频道",DIRTY HOBBY
 http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/12183/index.m3u8
-#EXTINF:-1 tvg-name="DUSK TV" tvg-logo="DUSK TV.png" group-title="☘️俄语频道",DUSK TV
-http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/12129/index.m3u8
 #EXTINF:-1 tvg-name="DUSK TV" tvg-logo="DUSK TV.png" group-title="☘️俄语频道",DUSK TV
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/12129/index.m3u8
 #EXTINF:-1 tvg-name="DUSK TV" tvg-logo="DUSK TV.png" group-title="☘️俄语频道",DUSK TV
 http://a0bn5xro.rostelekom.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/12129/index.m3u8
+#EXTINF:-1 tvg-name="DUSK TV" tvg-logo="DUSK TV.png" group-title="☘️俄语频道",DUSK TV
+http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/12129/index.m3u8
 #EXTINF:-1 tvg-name="Dusk" tvg-logo="Dusk.png" group-title="☘️俄语频道",Dusk
 http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6198/index.m3u8
 #EXTINF:-1 tvg-name="Emanuelle HD" tvg-logo="Emanuelle HD.png" group-title="☘️俄语频道",Emanuelle HD
@@ -452,11 +494,11 @@ http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6199/index.m3u8
 #EXTINF:-1 tvg-name="EXTACY 4K" tvg-logo="EXTACY 4K.png" group-title="☘️俄语频道",EXTACY 4K
 http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/12182/index.m3u8
 #EXTINF:-1 tvg-name="Extasy 4K" tvg-logo="Extasy 4K.png" group-title="☘️俄语频道",Extasy 4K
-http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/5014/index.m3u8
-#EXTINF:-1 tvg-name="Extasy 4K" tvg-logo="Extasy 4K.png" group-title="☘️俄语频道",Extasy 4K
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/5014/index.m3u8
 #EXTINF:-1 tvg-name="Extasy 4K" tvg-logo="Extasy 4K.png" group-title="☘️俄语频道",Extasy 4K
 http://a0bn5xro.rostelekom.xyz/iptv/ESMHU7B3S7N5NW/5014/index.m3u8
+#EXTINF:-1 tvg-name="Extasy 4K" tvg-logo="Extasy 4K.png" group-title="☘️俄语频道",Extasy 4K
+http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/5014/index.m3u8
 #EXTINF:-1 tvg-name="EXTASY HD" tvg-logo="EXTASY HD.png" group-title="☘️俄语频道",EXTASY HD
 http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/11051/index.m3u8
 #EXTINF:-1 tvg-name="Extasy HD" tvg-logo="Extasy HD.png" group-title="☘️俄语频道",Extasy HD
@@ -492,25 +534,25 @@ http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6216/index.m3u8
 #EXTINF:-1 tvg-name="Hands on Hardcore" tvg-logo="Hands on Hardcore.png" group-title="☘️俄语频道",Hands on Hardcore
 http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6217/index.m3u8
 #EXTINF:-1 tvg-name="Hard X" tvg-logo="Hard X.png" group-title="☘️俄语频道",Hard X
-http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6218/index.m3u8
-#EXTINF:-1 tvg-name="Hard X" tvg-logo="Hard X.png" group-title="☘️俄语频道",Hard X
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/6218/index.m3u8
+#EXTINF:-1 tvg-name="Hard X" tvg-logo="Hard X.png" group-title="☘️俄语频道",Hard X
+http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6218/index.m3u8
 #EXTINF:-1 tvg-name="Holed" tvg-logo="Holed.png" group-title="☘️俄语频道",Holed
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/6221/index.m3u8
 #EXTINF:-1 tvg-name="Holed" tvg-logo="Holed.png" group-title="☘️俄语频道",Holed
 http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6221/index.m3u8
 #EXTINF:-1 tvg-name="Hot and Mean" tvg-logo="Hot and Mean.png" group-title="☘️俄语频道",Hot and Mean
-http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6222/index.m3u8
-#EXTINF:-1 tvg-name="Hot and Mean" tvg-logo="Hot and Mean.png" group-title="☘️俄语频道",Hot and Mean
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/6222/index.m3u8
+#EXTINF:-1 tvg-name="Hot and Mean" tvg-logo="Hot and Mean.png" group-title="☘️俄语频道",Hot and Mean
+http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6222/index.m3u8
 #EXTINF:-1 tvg-name="Hot Guys Fuck" tvg-logo="Hot Guys Fuck.png" group-title="☘️俄语频道",Hot Guys Fuck
 http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6223/index.m3u8
 #EXTINF:-1 tvg-name="Hot Guys Fuck" tvg-logo="Hot Guys Fuck.png" group-title="☘️俄语频道",Hot Guys Fuck
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/6223/index.m3u8
 #EXTINF:-1 tvg-name="Hot Pleasure" tvg-logo="Hot Pleasure.png" group-title="☘️俄语频道",Hot Pleasure
-http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6277/index.m3u8
-#EXTINF:-1 tvg-name="Hot Pleasure" tvg-logo="Hot Pleasure.png" group-title="☘️俄语频道",Hot Pleasure
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/6277/index.m3u8
+#EXTINF:-1 tvg-name="Hot Pleasure" tvg-logo="Hot Pleasure.png" group-title="☘️俄语频道",Hot Pleasure
+http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6277/index.m3u8
 #EXTINF:-1 tvg-name="Kaloopy hd tv" tvg-logo="Kaloopy hd tv.png" group-title="☘️俄语频道",Kaloopy hd tv
 http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/16018/index.m3u8
 #EXTINF:-1 tvg-name="KinoXXX" tvg-logo="KinoXXX.png" group-title="☘️俄语频道",KinoXXX
@@ -520,11 +562,11 @@ http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/12123/index.m3u8
 #EXTINF:-1 tvg-name="LEO TV FHD" tvg-logo="LEO TV FHD.png" group-title="☘️俄语频道",LEO TV FHD
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/12123/index.m3u8
 #EXTINF:-1 tvg-name="Lesbea" tvg-logo="Lesbea.png" group-title="☘️俄语频道",Lesbea
-http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6227/index.m3u8
-#EXTINF:-1 tvg-name="Lesbea" tvg-logo="Lesbea.png" group-title="☘️俄语频道",Lesbea
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/6227/index.m3u8
 #EXTINF:-1 tvg-name="Lesbea" tvg-logo="Lesbea.png" group-title="☘️俄语频道",Lesbea
 http://a0bn5xro.rostelekom.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6227/index.m3u8
+#EXTINF:-1 tvg-name="Lesbea" tvg-logo="Lesbea.png" group-title="☘️俄语频道",Lesbea
+http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6227/index.m3u8
 #EXTINF:-1 tvg-name="Lethal Hardcore" tvg-logo="Lethal Hardcore.png" group-title="☘️俄语频道",Lethal Hardcore
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/6229/index.m3u8
 #EXTINF:-1 tvg-name="Lethal Hardcore" tvg-logo="Lethal Hardcore.png" group-title="☘️俄语频道",Lethal Hardcore
@@ -534,11 +576,11 @@ http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6230/index.m3u8
 #EXTINF:-1 tvg-name="Little Asians HD" tvg-logo="Little Asians HD.png" group-title="☘️俄语频道",Little Asians HD
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/6230/index.m3u8
 #EXTINF:-1 tvg-name="Nubiles TV HD" tvg-logo="Nubiles TV HD.png" group-title="☘️俄语频道",Nubiles TV HD
-http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6238/index.m3u8
-#EXTINF:-1 tvg-name="Nubiles TV HD" tvg-logo="Nubiles TV HD.png" group-title="☘️俄语频道",Nubiles TV HD
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/6238/index.m3u8
 #EXTINF:-1 tvg-name="Nubiles TV HD" tvg-logo="Nubiles TV HD.png" group-title="☘️俄语频道",Nubiles TV HD
 http://a0bn5xro.rostelekom.xyz/iptv/ESMHU7B3S7N5NW/6238/index.m3u8
+#EXTINF:-1 tvg-name="Nubiles TV HD" tvg-logo="Nubiles TV HD.png" group-title="☘️俄语频道",Nubiles TV HD
+http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6238/index.m3u8
 #EXTINF:-1 tvg-name="O-la-la" tvg-logo="O-la-la.png" group-title="☘️俄语频道",O-la-la
 http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/2161/index.m3u8
 #EXTINF:-1 tvg-name="ox-ax HD" tvg-logo="ox-ax HD.png" group-title="☘️俄语频道",ox-ax HD
@@ -554,9 +596,9 @@ http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/12120/index.m3u8
 #EXTINF:-1 tvg-name="Playboy LA" tvg-logo="Playboy LA.png" group-title="☘️俄语频道",Playboy LA
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/6280/index.m3u8
 #EXTINF:-1 tvg-name="Playboy LA" tvg-logo="Playboy LA.png" group-title="☘️俄语频道",Playboy LA
-http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6280/index.m3u8
-#EXTINF:-1 tvg-name="Playboy LA" tvg-logo="Playboy LA.png" group-title="☘️俄语频道",Playboy LA
 http://a0bn5xro.rostelekom.xyz/iptv/ESMHU7B3S7N5NW/6280/index.m3u8
+#EXTINF:-1 tvg-name="Playboy LA" tvg-logo="Playboy LA.png" group-title="☘️俄语频道",Playboy LA
+http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6280/index.m3u8
 #EXTINF:-1 tvg-name="Lust Cinema" tvg-logo="Lust Cinema.png" group-title="☘️俄语频道",Lust Cinema
 http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6232/index.m3u8
 #EXTINF:-1 tvg-name="Lust Cinema" tvg-logo="Lust Cinema.png" group-title="☘️俄语频道",Lust Cinema
@@ -598,9 +640,9 @@ http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/6253/index.m3u8
 #EXTINF:-1 tvg-name="sext 6 senso" tvg-logo="sext 6 senso.png" group-title="☘️俄语频道",sext 6 senso
 http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6254/index.m3u8
 #EXTINF:-1 tvg-name="Sexy Hot" tvg-logo="Sexy Hot.png" group-title="☘️俄语频道",Sexy Hot
-http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6282/index.m3u8
-#EXTINF:-1 tvg-name="Sexy Hot" tvg-logo="Sexy Hot.png" group-title="☘️俄语频道",Sexy Hot
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/6282/index.m3u8
+#EXTINF:-1 tvg-name="Sexy Hot" tvg-logo="Sexy Hot.png" group-title="☘️俄语频道",Sexy Hot
+http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6282/index.m3u8
 #EXTINF:-1 tvg-name="Shalun TV" tvg-logo="Shalun TV.png" group-title="☘️俄语频道",Shalun TV
 http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/12126/index.m3u8
 #EXTINF:-1 tvg-name="SINematica" tvg-logo="SINematica.png" group-title="☘️俄语频道",SINematica
@@ -632,21 +674,21 @@ http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/12121/index.m3u8
 #EXTINF:-1 tvg-name="Super one HD" tvg-logo="Super one HD.png" group-title="☘️俄语频道",Super one HD
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/12121/index.m3u8
 #EXTINF:-1 tvg-name="SuperOne HD" tvg-logo="SuperOne HD.png" group-title="☘️俄语频道",SuperOne HD
-http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6298/index.m3u8
-#EXTINF:-1 tvg-name="SuperOne HD" tvg-logo="SuperOne HD.png" group-title="☘️俄语频道",SuperOne HD
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/6298/index.m3u8
+#EXTINF:-1 tvg-name="SuperOne HD" tvg-logo="SuperOne HD.png" group-title="☘️俄语频道",SuperOne HD
+http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6298/index.m3u8
 #EXTINF:-1 tvg-name="TEEN TV" tvg-logo="TEEN TV.png" group-title="☘️俄语频道",TEEN TV
 http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/12178/index.m3u8
 #EXTINF:-1 tvg-name="Tiny4K" tvg-logo="Tiny4K.png" group-title="☘️俄语频道",Tiny4K
-http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6258/index.m3u8
-#EXTINF:-1 tvg-name="Tiny4K" tvg-logo="Tiny4K.png" group-title="☘️俄语频道",Tiny4K
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/6258/index.m3u8
+#EXTINF:-1 tvg-name="Tiny4K" tvg-logo="Tiny4K.png" group-title="☘️俄语频道",Tiny4K
+http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6258/index.m3u8
 #EXTINF:-1 tvg-name="TRANS PREMIUM" tvg-logo="TRANS PREMIUM.png" group-title="☘️俄语频道",TRANS PREMIUM
 http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/12193/index.m3u8
 #EXTINF:-1 tvg-name="True Amateurs" tvg-logo="True Amateurs.png" group-title="☘️俄语频道",True Amateurs
-http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6260/index.m3u8
-#EXTINF:-1 tvg-name="True Amateurs" tvg-logo="True Amateurs.png" group-title="☘️俄语频道",True Amateurs
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/6260/index.m3u8
+#EXTINF:-1 tvg-name="True Amateurs" tvg-logo="True Amateurs.png" group-title="☘️俄语频道",True Amateurs
+http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6260/index.m3u8
 #EXTINF:-1 tvg-name="TURK AMATOTLER" tvg-logo="TURK AMATOTLER.png" group-title="☘️俄语频道",TURK AMATOTLER
 http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/12159/index.m3u8
 #EXTINF:-1 tvg-name="TURKCE ALTAZILI YENI" tvg-logo="TURKCE ALTAZILI YENI.png" group-title="☘️俄语频道",TURKCE ALTAZILI YENI
@@ -696,11 +738,11 @@ http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/6267/index.m3u8
 #EXTINF:-1 tvg-name="White Boxxx" tvg-logo="White Boxxx.png" group-title="☘️俄语频道",White Boxxx
 http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6267/index.m3u8
 #EXTINF:-1 tvg-name="Wicked" tvg-logo="Wicked.png" group-title="☘️俄语频道",Wicked
-http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6268/index.m3u8
-#EXTINF:-1 tvg-name="Wicked" tvg-logo="Wicked.png" group-title="☘️俄语频道",Wicked
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/6268/index.m3u8
 #EXTINF:-1 tvg-name="Wicked" tvg-logo="Wicked.png" group-title="☘️俄语频道",Wicked
 http://a0bn5xro.rostelekom.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6268/index.m3u8
+#EXTINF:-1 tvg-name="Wicked" tvg-logo="Wicked.png" group-title="☘️俄语频道",Wicked
+http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/6268/index.m3u8
 #EXTINF:-1 tvg-name="X Plus Milf HD" tvg-logo="X Plus Milf HD.png" group-title="☘️俄语频道",X Plus Milf HD
 http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/12130/index.m3u8
 #EXTINF:-1 tvg-name="X1 TV" tvg-logo="X1 TV.png" group-title="☘️俄语频道",X1 TV
@@ -736,9 +778,9 @@ http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/14176/index.m3u8
 #EXTINF:-1 tvg-name="Ню Арт HD orig" tvg-logo="Ню Арт HD orig.png" group-title="☘️俄语频道",Ню Арт HD orig
 http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/9071/index.m3u8
 #EXTINF:-1 tvg-name="Нюарт TV" tvg-logo="Нюарт TV.png" group-title="☘️俄语频道",Нюарт TV
-http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/2057/index.m3u8
-#EXTINF:-1 tvg-name="Нюарт TV" tvg-logo="Нюарт TV.png" group-title="☘️俄语频道",Нюарт TV
 http://a0bn5xro.rostelekom.xyz/iptv/F65BX3TKGTCBZQ/2057/index.m3u8
+#EXTINF:-1 tvg-name="Нюарт TV" tvg-logo="Нюарт TV.png" group-title="☘️俄语频道",Нюарт TV
+http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/2057/index.m3u8
 #EXTINF:-1 tvg-name="ОХ-АХ HD" tvg-logo="ОХ-АХ HD.png" group-title="☘️俄语频道",ОХ-АХ HD
 http://chencai80088.ottclub.xyz/iptv/BPZAZHWVQK3DBLBDSRGFZZ6K/11068/index.m3u8
 #EXTINF:-1 tvg-name="Русская ночь orig" tvg-logo="Русская ночь orig.png" group-title="☘️俄语频道",Русская ночь orig
@@ -1223,6 +1265,8 @@ http://tvmate.icu:8080/7ES2xf/934197/215457
 http://tvmate.icu:8080/7ES2xf/934197/215458
 #EXTINF:-1 tvg-name="X4 | Anastangel" tvg-logo="X4 | Anastangel.png" group-title="☘️泰语频道",X4 | Anastangel
 http://tvmate.icu:8080/C4Ft1d/042942/215459
+#EXTINF:-1 tvg-name="X4 | Anastangel" tvg-logo="X4 | Anastangel.png" group-title="☘️泰语频道",X4 | Anastangel
+http://tvmate.icu:8080/7ES2xf/934197/215459
 #EXTINF:-1 tvg-name="X4 | Angela White" tvg-logo="X4 | Angela White.png" group-title="☘️泰语频道",X4 | Angela White
 http://tvmate.icu:8080/C4Ft1d/042942/215461
 #EXTINF:-1 tvg-name="X4 | Anny Walker" tvg-logo="X4 | Anny Walker.png" group-title="☘️泰语频道",X4 | Anny Walker
@@ -1271,6 +1315,8 @@ http://tvmate.icu:8080/C4Ft1d/042942/215481
 http://tvmate.icu:8080/7ES2xf/934197/215482
 #EXTINF:-1 tvg-name="X4 | Blair Williams" tvg-logo="X4 | Blair Williams.png" group-title="☘️泰语频道",X4 | Blair Williams
 http://tvmate.icu:8080/C4Ft1d/042942/215483
+#EXTINF:-1 tvg-name="X4 | Blair Williams" tvg-logo="X4 | Blair Williams.png" group-title="☘️泰语频道",X4 | Blair Williams
+http://tvmate.icu:8080/7ES2xf/934197/215483
 #EXTINF:-1 tvg-name="X4 | Blake Blossom" tvg-logo="X4 | Blake Blossom.png" group-title="☘️泰语频道",X4 | Blake Blossom
 http://tvmate.icu:8080/7ES2xf/934197/215484
 #EXTINF:-1 tvg-name="X4 | Blaze Rager" tvg-logo="X4 | Blaze Rager.png" group-title="☘️泰语频道",X4 | Blaze Rager
@@ -1327,6 +1373,8 @@ http://tvmate.icu:8080/C4Ft1d/042942/215513
 http://tvmate.icu:8080/7ES2xf/934197/215514
 #EXTINF:-1 tvg-name="X4 | Crystal Rush" tvg-logo="X4 | Crystal Rush.png" group-title="☘️泰语频道",X4 | Crystal Rush
 http://tvmate.icu:8080/C4Ft1d/042942/215515
+#EXTINF:-1 tvg-name="X4 | Crystal Rush" tvg-logo="X4 | Crystal Rush.png" group-title="☘️泰语频道",X4 | Crystal Rush
+http://tvmate.icu:8080/7ES2xf/934197/215515
 #EXTINF:-1 tvg-name="X4 | Cum in Mouth" tvg-logo="X4 | Cum in Mouth.png" group-title="☘️泰语频道",X4 | Cum in Mouth
 http://tvmate.icu:8080/C4Ft1d/042942/215517
 #EXTINF:-1 tvg-name="X4 | Cumshot" tvg-logo="X4 | Cumshot.png" group-title="☘️泰语频道",X4 | Cumshot
@@ -1355,6 +1403,8 @@ http://tvmate.icu:8080/C4Ft1d/042942/215527
 http://tvmate.icu:8080/7ES2xf/934197/215528
 #EXTINF:-1 tvg-name="X4 | DickForLily" tvg-logo="X4 | DickForLily.png" group-title="☘️泰语频道",X4 | DickForLily
 http://tvmate.icu:8080/C4Ft1d/042942/215529
+#EXTINF:-1 tvg-name="X4 | DickForLily" tvg-logo="X4 | DickForLily.png" group-title="☘️泰语频道",X4 | DickForLily
+http://tvmate.icu:8080/7ES2xf/934197/215529
 #EXTINF:-1 tvg-name="X4 | Digital Climaxxx" tvg-logo="X4 | Digital Climaxxx.png" group-title="☘️泰语频道",X4 | Digital Climaxxx
 http://tvmate.icu:8080/7ES2xf/934197/215530
 #EXTINF:-1 tvg-name="X4 | Digital Playground" tvg-logo="X4 | Digital Playground.png" group-title="☘️泰语频道",X4 | Digital Playground
@@ -1381,6 +1431,8 @@ http://tvmate.icu:8080/C4Ft1d/042942/215539
 http://tvmate.icu:8080/7ES2xf/934197/215540
 #EXTINF:-1 tvg-name="X4 | Emanuelly Raquel" tvg-logo="X4 | Emanuelly Raquel.png" group-title="☘️泰语频道",X4 | Emanuelly Raquel
 http://tvmate.icu:8080/C4Ft1d/042942/215541
+#EXTINF:-1 tvg-name="X4 | Emanuelly Raquel" tvg-logo="X4 | Emanuelly Raquel.png" group-title="☘️泰语频道",X4 | Emanuelly Raquel
+http://tvmate.icu:8080/7ES2xf/934197/215541
 #EXTINF:-1 tvg-name="X4 | Emily Willis" tvg-logo="X4 | Emily Willis.png" group-title="☘️泰语频道",X4 | Emily Willis
 http://tvmate.icu:8080/7ES2xf/934197/215542
 #EXTINF:-1 tvg-name="X4 | Emma Fiore" tvg-logo="X4 | Emma Fiore.png" group-title="☘️泰语频道",X4 | Emma Fiore
@@ -1441,6 +1493,8 @@ http://tvmate.icu:8080/C4Ft1d/042942/215567
 http://tvmate.icu:8080/7ES2xf/934197/215568
 #EXTINF:-1 tvg-name="X4 | Hailey Rose" tvg-logo="X4 | Hailey Rose.png" group-title="☘️泰语频道",X4 | Hailey Rose
 http://tvmate.icu:8080/C4Ft1d/042942/215569
+#EXTINF:-1 tvg-name="X4 | Hailey Rose" tvg-logo="X4 | Hailey Rose.png" group-title="☘️泰语频道",X4 | Hailey Rose
+http://tvmate.icu:8080/7ES2xf/934197/215569
 #EXTINF:-1 tvg-name="X4 | Haley Reed" tvg-logo="X4 | Haley Reed.png" group-title="☘️泰语频道",X4 | Haley Reed
 http://tvmate.icu:8080/7ES2xf/934197/215570
 #EXTINF:-1 tvg-name="X4 | Handjob" tvg-logo="X4 | Handjob.png" group-title="☘️泰语频道",X4 | Handjob
@@ -1493,6 +1547,8 @@ http://tvmate.icu:8080/C4Ft1d/042942/215593
 http://tvmate.icu:8080/C4Ft1d/042942/215595
 #EXTINF:-1 tvg-name="X4 | Kelsi Monroe" tvg-logo="X4 | Kelsi Monroe.png" group-title="☘️泰语频道",X4 | Kelsi Monroe
 http://tvmate.icu:8080/C4Ft1d/042942/215597
+#EXTINF:-1 tvg-name="X4 | Kelsi Monroe" tvg-logo="X4 | Kelsi Monroe.png" group-title="☘️泰语频道",X4 | Kelsi Monroe
+http://tvmate.icu:8080/7ES2xf/934197/215597
 #EXTINF:-1 tvg-name="X4 | Kendra Lust" tvg-logo="X4 | Kendra Lust.png" group-title="☘️泰语频道",X4 | Kendra Lust
 http://tvmate.icu:8080/7ES2xf/934197/215598
 #EXTINF:-1 tvg-name="X4 | Kenna James" tvg-logo="X4 | Kenna James.png" group-title="☘️泰语频道",X4 | Kenna James
@@ -1651,6 +1707,8 @@ http://tvmate.icu:8080/7ES2xf/934197/215672
 http://tvmate.icu:8080/7ES2xf/934197/215674
 #EXTINF:-1 tvg-name="X4 | Msbreewc" tvg-logo="X4 | Msbreewc.png" group-title="☘️泰语频道",X4 | Msbreewc
 http://tvmate.icu:8080/C4Ft1d/042942/215675
+#EXTINF:-1 tvg-name="X4 | Msbreewc" tvg-logo="X4 | Msbreewc.png" group-title="☘️泰语频道",X4 | Msbreewc
+http://tvmate.icu:8080/7ES2xf/934197/215675
 #EXTINF:-1 tvg-name="X4 | My BF Doesnt Know" tvg-logo="X4 | My BF Doesnt Know.png" group-title="☘️泰语频道",X4 | My BF Doesnt Know
 http://tvmate.icu:8080/7ES2xf/934197/215676
 #EXTINF:-1 tvg-name="X4 | My Friends Hot Mom" tvg-logo="X4 | My Friends Hot Mom.png" group-title="☘️泰语频道",X4 | My Friends Hot Mom
@@ -1665,6 +1723,8 @@ http://tvmate.icu:8080/7ES2xf/934197/215680
 http://tvmate.icu:8080/7ES2xf/934197/215682
 #EXTINF:-1 tvg-name="X4 | Natasha Nice" tvg-logo="X4 | Natasha Nice.png" group-title="☘️泰语频道",X4 | Natasha Nice
 http://tvmate.icu:8080/C4Ft1d/042942/215683
+#EXTINF:-1 tvg-name="X4 | Natasha Nice" tvg-logo="X4 | Natasha Nice.png" group-title="☘️泰语频道",X4 | Natasha Nice
+http://tvmate.icu:8080/7ES2xf/934197/215683
 #EXTINF:-1 tvg-name="X4 | New Sensations" tvg-logo="X4 | New Sensations.png" group-title="☘️泰语频道",X4 | New Sensations
 http://tvmate.icu:8080/7ES2xf/934197/215684
 #EXTINF:-1 tvg-name="X4 | Next Door Taboo" tvg-logo="X4 | Next Door Taboo.png" group-title="☘️泰语频道",X4 | Next Door Taboo
@@ -1823,6 +1883,8 @@ http://tvmate.icu:8080/C4Ft1d/042942/215763
 http://tvmate.icu:8080/7ES2xf/934197/215764
 #EXTINF:-1 tvg-name="X4 | Teen" tvg-logo="X4 | Teen.png" group-title="☘️泰语频道",X4 | Teen
 http://tvmate.icu:8080/C4Ft1d/042942/215765
+#EXTINF:-1 tvg-name="X4 | Teen" tvg-logo="X4 | Teen.png" group-title="☘️泰语频道",X4 | Teen
+http://tvmate.icu:8080/7ES2xf/934197/215765
 #EXTINF:-1 tvg-name="X4 | The White Boxxx" tvg-logo="X4 | The White Boxxx.png" group-title="☘️泰语频道",X4 | The White Boxxx
 http://tvmate.icu:8080/7ES2xf/934197/215766
 #EXTINF:-1 tvg-name="X4 | Thelexisstar" tvg-logo="X4 | Thelexisstar.png" group-title="☘️泰语频道",X4 | Thelexisstar
@@ -1855,6 +1917,8 @@ http://tvmate.icu:8080/C4Ft1d/042942/215779
 http://tvmate.icu:8080/7ES2xf/934197/215780
 #EXTINF:-1 tvg-name="X4 | VibeWithMommy" tvg-logo="X4 | VibeWithMommy.png" group-title="☘️泰语频道",X4 | VibeWithMommy
 http://tvmate.icu:8080/C4Ft1d/042942/215781
+#EXTINF:-1 tvg-name="X4 | VibeWithMommy" tvg-logo="X4 | VibeWithMommy.png" group-title="☘️泰语频道",X4 | VibeWithMommy
+http://tvmate.icu:8080/7ES2xf/934197/215781
 #EXTINF:-1 tvg-name="X4 | Vic Alouqua" tvg-logo="X4 | Vic Alouqua.png" group-title="☘️泰语频道",X4 | Vic Alouqua
 http://tvmate.icu:8080/7ES2xf/934197/215782
 #EXTINF:-1 tvg-name="X4 | Vina Sky" tvg-logo="X4 | Vina Sky.png" group-title="☘️泰语频道",X4 | Vina Sky
