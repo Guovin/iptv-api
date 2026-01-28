@@ -1,57 +1,41 @@
 name: 'Update schedule'
 
-# 核心：添加权限声明，解决推送/修改工作流权限不足问题
-permissions:
-  contents: write  # 授予写入仓库内容的权限，满足git push需求
-
 on:
-  schedule:
-    - cron: '0 0 * * *'  # UTC0点（北京时间8点）执行，若要北京0点改为 0 16 * * *
-  workflow_dispatch:  # 手动触发
-  branches:  # 仅在这三个分支触发工作流（修正原语法错误，原branches写在workflow_dispatch内是错的）
-    - master
-    - dev
-    - gd
+  workflow_dispatch:
 
 jobs:
   push:
-    runs-on: ubuntu-latest  # 移除冗余的matrix，单系统无需策略，简化配置
+    runs-on: ${{ matrix.operating-system }}
+    strategy:
+      matrix:
+        operating-system: [ 'ubuntu-latest' ]
     steps:
       - name: Set branch name
         id: vars
         run: echo "BRANCH_NAME=${{ github.repository_owner == 'Guovin' && 'gd' || 'master' }}" >> $GITHUB_ENV
-
-      - uses: actions/checkout@v4  # 升级到最新版v4，更稳定
+      - uses: actions/checkout@v3
         with:
           ref: ${{ env.BRANCH_NAME }}
-          fetch-depth: 1  # 浅克隆，提升执行速度
-
       - name: Run with setup-python 3.13
-        uses: actions/setup-python@v5  # 升级到最新版v5
+        uses: actions/setup-python@v4
         with:
           python-version: '3.13'
           update-environment: true
           cache: 'pipenv'
-
       - name: Install FFmpeg
         run: sudo apt-get update && sudo apt-get install -y ffmpeg
-
       - name: Install pipenv
-        run: pip install pipenv  # 修复原--user导致的路径问题，直接全局安装更稳定
-
-      - name: Install dependencies
-        run: pipenv --python 3.13 && pipenv install --deploy  # 修正原单词拼写错误dependecies→dependencies
-
+        run: pip3 install --user pipenv
+      - name: Install dependecies
+        run: pipenv --python 3.13 && pipenv install --deploy
       - name: Update
         run: pipenv run dev
-
       - name: Commit and push if changed
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add .
-          # 仅当有文件修改时才提交推送
           if ! git diff --staged --quiet; then
             git commit -m "Github Action Auto Updated"
-            git push  # 移除--force，强制推送有风险，普通推送满足需求
+            git push --force
           fi
