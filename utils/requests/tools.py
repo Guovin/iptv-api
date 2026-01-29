@@ -18,7 +18,7 @@ def get_requests(url, data=None, proxy=None, timeout=30):
     Get the response by requests
     """
     if proxy is None:
-        proxy = config.request_proxy
+        proxy = config.http_proxy
     proxies = {"http": proxy, "https": proxy} if proxy else None
     response = None
     try:
