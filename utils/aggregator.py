@@ -25,9 +25,14 @@ class ResultAggregator:
             flush_debounce: Optional[float] = None,
             sort_logger=None,
             stat_logger=None,
-            last_full_sorted: Optional[Dict[str, Dict[str, Any]]] = None,
+            result: Optional[Dict[str, Dict[str, list]]] = None,
     ):
         self.base_data = base_data
+        self.result = sort_channel_result(
+            base_data,
+            result=result,
+            ipv6_support=ipv6_support
+        )
         self.test_results: Dict[str, Dict[str, list]] = defaultdict(lambda: defaultdict(list))
         self._dirty = False
         self._dirty_count = 0
@@ -44,7 +49,6 @@ class ResultAggregator:
         self.flush_debounce = flush_debounce if flush_debounce is not None else max(0.2, write_interval / 2)
         self._flush_event = asyncio.Event()
         self._debounce_task: Optional[asyncio.Task] = None
-        self.last_full_sorted = last_full_sorted
         self._pending_channels: Set[Tuple[str, str]] = set()
         self._finished_channels: Set[Tuple[str, str]] = set()
 
@@ -124,15 +128,7 @@ class ResultAggregator:
         if finished is None:
             finished = set()
 
-        if self.last_full_sorted is None:
-            try:
-                self.last_full_sorted = sort_channel_result(
-                    self.base_data, result=None, filter_host=config.speed_test_filter_host,
-                    ipv6_support=self.ipv6_support
-                )
-            except Exception:
-                self.last_full_sorted = defaultdict(lambda: defaultdict(list))
-
+        speed_test_filter_host = config.speed_test_filter_host
         if affected:
             partial_base = defaultdict(lambda: defaultdict(list))
             partial_result = defaultdict(lambda: defaultdict(list))
@@ -140,41 +136,56 @@ class ResultAggregator:
             for cate, name in affected:
                 base_entries = self.base_data.get(cate, {})
                 if name in base_entries:
-                    partial_base[cate][name] = base_entries[name]
+                    partial_base[cate][name] = list(base_entries[name])
 
                 partial_result[cate][name] = list(test_copy.get(cate, {}).get(name, []))
 
                 if (cate, name) not in finished:
-                    prev_sorted = self.last_full_sorted.get(cate, {}).get(name, [])
-                    seen = {it.get("url") for it in partial_result[cate][name] if it.get("url")}
+                    prev_sorted = self.result.get(cate, {}).get(name, [])
+                    seen = {it.get("url") for it in partial_result[cate][name] if
+                            isinstance(it, dict) and it.get("url")}
                     for item in prev_sorted:
-                        url = item.get("url") if isinstance(item, dict) else None
+                        if not isinstance(item, dict):
+                            continue
+                        url = item.get("url")
                         if url and url not in seen and item.get("origin") not in retain_origin:
                             partial_result[cate][name].append(item)
                             seen.add(url)
             try:
-                new_sorted = sort_channel_result(
-                    partial_base, result=partial_result, filter_host=config.speed_test_filter_host,
-                    ipv6_support=self.ipv6_support
-                )
+                if len(affected) == 1:
+                    cate_single, name_single = next(iter(affected))
+                    new_sorted = sort_channel_result(
+                        partial_base,
+                        result=partial_result,
+                        filter_host=speed_test_filter_host,
+                        ipv6_support=self.ipv6_support,
+                        cate=cate_single,
+                        name=name_single,
+                    )
+                else:
+                    new_sorted = sort_channel_result(
+                        partial_base, result=partial_result, filter_host=speed_test_filter_host,
+                        ipv6_support=self.ipv6_support
+                    )
             except Exception:
                 new_sorted = defaultdict(lambda: defaultdict(list))
         else:
             try:
                 new_sorted = sort_channel_result(
-                    self.base_data, result=test_copy, filter_host=config.speed_test_filter_host,
+                    self.base_data, result=test_copy, filter_host=speed_test_filter_host,
                     ipv6_support=self.ipv6_support
                 )
             except Exception:
                 new_sorted = defaultdict(lambda: defaultdict(list))
 
         merged = defaultdict(lambda: defaultdict(list))
-        for cate, names in (self.last_full_sorted or {}).items():
+        for cate, names in self.result.items():
             merged[cate].update({k: list(v) for k, v in names.items()})
+
         for cate, names in new_sorted.items():
             for name, vals in names.items():
                 if vals:
-                    merged[cate][name] = vals
+                    merged[cate][name] = list(vals)
 
         loop = asyncio.get_running_loop()
         await loop.run_in_executor(
@@ -187,7 +198,7 @@ class ResultAggregator:
             self.is_last,
         )
 
-        self.last_full_sorted = merged
+        self.result = merged
 
     async def _debounce_loop(self):
         """

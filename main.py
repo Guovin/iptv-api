@@ -28,9 +28,9 @@ from utils.tools import (
     get_urls_from_file,
     get_version_info,
     get_urls_len,
-    merge_objects,
     get_public_url,
     parse_times,
+    to_serializable,
 )
 from utils.types import CategoryChannelData
 from utils.whitelist import load_whitelist_maps, get_section_entries
@@ -100,11 +100,12 @@ class UpdateSource:
             return {}
 
     def _save_cache(self, cache_result: dict):
+        serializable = to_serializable(cache_result or {})
         cache_dir = os.path.dirname(constants.cache_path)
         if cache_dir:
             os.makedirs(cache_dir, exist_ok=True)
         with gzip.open(constants.cache_path, "wb") as f:
-            pickle.dump(cache_result, f)
+            pickle.dump(serializable, f)
 
     # ----------------------------
     # stage 1: prepare
@@ -190,7 +191,7 @@ class UpdateSource:
             first_channel_name=self.channel_names[0] if self.channel_names else None,
             ipv6_support=self.ipv6_support,
             write_interval=2.0,
-            last_full_sorted=cache,
+            result=cache,
         )
         await self.aggregator.start()
 
@@ -305,23 +306,18 @@ class UpdateSource:
 
             await self._start_aggregator(cache)
             try:
-                cache_result = copy.deepcopy(self.channel_data)
-
                 if config.open_speed_test:
                     clear_cache()
-                    test_result = await self._run_speed_test()
-                    cache_result = merge_objects(cache_result, test_result, match_key="url")
+                    await self._run_speed_test()
                 else:
                     self.aggregator.is_last = True
                     await self.aggregator.flush_once(force=True)
 
             finally:
+                if config.open_history:
+                    self._save_cache(self.aggregator.result)
+                    frozen.save(constants.frozen_path)
                 await self._stop_aggregator()
-
-            if config.open_history:
-                cache_result = merge_objects(cache, cache_result, match_key="url")
-                self._save_cache(cache_result)
-                frozen.save(constants.frozen_path)
 
             print(
                 t("msg.update_completed").format(

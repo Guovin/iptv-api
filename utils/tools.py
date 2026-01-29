@@ -389,6 +389,17 @@ def get_epg_url():
         return f"{get_public_url()}/epg/epg.gz"
 
 
+def get_logo_url():
+    """
+    Get the logo url
+    """
+    logo_url = join_url(config.cdn_url,
+                        config.logo_url) if "raw.githubusercontent.com" in config.logo_url else config.logo_url
+    if not logo_url:
+        logo_url = f"{get_public_url()}/logo/"
+    return logo_url
+
+
 def convert_to_m3u(path=None, first_channel_name=None, data=None):
     """
     Convert result txt to m3u format
@@ -397,8 +408,8 @@ def convert_to_m3u(path=None, first_channel_name=None, data=None):
         with open(path, "r", encoding="utf-8") as file:
             m3u_output = f'#EXTM3U x-tvg-url="{get_epg_url()}"\n' if config.open_epg else "#EXTM3U\n"
             current_group = None
-            logo_url = join_url(config.cdn_url,
-                                config.logo_url) if "raw.githubusercontent.com" in config.logo_url else config.logo_url
+            logo_url = get_logo_url()
+            from_fanmingming = "https://raw.githubusercontent.com/fanmingming/live/main/tv" in logo_url
             for line in file:
                 trimmed_line = line.strip()
                 if trimmed_line != "":
@@ -413,12 +424,14 @@ def convert_to_m3u(path=None, first_channel_name=None, data=None):
                             continue
                         use_name = first_channel_name if current_group in (t("content.update_time"),
                                                                            t("content.update_running")) else original_channel_name
-                        processed_channel_name = re.sub(
-                            r"(CCTV|CETV)-(\d+)(\+.*)?",
-                            lambda m: f"{m.group(1)}{m.group(2)}"
-                                      + ("+" if m.group(3) else ""),
-                            use_name,
-                        )
+                        processed_channel_name = use_name
+                        if from_fanmingming:
+                            processed_channel_name = re.sub(
+                                r"(CCTV|CETV)-(\d+)(\+.*)?",
+                                lambda m: f"{m.group(1)}{m.group(2)}"
+                                          + ("+" if m.group(3) else ""),
+                                use_name,
+                            )
                         m3u_output += f'#EXTINF:-1 tvg-name="{processed_channel_name}" tvg-logo="{join_url(logo_url, f'{processed_channel_name}.{config.logo_type}')}"'
                         if current_group:
                             m3u_output += f' group-title="{current_group}"'
@@ -901,3 +914,59 @@ def build_path_list(
             continue
         paths.append(str(f.resolve()))
     return sorted(paths)
+
+
+def to_serializable(obj):
+    """
+    Convert an object to a serializable form.
+    Handles dicts, lists, tuples, sets, and other iterables recursively.
+    Non-serializable objects are returned as-is.
+    """
+    if isinstance(obj, dict):
+        return {k: to_serializable(v) for k, v in obj.items()}
+    if isinstance(obj, (list, tuple, set)):
+        return [to_serializable(i) for i in obj]
+    try:
+        if not isinstance(obj, (str, bytes)) and hasattr(obj, "__iter__"):
+            return [to_serializable(i) for i in obj]
+    except Exception:
+        pass
+    return obj
+
+
+def count_files_by_ext(
+        dir_path: Union[str, Path],
+        exts: Optional[Union[str, Iterable[str]]] = None,
+        recursive: bool = False,
+        include_hidden: bool = False
+) -> int:
+    """
+    Count files in a directory with filtering options.
+    :param dir_path: The directory path to search.
+    :param exts: Optional; A string or iterable of file extensions to filter by (e.g., '.txt', 'jpg'). Case-insensitive.
+    :param recursive: Whether to search subdirectories recursively.
+    :param include_hidden: Whether to include hidden files (those starting with a dot).
+    :return: The count of files matching the criteria.
+    """
+    p = Path(dir_path)
+    if not p.exists() or not p.is_dir():
+        return 0
+
+    exts_set = None
+    if exts:
+        if isinstance(exts, str):
+            exts = [exts]
+        exts_set = {e.lower() if e.startswith('.') else f".{e.lower()}" for e in exts}
+
+    iterator = p.rglob("*") if recursive else p.glob("*")
+    count = 0
+    for f in iterator:
+        if not f.is_file():
+            continue
+        if not include_hidden and f.name.startswith("."):
+            continue
+        if exts_set and f.suffix.lower() not in exts_set:
+            continue
+        count += 1
+
+    return count

@@ -18,3 +18,4 @@ services:
       PUBLIC_PORT: "80"
       NGINX_HTTP_PORT: "8080"
       CDN_URL: ""
+      HTTP_PROXY: ""

@@ -13,6 +13,8 @@ local_dir_path = os.path.join(config_dir, "local")
 
 local_path = os.path.join(config_dir, "local.txt")
 
+channel_logo_path = os.path.join(config_dir, "logo")
+
 alias_path = os.path.join(config_dir, "alias.txt")
 
 epg_path = os.path.join(config_dir, "epg.txt")
