@@ -7,7 +7,7 @@ on:
     branches:
       - master
       - dev
-      - gd:
+      - gd
 jobs:
   push:
     runs-on: ${{ matrix.operating-system }}
