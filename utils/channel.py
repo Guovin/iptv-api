@@ -596,18 +596,20 @@ def generate_channel_statistic(logger, cate, name, values):
     Generate channel statistic
     """
     total = len(values)
-    valid = len([v for v in values if (v.get("speed") or 0) > 0 and (v.get("delay") or -1) != -1])
+    valid_items = [
+        v for v in values
+        if (v.get("speed") or 0) > 0 and not math.isinf(v.get("speed")) and (v.get("delay") or -1) != -1
+    ]
+    valid = len(valid_items)
     valid_rate = (valid / total * 100) if total > 0 else 0
     ipv4_count = len([v for v in values if v.get("ipv_type") == "ipv4"])
     ipv6_count = len([v for v in values if v.get("ipv_type") == "ipv6"])
     min_delay = min((v.get("delay") for v in values if (v.get("delay") or -1) != -1), default=-1)
-    max_speed = max((v.get("speed") for v in values if (v.get("speed") or 0) > 0 and not math.isinf(v.get("speed"))),
-                    default=0)
-    avg_speed = (
-        sum((v.get("speed") or 0) for v in values if
-            (v.get("speed") or 0) > 0 and not math.isinf(v.get("speed"))) / valid
-        if valid > 0 else 0
+    max_speed = max(
+        (v.get("speed") for v in values if (v.get("speed") or 0) > 0 and not math.isinf(v.get("speed"))),
+        default=0
     )
+    avg_speed = sum((v.get("speed") or 0) for v in valid_items) / valid if valid > 0 else 0
     max_resolution = max(
         (v.get("resolution") for v in values if v.get("resolution")),
         key=lambda r: get_resolution_value(r),
