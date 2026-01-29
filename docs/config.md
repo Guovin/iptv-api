@@ -21,6 +21,7 @@
 | public_scheme          | 公网协议；可选值: http、https                                                                                                 | http              |
 | public_domain          | 公网 Host 地址，用于生成结果中的访问地址，默认使用本机 IP                                                                                    | 127.0.0.1         |
 | cdn_url                | CDN 代理加速地址，用于订阅源、频道图标等资源的加速访问                                                                                        |                   |
+| http_proxy             | HTTP 代理地址，用于获取订阅源等网络请求                                                                                               |                   |
 | open_local             | 开启本地源功能，将使用模板文件与本地源文件（local.txt）中的数据                                                                                 | True              |
 | open_subscribe         | 开启订阅源功能                                                                                                              | True              |
 | open_history           | 开启使用历史更新结果（包含模板与结果文件的接口），合并至本次更新中                                                                                    | True              |

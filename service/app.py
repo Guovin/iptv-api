@@ -12,6 +12,8 @@ from service.rtmp import start_rtmp_service, stop_rtmp_service, app_rtmp_url, hl
     hls_running_streams, start_hls_to_rtmp, hls_last_access, HLS_WAIT_TIMEOUT, HLS_WAIT_INTERVAL
 import logging
 from utils.i18n import t
+from werkzeug.utils import secure_filename
+import mimetypes
 
 app = Flask(__name__)
 log = logging.getLogger('werkzeug')
@@ -30,6 +32,22 @@ def show_index():
 def favicon():
     return send_from_directory(resource_path(''), 'favicon.ico',
                                mimetype='image/vnd.microsoft.icon')
+
+
+@app.route('/logo/<path:filename>')
+def show_logo(filename):
+    if not filename:
+        return jsonify({"error": "filename required"}), 400
+
+    safe_name = secure_filename(filename)
+    logo_dir = resource_path(constants.channel_logo_path)
+    file_path = os.path.join(logo_dir, safe_name)
+
+    if not os.path.exists(file_path):
+        return jsonify({"error": "logo not found"}), 404
+
+    mime_type, _ = mimetypes.guess_type(safe_name)
+    return send_from_directory(logo_dir, safe_name, mimetype=mime_type or 'application/octet-stream')
 
 
 @app.route("/txt")

@@ -38,7 +38,7 @@ from utils.tools import (
     custom_print,
     get_name_uri_from_dir,
     get_resolution_value,
-    get_public_url, build_path_list, get_real_path
+    get_public_url, build_path_list, get_real_path, count_files_by_ext
 )
 from utils.types import ChannelData, OriginType, CategoryChannelData, WhitelistMaps
 from utils.whitelist import is_url_whitelisted, get_whitelist_url, get_whitelist_total_count
@@ -184,10 +184,13 @@ def get_channel_items(whitelist_maps, blacklist) -> CategoryChannelData:
     local_data = get_name_urls_from_file([get_real_path(constants.local_path)] + local_paths)
     whitelist_count = get_whitelist_total_count(whitelist_maps)
     blacklist_count = len(blacklist)
+    channel_logo_count = count_files_by_ext(resource_path(constants.channel_logo_path), [config.logo_type])
     if whitelist_count:
         print(t("msg.whitelist_found").format(count=whitelist_count))
     if blacklist_count:
         print(t("msg.blacklist_found").format(count=blacklist_count))
+    if channel_logo_count:
+        print(t("msg.channel_logo_found").format(count=channel_logo_count))
 
     if os.path.exists(user_source_file):
         with open(user_source_file, "r", encoding="utf-8") as file:

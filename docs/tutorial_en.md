@@ -135,7 +135,7 @@ Adjust the configuration as needed, here is the default configuration descriptio
 > 2. If your network supports IPv6, you can modify the configuration: `ipv6_support = True` (GUI: Check
      `Force assume the current network supports IPv6`) to skip the support check.
 
-#### Similarly, you can customize subscription sources, blacklists, and whitelists
+#### Similarly, you can customize subscription sources, local sources, logo sources, EPG, channel aliases, blacklist, and whitelist
 
 - Subscription sources (`config/subscribe.txt`)
 
@@ -151,6 +151,11 @@ Adjust the configuration as needed, here is the default configuration descriptio
   directory under `config` to store them; the program will read the channel interface data from them in order. Supports
   `txt` and `m3u` files.
 
+
+- Logo source (`config/logo`)
+
+  Directory for channel logo images. The program will match corresponding logo images in this directory based on the
+  channel names in the template. If a remote library `logo_url` is used, the remote source will be preferred.
 
 - EPG Source (`config/epg.txt`)
 

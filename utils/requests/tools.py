@@ -3,6 +3,8 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
+from utils.config import config
+
 headers = {
     "Accept": "*/*",
     "Connection": "keep-alive",
@@ -15,7 +17,9 @@ def get_requests(url, data=None, proxy=None, timeout=30):
     """
     Get the response by requests
     """
-    proxies = {"http": proxy} if proxy is not None else None
+    if proxy is None:
+        proxy = config.request_proxy
+    proxies = {"http": proxy, "https": proxy} if proxy else None
     response = None
     try:
         with requests.Session() as session:
