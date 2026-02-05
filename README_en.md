@@ -53,10 +53,14 @@
 - [⚖️ License](#license)
 
 > [!IMPORTANT]
-> 1. Go to the `Govin` WeChat public account and reply with `cdn` to get an acceleration address to improve access speed
+> 1. ⚠️ Due to an excessive number of forks, GitHub resource usage has reached its limit, and the workflow has been
+     changed to manual trigger. Please update [main.yml](./.github/workflows/main.yml) as soon as possible to remove the
+     scheduled task; otherwise the workflow may be disabled!
+> 2. Go to the `Govin` WeChat public account and reply with `cdn` to get an acceleration address to improve access speed
      for subscription sources and channel logos.
-> 2. This project does not provide data sources. Please add your own before generating results.
-> 3. The quality of generated results depends on the data sources and network conditions; please adjust
+> 3. This project does not provide data sources. Please add your own before generating
+     results. ([How to add data sources?](./docs/tutorial_en.md#Add-data-sources-and-more))
+> 4. The quality of generated results depends on the data sources and network conditions; please adjust
      the [configuration](#Config) accordingly to obtain results that better meet your needs.
 
 ## Core Features
@@ -101,6 +105,7 @@
 | time_zone              | Time zone, can be used to control the time zone for scheduled execution or display update time; Optional values: Asia/Shanghai or other time zone codes                                                                                                                                                                                     | Asia/Shanghai     |
 | source_file            | Template file path.                                                                                                                                                                                                                                                                                                                         | config/demo.txt   |
 | final_file             | Generated result file path.                                                                                                                                                                                                                                                                                                                 | output/result.txt |
+| open_realtime_write    | Enable real-time writing of result files, you can access and use the updated results during the speed measurement process                                                                                                                                                                                                                   | True              |
 | open_service           | Enable page service, used to control whether to start the result page service. If using platforms such as Qinglong with scheduled tasks, and you need the program to exit after update is finished, you can disable this.                                                                                                                   | True              |
 | app_port               | Page service port, used to control the port number of the page service.                                                                                                                                                                                                                                                                     | 5180              |
 | public_scheme          | Public network protocol. Optional values: `http`, `https`.                                                                                                                                                                                                                                                                                  | http              |

@@ -20,8 +20,8 @@ class ResultAggregator:
             base_data: Dict[str, Dict[str, Any]],
             first_channel_name: Optional[str] = None,
             ipv6_support: bool = True,
-            write_interval: float = 2.0,
-            min_items_before_flush: int = 1,
+            write_interval: float = 5.0,
+            min_items_before_flush: int = 10,
             flush_debounce: Optional[float] = None,
             sort_logger=None,
             stat_logger=None,
@@ -38,6 +38,7 @@ class ResultAggregator:
         self._dirty_count = 0
         self._stopped = True
         self._task: Optional[asyncio.Task] = None
+        self.realtime_write = config.open_realtime_write
         self.write_interval = write_interval
         self.first_channel_name = first_channel_name
         self.ipv6_support = ipv6_support
@@ -101,20 +102,22 @@ class ResultAggregator:
             except Exception:
                 pass
 
-        try:
-            loop = asyncio.get_running_loop()
-            self._ensure_debounce_task_in_loop(loop)
-            loop.call_soon(self._flush_event.set)
-        except RuntimeError:
+        if self.realtime_write:
             try:
-                loop = asyncio.get_event_loop()
+                loop = asyncio.get_running_loop()
                 self._ensure_debounce_task_in_loop(loop)
-                loop.call_soon_threadsafe(self._flush_event.set)
-            except Exception:
-                pass
-
-        if self._dirty_count >= self._min_items_before_flush:
-            self._dirty_count = 0
+                if self._dirty_count >= self._min_items_before_flush:
+                    self._dirty_count = 0
+                    loop.call_soon(self._flush_event.set)
+            except RuntimeError:
+                try:
+                    loop = asyncio.get_event_loop()
+                    self._ensure_debounce_task_in_loop(loop)
+                    if self._dirty_count >= self._min_items_before_flush:
+                        self._dirty_count = 0
+                        loop.call_soon_threadsafe(self._flush_event.set)
+                except Exception:
+                    pass
 
     async def _atomic_write_sorted_view(
             self,
@@ -263,6 +266,9 @@ class ResultAggregator:
         """
         Start the aggregator's periodic flush loop.
         """
+        if not self.realtime_write:
+            self._stopped = False
+            return
         if self._task and not self._task.done():
             return
         self._task = asyncio.create_task(self._run_loop())
@@ -273,6 +279,11 @@ class ResultAggregator:
         """
         Stop the aggregator and clean up resources.
         """
+        try:
+            await self.flush_once(force=True)
+        except Exception:
+            pass
+
         self._stopped = True
         if self._task:
             await self._task

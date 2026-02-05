@@ -16,6 +16,7 @@
 | time_zone              | 时区，可用于控制定时执行时区或显示更新时间的时区；可选值: Asia/Shanghai 或其它时区编码                                                                  | Asia/Shanghai     |
 | source_file            | 模板文件路径                                                                                                               | config/demo.txt   |
 | final_file             | 生成结果文件路径                                                                                                             | output/result.txt |
+| open_realtime_write    | 开启实时写入结果文件，在测速过程中可以访问并使用更新结果                                                                                         | True              |
 | open_service           | 开启页面服务，用于控制是否启动结果页面服务；如果使用青龙等平台部署，有专门设定的定时任务，需要更新完成后停止运行，可以关闭该功能                                                     | True              |
 | app_port               | 页面服务端口，用于控制页面服务的端口号                                                                                                  | 5180              |
 | public_scheme          | 公网协议；可选值: http、https                                                                                                 | http              |

@@ -351,6 +351,10 @@ class ConfigManager:
     def http_proxy(self):
         return self.config.get("Settings", "http_proxy", fallback="").strip()
 
+    @property
+    def open_realtime_write(self):
+        return self.config.getboolean("Settings", "open_realtime_write", fallback=True)
+
     def load(self):
         """
         Load the config
