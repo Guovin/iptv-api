@@ -62,8 +62,6 @@ class LocalUI:
     def change_entry_state(self, state):
         for entry in [
             "open_local_checkbutton",
-            "local_file_entry",
-            "local_file_button",
             "local_file_edit_button",
         ]:
             getattr(self, entry).config(state=state)

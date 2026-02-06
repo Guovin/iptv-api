@@ -1,12 +1,14 @@
-# 这是接口的白名单，白名单内的接口将不会参与测速，始终保留至结果最前。
-# 填写频道名称会直接保留该记录至最终结果，如：CCTV-1,接口地址，只填写接口地址则对所有频道生效，多条记录换行输入。
-# This is the whitelist for the interface. Interfaces in the whitelist will not participate in speed testing and will always be retained at the front of the results.
-# Filling in the channel name will directly retain the record to the final result, such as: CCTV-1,url, only fill in the interface address will be effective for all channels, multiple records newline input.
+# 这是接口的白名单，白名单内的接口将不会参与测速，始终保留至结果最前；
+# 填写频道名称会直接保留该记录至该频道的最终结果，如：CCTV-1,接口地址；
+# 如果不填写频道名称，则该地址会被加入到所有频道的结果中，多条记录换行输入。
+# This is the whitelist for interfaces. Interfaces in the whitelist will not be speed tested and will always be kept at the top of the results;
+# Filling in the channel name will directly retain the record to the final result of the channel, such as: CCTV-1, interface address;
+# If the channel name is not filled in, the address will be added to the results of all channels, with multiple records entered on new lines.
 
 
 
 
 
 [KEYWORDS]
-# 以下是关键字白名单，含有关键字的地址会被加入白名单，换行输入。
-# This is the keyword whitelist. Addresses containing keywords will be added to the whitelist, newline input.
+# 以下区域是关键字白名单，某频道获取到的接口地址中含有指定关键字，则该接口会被加入该频道的白名单，多条记录换行输入。
+# This area is the keyword whitelist. If the interface address obtained by a certain channel contains the specified keyword, the interface will be added to the whitelist of the channel, with multiple records entered on new lines.
