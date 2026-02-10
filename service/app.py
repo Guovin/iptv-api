@@ -39,7 +39,16 @@ def show_logo(filename):
     if not filename:
         return jsonify({"error": "filename required"}), 400
 
-    safe_name = secure_filename(filename)
+    try:
+        safe_name = secure_filename(filename, allow_unicode=True)
+    except TypeError:
+        safe_name = os.path.basename(filename)
+        safe_name = safe_name.replace('/', '').replace('\\', '')
+        safe_name = safe_name.lstrip('.')
+
+    if not safe_name:
+        return jsonify({"error": "filename required"}), 400
+
     logo_dir = resource_path(constants.channel_logo_path)
     file_path = os.path.join(logo_dir, safe_name)
 
