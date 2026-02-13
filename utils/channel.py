@@ -47,7 +47,11 @@ channel_alias = Alias()
 ip_checker = IPChecker()
 location_list = config.location
 isp_list = config.isp
+open_filter_speed = config.open_filter_speed
+min_speed = config.min_speed
+open_filter_resolution = config.open_filter_resolution
 min_resolution_value = config.min_resolution_value
+resolution_speed_map = config.resolution_speed_map
 open_history = config.open_history
 open_local = config.open_local
 open_rtmp = config.open_rtmp
@@ -473,12 +477,43 @@ def append_total_data(
             print_channel_number(data, cate, name)
 
 
+def is_valid_speed_result(info) -> bool:
+    """
+    Check if the speed test result is valid
+    """
+    try:
+        delay = info.get("delay")
+        if delay is None or delay == -1:
+            return False
+
+        res_str = info.get("resolution") or ""
+        speed_val = info.get("speed", 0) or 0
+        if not speed_val or math.isinf(speed_val):
+            return False
+        if open_filter_speed:
+            if speed_val < resolution_speed_map.get(res_str, min_speed):
+                return False
+
+        if open_filter_resolution:
+            try:
+                res_value = get_resolution_value(res_str)
+            except Exception:
+                res_value = 0
+            if res_value < min_resolution_value:
+                return False
+
+        return True
+    except Exception:
+        return False
+
+
 async def test_speed(data, ipv6=False, callback=None, on_task_complete=None):
     """
     Test speed of channel data
     """
     ipv6_proxy_url = None if (not config.open_ipv6 or ipv6) else constants.ipv6_proxy
     open_headers = config.open_headers
+    open_full_speed_test = config.open_full_speed_test
     get_resolution = config.open_filter_resolution and check_ffmpeg_installed_status()
     semaphore = asyncio.Semaphore(config.speed_test_limit)
     logger = get_logger(constants.speed_test_log_path, level=INFO, init=True)
@@ -492,7 +527,6 @@ async def test_speed(data, ipv6=False, callback=None, on_task_complete=None):
                 ipv6_proxy=ipv6_proxy_url,
                 filter_resolution=get_resolution,
                 logger=logger,
-                callback=callback,
             )
 
     total_tasks = sum(len(info_list) for channel_obj in data.values() for info_list in channel_obj.values())
@@ -505,11 +539,32 @@ async def test_speed(data, ipv6=False, callback=None, on_task_complete=None):
     channel_map = {}
     grouped_results = {}
     completed_by_channel = defaultdict(int)
+    urls_limit = config.urls_limit
+    valid_count_by_channel = defaultdict(int)
+
+    def _cancel_remaining_channel_tasks(cate, name):
+        for task, meta in list(channel_map.items()):
+            if task.done():
+                continue
+            t_cate, t_name, _ = meta
+            if t_cate == cate and t_name == name:
+                try:
+                    task.cancel()
+                except Exception:
+                    pass
 
     def _on_task_done(task):
         nonlocal completed
         try:
-            result = task.result()
+            if task.cancelled():
+                result = {}
+            else:
+                try:
+                    result = task.result()
+                except asyncio.CancelledError:
+                    result = {}
+                except Exception:
+                    result = {}
         except Exception:
             result = {}
         meta = channel_map.get(task)
@@ -528,6 +583,11 @@ async def test_speed(data, ipv6=False, callback=None, on_task_complete=None):
         else:
             mark_url_good(merged.get("url"))
 
+        if is_valid_speed_result(merged):
+            valid_count_by_channel[(cate, name)] += 1
+            if not open_full_speed_test and valid_count_by_channel[(cate, name)] >= urls_limit:
+                _cancel_remaining_channel_tasks(cate, name)
+
         completed += 1
         completed_by_channel[(cate, name)] += 1
 
@@ -537,6 +597,12 @@ async def test_speed(data, ipv6=False, callback=None, on_task_complete=None):
         if on_task_complete:
             try:
                 on_task_complete(cate, name, merged, is_channel_last, is_last)
+            except Exception:
+                pass
+
+        if callback:
+            try:
+                callback()
             except Exception:
                 pass
 
@@ -601,7 +667,7 @@ def generate_channel_statistic(logger, cate, name, values):
     total = len(values)
     valid_items = [
         v for v in values
-        if (v.get("speed") or 0) > 0 and not math.isinf(v.get("speed")) and (v.get("delay") or -1) != -1
+        if is_valid_speed_result(v)
     ]
     valid = len(valid_items)
     valid_rate = (valid / total * 100) if total > 0 else 0
@@ -618,10 +684,14 @@ def generate_channel_statistic(logger, cate, name, values):
         key=lambda r: get_resolution_value(r),
         default="None"
     )
-    logger.info(
-        f"Category: {cate}, Name: {name}, Total: {total}, Valid: {valid}, Valid Percent: {valid_rate:.2f}%, IPv4: {ipv4_count}, IPv6: {ipv6_count}, Min Delay: {min_delay} ms, Max Speed: {max_speed:.2f} M/s, Avg Speed: {avg_speed:.2f} M/s, Max Resolution: {max_resolution}")
-    print(
-        f"\n{f"{t("name.category")}: {cate}, {t("name.name")}: {name}, {t("name.total")}: {total}, {t("name.valid")}: {valid}, {t("name.valid_percent")}: {valid_rate:.2f}%, IPv4: {ipv4_count}, IPv6: {ipv6_count}, {t("name.min_delay")}: {min_delay} ms, {t("name.max_speed")}: {max_speed:.2f} M/s, {t("name.average_speed")}: {avg_speed:.2f} M/s, {t("name.max_resolution")}: {max_resolution}"}")
+    if config.open_full_speed_test:
+        content = f"{f"{t("name.category")}: {cate}, {t("name.name")}: {name}, {t("name.total")}: {total}, {t("name.valid")}: {valid}, {t("name.valid_percent")}: {valid_rate:.2f}%, IPv4: {ipv4_count}, IPv6: {ipv6_count}, {t("name.min_delay")}: {min_delay} ms, {t("name.max_speed")}: {max_speed:.2f} M/s, {t("name.average_speed")}: {avg_speed:.2f} M/s, {t("name.max_resolution")}: {max_resolution}"}"
+        logger.info(content)
+        print(content)
+    else:
+        content = f"{f"{t("name.category")}: {cate}, {t("name.name")}: {name}, {t("name.valid")}: {valid}, IPv4: {ipv4_count}, IPv6: {ipv6_count}, {t("name.min_delay")}: {min_delay} ms, {t("name.max_speed")}: {max_speed:.2f} M/s, {t("name.average_speed")}: {avg_speed:.2f} M/s, {t("name.max_resolution")}: {max_resolution}"}"
+        logger.info(content)
+        print(content)
 
 
 def process_write_content(

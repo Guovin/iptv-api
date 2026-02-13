@@ -251,7 +251,7 @@ class ConfigManager:
 
     @property
     def speed_test_limit(self):
-        return self.config.getint("Settings", "speed_test_limit", fallback=10)
+        return self.config.getint("Settings", "speed_test_limit", fallback=5)
 
     @property
     def location(self):
@@ -354,6 +354,24 @@ class ConfigManager:
     @property
     def open_realtime_write(self):
         return self.config.getboolean("Settings", "open_realtime_write", fallback=True)
+
+    @property
+    def open_full_speed_test(self):
+        return self.config.getboolean("Settings", "open_full_speed_test", fallback=False)
+
+    @property
+    def resolution_speed_map(self):
+        mapping = {}
+        for item in self.config.get("Settings", "resolution_speed_map", fallback="").split(","):
+            if ":" in item:
+                resolution_part, speed_part = item.split(":", 1)
+                resolution = resolution_part.strip()
+                try:
+                    speed = float(speed_part.strip())
+                    mapping[resolution] = speed
+                except ValueError:
+                    pass
+        return mapping
 
     def load(self):
         """

@@ -27,6 +27,7 @@ max_resolution_value = config.max_resolution_value
 open_supply = config.open_supply
 open_filter_speed = config.open_filter_speed
 min_speed_value = config.min_speed
+resolution_speed_map = config.resolution_speed_map
 m3u8_headers = ['application/x-mpegurl', 'application/vnd.apple.mpegurl', 'audio/mpegurl', 'audio/x-mpegurl']
 default_ipv6_delay = 0.1
 default_ipv6_resolution = "1920x1080"
@@ -577,8 +578,10 @@ async def get_speed(data, headers=None, ipv6_proxy=None, filter_resolution=open_
         if callback:
             callback()
         if logger:
+            origin = data.get('origin')
+            origin_name = t(f"name.{origin}") if origin else origin
             logger.info(
-                f"Name: {data.get('name')}, URL: {data.get('url')}, From: {data.get('origin')}, IPv_Type: {data.get("ipv_type")}, Location: {data.get('location')}, ISP: {data.get('isp')}, Date: {data["date"]}, Delay: {result.get('delay') or -1} ms, Speed: {result.get('speed') or 0:.2f} M/s, Resolution: {result.get('resolution')}"
+                f"{t("name.name")}: {data.get('name')}, {t("pbar.url")}: {data.get('url')}, {t("name.from")}: {origin_name}, {t("name.ipv_type")}: {data.get("ipv_type")}, {t("name.location")}: {data.get('location')}, {t("name.isp")}: {data.get('isp')}, {t("name.date")}: {data["date"]}, {t("name.delay")}: {result.get('delay') or -1} ms, {t("name.speed")}: {result.get('speed') or 0:.2f} M/s, {t("name.resolution")}: {result.get('resolution')}"
             )
         return result
 
@@ -608,7 +611,7 @@ def get_sort_result(
         if result_delay == -1:
             continue
         if not supply:
-            if filter_speed and result_speed < min_speed:
+            if filter_speed and result_speed < resolution_speed_map.get(resolution, min_speed):
                 continue
             if filter_resolution and resolution:
                 resolution_value = get_resolution_value(resolution)
