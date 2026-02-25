@@ -336,7 +336,7 @@ docker run -d -p 80:8080 guovern/iptv-api
 
 | 支付宝                                  | 微信                                      |
 |--------------------------------------|-----------------------------------------|
-| ![支付宝扫码](./static/images/alipay.jpg) | ![微信扫码](./static/images/appreciate.jpg) |
+| ![支付宝扫码](./static/images/my_alipay.JPG) | ![微信扫码](./static/images/my_appreciate.JPG) |
 
 ## 免责声明
 
