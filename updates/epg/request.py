@@ -3,7 +3,7 @@ import re
 import xml.etree.ElementTree as ET
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
-from datetime import datetime
+from datetime import datetime, timedelta
 from time import time
 
 from requests import Session, exceptions
@@ -40,6 +40,11 @@ def parse_epg(epg_content):
             re.sub(r'\s+', '', programme.get('start')), "%Y%m%d%H%M%S%z")
         channel_stop = datetime.strptime(
             re.sub(r'\s+', '', programme.get('stop')), "%Y%m%d%H%M%S%z")
+
+        now = datetime.now(channel_start.tzinfo) if channel_start.tzinfo else datetime.now()
+        if channel_start < (now - timedelta(days=7)):
+            continue
+
         channel_text = opencc_t2s.convert(programme.find('title').text)
         channel_elem = ET.SubElement(
             root, 'programme', attrib={"channel": channel_id, "start": channel_start.strftime("%Y%m%d%H%M%S +0800"),
