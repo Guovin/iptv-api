@@ -5,7 +5,7 @@
 # pipenv install pytz --pypi-mirror https://pypi.tuna.tsinghua.edu.cn/simple
 # 更新
 export PATH=/Users/wangmaolin/project/iptv-api/backend/ffmpeg/macos/:$PATH
-python script/playlist.py 
+/Users/wangmaolin/envs/iptv/bin/python script/playlist.py 
 pipenv run dev
 git add output/result.m3u
 git commit -m "Add latest user_result.m3u"
