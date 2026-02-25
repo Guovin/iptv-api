@@ -1,30 +1,34 @@
 # 这是订阅源列表，每行一个订阅地址
 # This is a list of subscription sources, with one subscription address per line
 ## https://github.com/vbskycn/iptv/
-https://raw.githubusercontent.com/vbskycn/iptv/refs/heads/master/tv/iptv4.m3u
+https://gh-proxy.org/https://raw.githubusercontent.com/vbskycn/iptv/refs/heads/master/tv/iptv4.m3u
+
 ## https://github.com/youhunwl/TVAPP
-https://raw.githubusercontent.com/Guovin/iptv-api/gd/output/result.m3u
+#https://gh-proxy.org/https://raw.githubusercontent.com/Guovin/iptv-api/gd/output/result.m3u
+
 ## https://github.com/iptv-org/iptv
-https://iptv-org.github.io/iptv/index.m3u
+#https://iptv-org.github.io/iptv/index.m3u
+
+## https://yang-1989.eu.org/
+#https://m.iill.top/Live.m3u
+
 ## https://iptvindex.com/
-https://txt.gt.tc/users/HKTV.txt
-https://bc.188766.xyz/?ip=&mima=bingcha1130
 https://tmxk.pp.ua/smart-cn.m3u
 https://tmxk.pp.ua/4gtv-cn.m3u
-https://gh-proxy.com/https://raw.githubusercontent.com/develop202/migu_video/refs/heads/main/interface.txt
-https://gitee.com/mytv-android/iptv-api/raw/master/output/result.m3u
-https://gh-proxy.com/https://raw.githubusercontent.com/Guovin/iptv-api/gd/output/result.txt
 https://gh-proxy.com/https://raw.githubusercontent.com/Guovin/iptv-api/gd/output/result.m3u
-https://d.h6room.com/frjzb.txt
 http://bxtv.3a.ink/live.m3u
 https://live.zbds.org/tv/iptv4.txt
-https://gh-proxy.com/https://raw.githubusercontent.com/fanmingming/live/main/tv/m3u/ipv6.m3u
-https://iptv.b2og.com/txt/fmml_ipv6.txt
-https://gh-proxy.com/https://raw.githubusercontent.com/cai23511/yex/master/TVlist/20210808384.m3u
-https://gh-proxy.com/https://raw.githubusercontent.com/cai23511/yex/master/TVlist/20210808226.m3u
-https://cnb.cool/fish2018/pg/-/git/raw/master/jsm.json
+#https://bc.188766.xyz/?ip=&mima=bingcha1130
+#https://d.h6room.com/frjzb.txt
+# https://gh-proxy.com/https://raw.githubusercontent.com/develop202/migu_video/refs/heads/main/interface.txt
+#https://gh-proxy.com/https://raw.githubusercontent.com/fanmingming/live/main/tv/m3u/ipv6.m3u
+#https://iptv.b2og.com/txt/fmml_ipv6.txt
+#https://gh-proxy.com/https://raw.githubusercontent.com/cai23511/yex/master/TVlist/20210808384.m3u
+#https://gh-proxy.com/https://raw.githubusercontent.com/cai23511/yex/master/TVlist/20210808226.m3u
+# https://txt.gt.tc/users/HKTV.txt
 
 
 [WHITELIST]
 # 以下是订阅源的白名单，白名单内的订阅源获取的接口将不会参与测速，始终保留至结果最前。
 # This is the whitelist for subscription sources. Subscription sources in the whitelist will not participate in speed testing and will always be retained at the front of the results.
+
