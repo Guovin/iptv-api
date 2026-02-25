@@ -9,7 +9,7 @@ python script/playlist.py
 pipenv run dev
 git add output/result.m3u
 git commit -m "Add latest user_result.m3u"
-git push gitee main
+git push gitee master
 
 
 
