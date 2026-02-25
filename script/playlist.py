@@ -8,7 +8,7 @@ M3U_URLS = [
     "https://gh-proxy.org/https://raw.githubusercontent.com/vbskycn/iptv/refs/heads/master/tv/iptv4.m3u"
 ] 
 BLACKLIST_FILE = "config/blackgroup.txt"
-OUTPUT_FILE = "config/demo.txt"
+OUTPUT_FILE = "config/user_demo.txt"
 
 EMOJI_MAP = {
     "电影频道": "🎬",

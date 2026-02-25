@@ -7,12 +7,14 @@
 export PATH=/Users/wangmaolin/project/iptv-api/backend/ffmpeg/macos/:$PATH
 python script/playlist.py 
 pipenv run dev
+git add output/result.m3u
+git commit -m "Add latest user_result.m3u"
+git push gitee main
 
 
 
-
-
-
+# gitee
+# git remote add gitee https://gitee.com/wml_1994/iptv.git
 
 
 # # 使用方法
