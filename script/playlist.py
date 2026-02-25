@@ -5,7 +5,8 @@ from collections import defaultdict
 # ===== 配置 =====
 M3U_URLS = [
     "https://gh-proxy.com/https://raw.githubusercontent.com/Guovin/iptv-api/gd/output/result.m3u",
-    "https://gh-proxy.org/https://raw.githubusercontent.com/vbskycn/iptv/refs/heads/master/tv/iptv4.m3u"
+    "https://gh-proxy.org/https://raw.githubusercontent.com/vbskycn/iptv/refs/heads/master/tv/iptv4.m3u",
+    "https://m.iill.top/Live.m3u"
 ] 
 BLACKLIST_FILE = "config/blackgroup.txt"
 OUTPUT_FILE = "config/user_demo.txt"
