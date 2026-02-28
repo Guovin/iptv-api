@@ -1,13 +1,7 @@
 name: 'Update schedule'
 
 on:
-  schedule:
-    - cron: '0 16 */3 * *'
   workflow_dispatch:
-    branches:
-      - master
-      - dev
-      - gd
   
 jobs:
   push:
