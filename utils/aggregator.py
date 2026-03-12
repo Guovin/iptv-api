@@ -23,7 +23,6 @@ class ResultAggregator:
             write_interval: float = 5.0,
             min_items_before_flush: int = config.urls_limit,
             flush_debounce: Optional[float] = None,
-            sort_logger=None,
             stat_logger=None,
             result: Optional[Dict[str, Dict[str, list]]] = None,
     ):
@@ -42,7 +41,6 @@ class ResultAggregator:
         self.write_interval = write_interval
         self.first_channel_name = first_channel_name
         self.ipv6_support = ipv6_support
-        self.sort_logger = sort_logger or get_logger(constants.result_log_path, level=INFO, init=True)
         self.stat_logger = stat_logger or get_logger(constants.statistic_log_path, level=INFO, init=True)
         self.is_last = False
         self._lock = asyncio.Lock()
@@ -84,10 +82,8 @@ class ResultAggregator:
         self._pending_channels.add((cate, name))
 
         if is_channel_last:
-            self._finished_channels.add((cate, name))
-
-        if is_channel_last:
             try:
+                self._finished_channels.add((cate, name))
                 generate_channel_statistic(self.stat_logger, cate, name, self.test_results[cate][name])
             except Exception:
                 pass
@@ -299,7 +295,5 @@ class ResultAggregator:
             except asyncio.CancelledError:
                 pass
             self._debounce_task = None
-        if self.sort_logger:
-            self.sort_logger.handlers.clear()
         if self.stat_logger:
             self.stat_logger.handlers.clear()

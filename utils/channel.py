@@ -6,7 +6,7 @@ import os
 import pickle
 import re
 import tempfile
-from collections import defaultdict
+from collections import defaultdict, Counter
 from itertools import chain
 from logging import INFO
 from typing import cast
@@ -14,15 +14,16 @@ from typing import cast
 import utils.constants as constants
 from utils.alias import Alias
 from utils.config import config
+from utils.db import ensure_result_data_schema
 from utils.db import get_db_connection, return_db_connection
+from utils.ffmpeg import check_ffmpeg_installed_status
 from utils.frozen import is_url_frozen, mark_url_bad, mark_url_good
 from utils.i18n import t
 from utils.ip_checker import IPChecker
 from utils.speed import (
     get_speed,
     get_speed_result,
-    get_sort_result,
-    check_ffmpeg_installed_status
+    get_sort_result
 )
 from utils.tools import (
     format_name,
@@ -550,6 +551,7 @@ async def test_speed(data, ipv6=False, callback=None, on_task_complete=None):
     get_resolution = config.open_filter_resolution and check_ffmpeg_installed_status()
     semaphore = asyncio.Semaphore(config.speed_test_limit)
     logger = get_logger(constants.speed_test_log_path, level=INFO, init=True)
+    result_logger = get_logger(constants.result_log_path, level=INFO, init=True)
 
     async def limited_get_speed(channel_info):
         async with semaphore:
@@ -622,6 +624,22 @@ async def test_speed(data, ipv6=False, callback=None, on_task_complete=None):
             if not open_full_speed_test and valid_count_by_channel[(cate, name)] >= urls_limit:
                 _cancel_remaining_channel_tasks(cate, name)
 
+            try:
+                origin = merged.get('origin')
+                origin_name = t(f"name.{origin}") if origin else origin
+                result_logger.info(
+                    f"ID: {merged.get('id')}, {t('name.name')}: {name}, "
+                    f"{t('pbar.url')}: {merged.get('url')}, {t('name.from')}: {origin_name}, "
+                    f"{t('name.ipv_type')}: {merged.get('ipv_type')}, {t('name.location')}: {merged.get('location')}, "
+                    f"{t('name.isp')}: {merged.get('isp')}, "
+                    f"{t('name.delay')}: {merged.get('delay') or -1} ms, {t('name.speed')}: {(merged.get('speed') or 0):.2f} M/s, "
+                    f"{t('name.resolution')}: {merged.get('resolution')}, {t('name.fps')}: {merged.get('fps') or t('name.unknown')}, "
+                    f"{t('name.video_codec')}: {merged.get('video_codec') or t('name.unknown')}, "
+                    f"{t('name.audio_codec')}: {merged.get('audio_codec') or t('name.unknown')}"
+                )
+            except Exception:
+                pass
+
         completed += 1
         completed_by_channel[(cate, name)] += 1
 
@@ -653,6 +671,7 @@ async def test_speed(data, ipv6=False, callback=None, on_task_complete=None):
         await asyncio.gather(*tasks, return_exceptions=True)
 
     logger.handlers.clear()
+    result_logger.handlers.clear()
     return grouped_results
 
 
@@ -729,12 +748,22 @@ def generate_channel_statistic(logger, cate, name, values):
         key=lambda r: get_resolution_value(r),
         default="None"
     )
+    video_codecs = [v.get('video_codec') for v in values if v.get('video_codec')]
+    audio_codecs = [v.get('audio_codec') for v in values if v.get('audio_codec')]
+    fps_values = [float(v.get('fps')) for v in values if
+                  v.get('fps') is not None and isinstance(v.get('fps'), (int, float, str)) and str(
+                      v.get('fps')).replace('.', '').isdigit()]
+    most_video = Counter(video_codecs).most_common(1)
+    most_audio = Counter(audio_codecs).most_common(1)
+    most_video_str = most_video[0][0] if most_video else t('name.unknown')
+    most_audio_str = most_audio[0][0] if most_audio else t('name.unknown')
+    avg_fps = (sum(fps_values) / len(fps_values)) if fps_values else None
     if config.open_full_speed_test:
-        content = f"{f"{t("name.category")}: {cate}, {t("name.name")}: {name}, {t("name.total")}: {total}, {t("name.valid")}: {valid}, {t("name.valid_percent")}: {valid_rate:.2f}%, IPv4: {ipv4_count}, IPv6: {ipv6_count}, {t("name.min_delay")}: {min_delay} ms, {t("name.max_speed")}: {max_speed:.2f} M/s, {t("name.average_speed")}: {avg_speed:.2f} M/s, {t("name.max_resolution")}: {max_resolution}"}"
+        content = f"{f"{t('name.category')}: {cate}, {t('name.name')}: {name}, {t('name.total')}: {total}, {t('name.valid')}: {valid}, {t('name.valid_percent')}: {valid_rate:.2f}%, IPv4: {ipv4_count}, IPv6: {ipv6_count}, {t('name.min_delay')}: {min_delay} ms, {t('name.max_speed')}: {max_speed:.2f} M/s, {t('name.average_speed')}: {avg_speed:.2f} M/s, {t('name.max_resolution')}: {max_resolution}, {t('name.avg_fps')}: {f"{avg_fps:.2f}" if avg_fps is not None else t('name.unknown')}, {t('name.video_codec')}: {most_video_str}, {t('name.audio_codec')}: {most_audio_str}"}"
         logger.info(content)
         print(content)
     else:
-        content = f"{f"{t("name.category")}: {cate}, {t("name.name")}: {name}, {t("name.valid")}: {valid}, IPv4: {ipv4_count}, IPv6: {ipv6_count}, {t("name.min_delay")}: {min_delay} ms, {t("name.max_speed")}: {max_speed:.2f} M/s, {t("name.average_speed")}: {avg_speed:.2f} M/s, {t("name.max_resolution")}: {max_resolution}"}"
+        content = f"{f"{t('name.category')}: {cate}, {t('name.name')}: {name}, {t('name.valid')}: {valid}, IPv4: {ipv4_count}, IPv6: {ipv6_count}, {t('name.min_delay')}: {min_delay} ms, {t('name.max_speed')}: {max_speed:.2f} M/s, {t('name.average_speed')}: {avg_speed:.2f} M/s, {t('name.max_resolution')}: {max_resolution}, {t('name.avg_fps')}: {f"{avg_fps:.2f}" if avg_fps is not None else t('name.unknown')}, {t('name.video_codec')}: {most_video_str}, {t('name.audio_codec')}: {most_audio_str}"}"
         logger.info(content)
         print(content)
 
@@ -817,6 +846,7 @@ def process_write_content(
             os.makedirs(db_dir, exist_ok=True)
 
         try:
+            ensure_result_data_schema(constants.rtmp_data_path)
             conn = get_db_connection(constants.rtmp_data_path)
         except Exception as e:
             print(t("msg.write_error").format(info=f"open rtmp db error: {e}"))
@@ -824,13 +854,21 @@ def process_write_content(
             try:
                 cursor = conn.cursor()
                 cursor.execute(
-                    "CREATE TABLE IF NOT EXISTS result_data (id TEXT PRIMARY KEY, url TEXT, headers TEXT)"
+                    "CREATE TABLE IF NOT EXISTS result_data (id TEXT PRIMARY KEY, url TEXT, headers TEXT, video_codec TEXT, audio_codec TEXT, resolution TEXT, fps REAL)"
                 )
                 for data_list in result_data.values():
                     for item in data_list:
                         cursor.execute(
-                            "INSERT OR REPLACE INTO result_data (id, url, headers) VALUES (?, ?, ?)",
-                            (item["id"], item["url"], json.dumps(item.get("headers", None)))
+                            "INSERT OR REPLACE INTO result_data (id, url, headers, video_codec, audio_codec, resolution, fps) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                            (
+                                str(item.get("id")),
+                                item.get("url"),
+                                json.dumps(item.get("headers", None)),
+                                item.get("video_codec"),
+                                item.get("audio_codec"),
+                                item.get("resolution"),
+                                item.get("fps"),
+                            )
                         )
                 conn.commit()
             finally:
@@ -847,18 +885,17 @@ def process_write_content(
             os.chmod(path, 0o644)
         except Exception:
             pass
-    except Exception as e:
-        print(e)
+    except Exception:
         try:
             with open(path, "w", encoding="utf-8") as f:
                 f.write(content)
-        except Exception as e2:
-            print(t("msg.write_error").format(info=e2))
+        except Exception as e:
+            print(t("msg.write_error").format(info=e))
             return
     try:
         convert_to_m3u(path, first_channel_name, data=result_data)
-    except Exception:
-        pass
+    except Exception as e:
+        print(t("msg.write_error").format(info=f"convert m3u error: {e}"))
 
 
 def write_channel_to_file(data, ipv6=False, first_channel_name=None, skip_print=False, is_last=False):

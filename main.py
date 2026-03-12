@@ -31,9 +31,10 @@ from utils.tools import (
     get_public_url,
     parse_times,
     to_serializable,
+    get_subscribe_entries
 )
 from utils.types import CategoryChannelData
-from utils.whitelist import load_whitelist_maps, get_section_entries
+from utils.whitelist import load_whitelist_maps
 
 ProgressCallback = Callable[..., Any]
 
@@ -127,26 +128,35 @@ class UpdateSource:
     # stage 2: fetch subscribe/epg (concurrent)
     # ----------------------------
     async def _fetch_subscribe(self, channel_names: list[str]):
-        whitelist_subscribe_urls, default_subscribe_urls = get_section_entries(
-            constants.subscribe_path,
-            pattern=constants.url_pattern,
-        )
-        subscribe_urls = list(dict.fromkeys(whitelist_subscribe_urls + default_subscribe_urls))
+        whitelist_entries, default_entries = get_subscribe_entries(constants.subscribe_path)
+
+        seen = set()
+        subscribe_entries = []
+        for e in (whitelist_entries + default_entries):
+            url = e['url'] if isinstance(e, dict) else e
+            if url in seen:
+                continue
+            seen.add(url)
+            subscribe_entries.append(e)
+
         print(
             t("msg.subscribe_urls_whitelist_total").format(
-                default_count=len(default_subscribe_urls),
-                whitelist_count=len(whitelist_subscribe_urls),
-                total=len(subscribe_urls),
+                default_count=len(default_entries),
+                whitelist_count=len(whitelist_entries),
+                total=len(subscribe_entries),
             )
         )
-        if not subscribe_urls:
+
+        if not subscribe_entries:
             print(t("msg.no_subscribe_urls").format(file=constants.subscribe_path))
             return {}
 
+        whitelist_urls = [e['url'] for e in whitelist_entries]
+
         return await get_channels_by_subscribe_urls(
-            subscribe_urls,
+            subscribe_entries,
             names=channel_names,
-            whitelist=whitelist_subscribe_urls,
+            whitelist=whitelist_urls,
             callback=self.update_progress,
         )
 
@@ -279,10 +289,6 @@ class UpdateSource:
         try:
             main_start_time = time()
 
-            if not config.open_update:
-                self._notify_ui_finished(main_start_time)
-                return
-
             self._prepare_channel_data()
 
             if not self.channel_names:
@@ -340,6 +346,11 @@ class UpdateSource:
 
         self.update_progress = callback or default_callback
         self.run_ui = True if callback else False
+
+        if not config.open_update:
+            if self.run_ui:
+                self.update_progress(t("msg.update_disabled"), 0, finished=True)
+            return
 
         if self.run_ui:
             self.update_progress(t("msg.check_ipv6_support"), 0)
@@ -413,7 +424,10 @@ class UpdateSource:
 if __name__ == "__main__":
     info = get_version_info()
     print(t("msg.version_info").format(name=info["name"], version=info["version"]))
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    update_source = UpdateSource()
-    loop.run_until_complete(update_source.start())
+    if not config.open_update:
+        print(t("msg.update_disabled"))
+    else:
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        update_source = UpdateSource()
+        loop.run_until_complete(update_source.start())

@@ -242,7 +242,9 @@ def hls_proxy(channel_id):
 
     if need_start:
         host = f"{app_rtmp_url}/hls"
-        start_hls_to_rtmp(host, channel_id)
+        client_ua = request.headers.get('User-Agent') if request and hasattr(request, 'headers') else None
+        print(f"▶️ {client_ua}")
+        start_hls_to_rtmp(host, channel_id, client_user_agent=client_ua)
 
     hls_min_segments = 3
     waited = 0.0

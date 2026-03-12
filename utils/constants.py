@@ -71,8 +71,9 @@ multiline_txt_pattern = re.compile(r"^(?P<name>[^,，]+)[,，](?!#genre#)(?P<val
 m3u_pattern = re.compile(r"^#EXTINF:-1[\s+,，](?P<attributes>[^,，]+)[，,](?P<name>.*?)\n(?P<value>.+)$")
 
 multiline_m3u_pattern = re.compile(
-    r"^#EXTINF:-1[\s+,，](?P<attributes>[^,，]+)[，,](?P<name>.*?)\n(?P<options>(#EXTVLCOPT:.*\n)*?)(?P<value>.+)$",
-    re.MULTILINE)
+    r"^#EXTINF:-1(?:[\s+,，]*(?P<attributes>[^,，\r\n]+))?[,，](?P<name>.*?)[\r\n]+"
+    r"(?P<options>(?:#EXTVLCOPT:.*[\r\n]+)*)(?P<value>.*?)(?=\r?\n#EXTINF:-1|\Z)",
+    re.MULTILINE | re.DOTALL)
 
 key_value_pattern = re.compile(r'(?P<key>\w+)=(?P<value>\S+)')
 

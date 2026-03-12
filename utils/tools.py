@@ -1,5 +1,6 @@
 import copy
 import datetime
+import hashlib
 import json
 import logging
 import os
@@ -11,7 +12,7 @@ from logging.handlers import RotatingFileHandler
 from pathlib import Path
 from time import time
 from typing import Iterable, List, Optional, Union
-from urllib.parse import urlparse, urlunparse
+from urllib.parse import urlparse, urlunparse, unquote, quote
 
 import pytz
 import requests
@@ -750,8 +751,11 @@ def get_name_uri_from_dir(path: str) -> dict:
     name_urls = defaultdict(list)
     if os.path.exists(real_path):
         for file in os.listdir(real_path):
-            filename = file.rsplit(".", 1)[0]
-            name_urls[filename].append(f"{real_path}/{file}")
+            file_path = os.path.join(real_path, file)
+            if not os.path.isfile(file_path):
+                continue
+            filename = os.path.splitext(file)[0]
+            name_urls[filename].append(os.path.normpath(os.path.abspath(file_path)))
     return name_urls
 
 
@@ -786,6 +790,45 @@ def join_url(url1: str, url2: str) -> str:
     if not url1.endswith("/"):
         url1 += "/"
     return url1 + url2
+
+
+def github_blob_to_raw(url: str) -> str:
+    """
+    Convert a GitHub repository blob (or tree) page URL to the corresponding
+    raw.githubusercontent.com URL. Handles percent-encoded path segments and
+    decodes them before safely re-quoting the path for the raw URL.
+    """
+
+    if not url:
+        return url
+
+    if "raw.githubusercontent.com" in url:
+        return url
+
+    parsed = urlparse(url)
+    netloc = parsed.netloc or ""
+    if "github.com" not in netloc:
+        return url
+
+    path = (parsed.path or "").lstrip('/')
+    parts = path.split('/')
+    if len(parts) < 5:
+        return url
+
+    owner, repo, marker = parts[0], parts[1], parts[2]
+    if marker not in ("blob", "tree"):
+        return url
+
+    branch = parts[3]
+    file_parts = parts[4:]
+    try:
+        decoded_path = '/'.join(unquote(p) for p in file_parts)
+        safe_path = quote(decoded_path, safe="/")
+    except Exception:
+        safe_path = '/'.join(file_parts)
+
+    raw_url = f"https://raw.githubusercontent.com/{owner}/{repo}/{branch}/{safe_path}"
+    return raw_url
 
 
 def add_port_to_url(url: str, port: int) -> str:
@@ -987,3 +1030,110 @@ def count_files_by_ext(
         count += 1
 
     return count
+
+
+def sanitize_filename_from_url(url: str, max_len: int = 200) -> str:
+    """
+    Create a filesystem-safe filename from a URL. Limits length and falls back to a hash when needed.
+    """
+    try:
+        if not url:
+            raise ValueError("empty url")
+        safe = unquote(url)
+        safe = re.sub(r'[<>:"/\\|?*]', '_', safe)
+        safe = re.sub(r'\s+', '_', safe)
+        safe = re.sub(r'_+', '_', safe)
+        safe = safe.strip('._')
+        if not safe:
+            raise ValueError("sanitized empty")
+        if len(safe) > max_len:
+            h = hashlib.sha256(url.encode('utf-8')).hexdigest()
+            keep = max_len - (1 + len(h))
+            safe = safe[:keep] + '_' + h
+        return safe
+    except Exception:
+        return hashlib.sha256((url or '').encode('utf-8')).hexdigest()
+
+
+def save_url_content(category: str, url: str, content: str) -> None:
+    """
+    Save the raw content fetched from `url` into output/log/<category>/<sanitized_url>.txt.
+    Overwrites existing files when called multiple times for the same url.
+    """
+    try:
+        if not category:
+            category = "misc"
+        dir_path = os.path.join(constants.output_dir, "log", category)
+        os.makedirs(dir_path, exist_ok=True)
+        filename = sanitize_filename_from_url(url)
+        file_path = os.path.join(dir_path, f"{filename}.txt")
+        with open(file_path, "w", encoding="utf-8") as f:
+            if isinstance(content, bytes):
+                try:
+                    f.write(content.decode('utf-8'))
+                except Exception:
+                    f.write(content.decode('latin-1', errors='ignore'))
+            else:
+                f.write(str(content))
+    except Exception as e:
+        print(f"Failed to save content for {url} into {category}: {e}")
+
+
+def get_subscribe_entries(path: str = "config/subscribe.txt") -> tuple[list, list]:
+    """
+    Parse the subscribe file and return two lists of entries (inside [WHITELIST], outside).
+    Each entry is a dict: {"url": <url>, "headers": {<Header-Name>: <value>, ...}} where headers is optional.
+
+    Supported line format (simple):
+        <url> KEY=VALUE KEY2="value with spaces" KEY3='another'
+    KEY `UA` or `User-Agent` will be mapped to the `User-Agent` header.
+    """
+    real_path = get_real_path(resource_path(path))
+    inside = []
+    outside = []
+    if not os.path.exists(real_path):
+        return inside, outside
+
+    header_re = re.compile(r"^\[.*\]$")
+    in_section = False
+    kv_re = re.compile(r"(?P<k>\w+)=((?P<q>\".*?\"|'.*?')|(?P<v>\S+))")
+
+    with open(real_path, "r", encoding="utf-8") as f:
+        for raw in f:
+            line = raw.rstrip("\n")
+            s = line.strip()
+            if not s:
+                continue
+            if header_re.match(s):
+                in_section = s.upper() == "[WHITELIST]"
+                continue
+            if s.startswith("#"):
+                continue
+
+            match = constants.url_pattern.search(s)
+            if not match:
+                continue
+            url = match.group().strip()
+            remainder = s[match.end():].strip()
+            headers = {}
+            for m in kv_re.finditer(remainder):
+                key = m.group('k')
+                val = m.group('q') or m.group('v')
+                if not val:
+                    continue
+                val = val.strip()
+                if (val.startswith('"') and val.endswith('"')) or (val.startswith("'") and val.endswith("'")):
+                    val = val[1:-1]
+                if key.lower() == 'ua' or key.lower() == 'useragent' or key.lower() == 'user-agent':
+                    headers['User-Agent'] = val
+                else:
+                    headers[key] = val
+
+            entry = {'url': url}
+            if headers:
+                entry['headers'] = headers
+
+            target = inside if in_section else outside
+            target.append(entry)
+
+    return inside, outside

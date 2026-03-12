@@ -363,3 +363,129 @@ docker run -d -p 80:8080 guovern/iptv-api
 | /hls/ipv6/txt | 推流ipv6 txt接口 |
 | /hls/ipv6/m3u | 推流ipv6 m3u接口 |
 | /stat         | 推流状态统计接口     |
+
+##### 推流使用教程
+
+Docker 中启用推流很简单——只需做少量配置并将需要推流的频道或视频放到指定位置，程序会自动将这些源通过内置 RTMP/HTTP 推出为可播放的
+HLS 流。
+
+下面以两种常见方式说明：订阅源推流（在线源）和本地视频推流（上传视频文件）。
+
+1) 启动前准备（以 docker compose 部署为例）
+
+- 使用本仓库提供的 `docker-compose.yml`，确认并根据需要修改下面的环境变量：
+    - `PUBLIC_DOMAIN`：公网可访问的域名或公网 IP（用于推流地址中的 Host）。
+    - `PUBLIC_PORT`：映射到宿主机的公网端口（影响最终访问地址）。
+    - `NGINX_HTTP_PORT`：容器内 HTTP 服务端口（通常保持默认）。
+- 确保将配置目录挂载到容器内（默认：`/iptv-api/config`），便于在宿主机上修改模板、放置本地视频等。
+
+示例（摘自 compose 配置，保留用于参考）：
+
+```yml
+services:
+  iptv-api:
+    image: guovern/iptv-api:latest
+    container_name: iptv-api
+    restart: unless-stopped
+
+    ports:
+      - "80:8080" # 修改为公网端口:容器内HTTP服务端口
+
+    volumes:
+      - /iptv-api/config:/iptv-api/config # 修改为宿主机配置文件夹路径:容器内配置文件夹路径
+      - /iptv-api/output:/iptv-api/output
+
+    environment:
+      PUBLIC_SCHEME: "http"
+      PUBLIC_DOMAIN: "192.168.1.95" # 修改为你的服务器域名或IP地址，这里以我的局域网IP为例
+      PUBLIC_PORT: "80" # 修改为公网端口
+      NGINX_HTTP_PORT: "8080" # 默认容器内HTTP服务端口
+      CDN_URL: ""
+      HTTP_PROXY: ""
+```
+
+2) 订阅源推流（在线源）
+
+- 在 `config/subscribe.txt` 中添加订阅地址（支持 txt 和 m3u）。启动后，程序会读取订阅并对其中的频道进行推流。
+- 推流接口示例：访问 `/hls/txt`、`/hls/m3u` 或带 ipv4/ipv6 前缀的接口以查看当前推流的频道列表。
+
+3) 本地视频推流（服务器上的视频文件）
+
+- 在挂载的 `config` 目录下创建 `hls` 文件夹（若使用容器挂载为 `/iptv-api/config/hls`），将需要推流的本地视频文件放入，文件名应与模板里的频道名称对应。
+
+例如：
+
+```
+iptv-api/
+├── config
+│   └── hls
+│       └── 海洋.mp4
+```
+
+- 在 `config/demo.txt` 中添加对应频道条目，程序会将该本地文件当成该频道的推流源。
+
+示例模板片段：
+
+```markdown
+📺央视频道,#genre#
+CCTV-1
+
+📡卫视频道,#genre#
+广东卫视
+
+🚀本地视频,#genre#
+海洋
+```
+
+4) 启动并验证
+
+- 启动容器：
+
+```bash
+docker compose up -d
+```
+
+- 启动成功后可通过以下页面/接口确认：
+    - 启动日志：
+      ![Finish-Log](./images/finish-log.png 'Finish Log')
+
+    - 推流结果（txt 格式示例）：
+      访问 `/hls/txt` 可查看当前推流的地址及说明：
+      ![Hls-Txt-Result](./images/hls-txt-result.png 'Hls Txt Result')
+
+    - 浏览器播放示例（订阅源与本地视频）：
+      ![Hls-Web-Subscribe](./images/hls-web-subscribe.png 'Hls Web Subscribe')
+      ![Hls-Web-Local](./images/hls-web-local.png 'Hls Web Local')
+
+    - 在播放器中加载完整频道菜单（示例使用 PotPlayer）：
+      ![PotPlayer](./images/potplayer.png 'PotPlayer')
+
+5) 监控与日志
+
+- 推流状态统计页面 `/stat` 用于查看当前推流数、流量等：
+  ![Rtmp-Stat](./images/rtmp-stat.png 'Rtmp Stat')
+
+- 也可以查看容器日志来观察频道开始/停止推流的详细记录：
+    - 频道开始推流：
+      ![Hls-Start-Log](./images/hls-start-log.png 'Hls Start Log')
+    - 频道空闲无人观看自动停止：
+      ![hls-will-Stop-Log](./images/hls-will-stop-log.png 'Rtmp Will Stop Log')
+      ![hls-Stop-Log](./images/hls-stop-log.png 'Rtmp Stop Log')
+
+6) 常见提示与调优建议
+
+- 公网访问与防火墙：确保 `PUBLIC_PORT` 对外已放通（防火墙、云服务安全组等）。RTMP/HTTP 需要对应端口能够被外部访问。
+- 域名与证书：若使用域名并启用 HTTPS，请将 `PUBLIC_DOMAIN` 设置为域名，`PUBLIC_SCHEME` 设置为 `https`，并在外部配置好反向代理或证书。
+- 性能与并发：本地推流会消耗 CPU 和带宽，建议合理设置 `rtmp_max_streams` 限制并发推流数量，避免服务器过载。
+- 空闲停止：`rtmp_idle_timeout` 控制无人观看后自动停止推流的超时时间（秒），可根据服务器资源与使用场景调整。
+
+7) 推流常用相关配置项
+
+```ini
+# RTMP 频道接口空闲停止推流超时时长（秒）
+rtmp_idle_timeout = 300
+# RTMP 推流最大并发数量，避免过高导致服务器压力过大
+rtmp_max_streams = 10
+```
+
+以上是简洁的推流使用说明。按需调整配置并通过 `/hls/*` 与 `/stat` 等接口验证推流状态和可用性即可。

@@ -14,7 +14,7 @@ from utils.channel import format_channel_name
 from utils.config import config
 from utils.i18n import t
 from utils.retry import retry_func
-from utils.tools import get_pbar_remaining, get_urls_from_file, opencc_t2s, join_url
+from utils.tools import get_pbar_remaining, opencc_t2s, join_url, github_blob_to_raw, get_subscribe_entries
 
 
 def parse_epg(epg_content):
@@ -58,13 +58,25 @@ def parse_epg(epg_content):
 
 
 async def get_epg(names=None, callback=None):
-    urls = get_urls_from_file(constants.epg_path)
-    if not urls:
+    whitelist_entries, default_entries = get_subscribe_entries(constants.epg_path)
+    entries = whitelist_entries + default_entries
+    if not entries:
         return {}
     if not os.getenv("GITHUB_ACTIONS") and config.cdn_url:
-        urls = [join_url(config.cdn_url, url) if "raw.githubusercontent.com" in url else url
-                for url in urls]
-    urls_len = len(urls)
+        def _map_raw(u):
+            raw_u = github_blob_to_raw(u)
+            return join_url(config.cdn_url, raw_u) if "raw.githubusercontent.com" in raw_u else raw_u
+
+        def _map_entry(e):
+            if isinstance(e, dict):
+                e = e.copy()
+                e['url'] = _map_raw(e.get('url'))
+                return e
+            return _map_raw(e)
+
+        entries = [_map_entry(e) for e in entries]
+
+    urls_len = len(entries)
     pbar = tqdm_asyncio(
         total=urls_len,
         desc=t("pbar.getting_name").format(name=t("name.epg")),
@@ -74,21 +86,19 @@ async def get_epg(names=None, callback=None):
     all_result_verify = set()
     session = Session()
 
-    def process_run(url):
+    def process_run(entry):
         nonlocal all_result_verify, result
         try:
+            entry_url = entry.get('url') if isinstance(entry, dict) else entry
+            headers = entry.get('headers') if isinstance(entry, dict) else None
             response = None
             try:
-                response = (
-                    retry_func(
-                        lambda: session.get(
-                            url, timeout=config.request_timeout
-                        ),
-                        name=url,
-                    )
+                response = retry_func(
+                    lambda: session.get(entry_url, timeout=config.request_timeout, headers=headers),
+                    name=entry_url,
                 )
             except exceptions.Timeout:
-                print(t("msg.request_timeout").format(name=url))
+                print(t("msg.request_timeout").format(name=entry_url))
             if response:
                 response.encoding = "utf-8"
                 content = response.text
@@ -104,7 +114,7 @@ async def get_epg(names=None, callback=None):
                             all_result_verify.add(display_name)
                             result[display_name] = programmes[channel_id]
         except Exception as e:
-            print(t("msg.error_name_info").format(name=url, info=e))
+            print(t("msg.error_name_info").format(name=entry_url, info=e))
         finally:
             pbar.update()
             if callback:
@@ -118,8 +128,8 @@ async def get_epg(names=None, callback=None):
                 )
 
     with ThreadPoolExecutor(max_workers=10) as executor:
-        for epg_url in urls:
-            executor.submit(process_run, epg_url)
+        for entry in entries:
+            executor.submit(process_run, entry)
     session.close()
     pbar.close()
     return result

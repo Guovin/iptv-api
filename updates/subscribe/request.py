@@ -16,7 +16,9 @@ from utils.tools import (
     merge_objects,
     get_pbar_remaining,
     get_name_value,
-    get_logger, join_url
+    get_logger, join_url,
+    github_blob_to_raw,
+    save_url_content
 )
 
 
@@ -34,13 +36,26 @@ async def get_channels_by_subscribe_urls(
     """
     if not os.getenv("GITHUB_ACTIONS") and config.cdn_url:
         def _map_raw(u):
-            return join_url(config.cdn_url, u) if "raw.githubusercontent.com" in u else u
+            raw_u = github_blob_to_raw(u)
+            return join_url(config.cdn_url, raw_u) if "raw.githubusercontent.com" in raw_u else raw_u
 
-        urls = [_map_raw(u) for u in urls]
+        def _map_entry(e):
+            if isinstance(e, dict):
+                e = e.copy()
+                e['url'] = _map_raw(e.get('url'))
+                return e
+            return _map_raw(e)
+
+        urls = [_map_entry(u) for u in urls]
         whitelist = [_map_raw(u) for u in whitelist] if whitelist else None
     if whitelist:
         index_map = {u: i for i, u in enumerate(whitelist)}
-        urls.sort(key=lambda u: index_map.get(u, len(whitelist)))
+
+        def sort_key(u):
+            key = u['url'] if isinstance(u, dict) else u
+            return index_map.get(key, len(whitelist))
+
+        urls.sort(key=sort_key)
     subscribe_results = {}
     subscribe_urls_len = len(urls)
     pbar = tqdm_asyncio(
@@ -51,33 +66,37 @@ async def get_channels_by_subscribe_urls(
     mode_name = t("name.subscribe")
     if callback:
         callback(
-            f"{t("pbar.getting_name").format(name=mode_name)}",
+            t("pbar.getting_name").format(name=mode_name),
             0,
         )
     logger = get_logger(constants.nomatch_log_path, level=INFO, init=True)
 
     def process_subscribe_channels(subscribe_info: str | dict) -> defaultdict:
-        subscribe_url = subscribe_info
-        channels = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
+        subscribe_url = subscribe_info.get('url') if isinstance(subscribe_info, dict) else subscribe_info
+        headers = subscribe_info.get('headers') if isinstance(subscribe_info, dict) else None
+        channels = defaultdict(list)
         in_whitelist = whitelist and (subscribe_url in whitelist)
         try:
             response = None
             try:
-                response = (
-                    retry_func(
-                        lambda: get_soup_requests(
-                            subscribe_url, timeout=config.request_timeout
-                        ),
-                        name=subscribe_url,
-                    )
-                    if retry
-                    else get_soup_requests(subscribe_url, timeout=config.request_timeout)
-                )
+                if retry:
+                    response = retry_func(lambda: get_soup_requests(subscribe_url, timeout=config.request_timeout,
+                                                                    headers_override=headers), name=subscribe_url)
+                else:
+                    response = get_soup_requests(subscribe_url, timeout=config.request_timeout,
+                                                 headers_override=headers)
             except Exception as e:
                 print(f"{subscribe_url}: {e}")
             if response:
-                response.encoding = "utf-8"
-                content = response.text
+                if hasattr(response, 'text'):
+                    response.encoding = "utf-8"
+                    content = response.text
+                else:
+                    content = str(response)
+                try:
+                    save_url_content('subscribe', subscribe_url, content)
+                except Exception:
+                    pass
                 m3u_type = True if "#EXTM3U" in content else False
                 data = get_name_value(
                     content,
@@ -119,7 +138,7 @@ async def get_channels_by_subscribe_urls(
             pbar.update()
             if callback:
                 callback(
-                    t("msg.progress_desc").format(name=f"{t("pbar.get")}{mode_name}",
+                    t("msg.progress_desc").format(name=f"{t('pbar.get')}{mode_name}",
                                                   remaining_total=subscribe_urls_len - pbar.n,
                                                   item_name=mode_name,
                                                   remaining_time=get_pbar_remaining(n=pbar.n, total=pbar.total,

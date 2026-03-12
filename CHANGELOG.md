@@ -1,5 +1,54 @@
 # 更新日志（Changelog）
 
+## v2.0.1
+
+### 2026/3/11
+
+### 🚀 新增功能
+
+1. 推流模块：支持在推流时自动切换编码器进行转码，以提升兼容性与成功率。
+2. 订阅源/EPG 请求头：支持为订阅源或 EPG 请求设置 User-Agent（UA）或其他验证信息。
+3. 保留原始订阅数据：支持将订阅源的原始接口数据保留到 `output/log/subscribe` 目录，便于排查与二次处理。
+4. 源信息采集：支持获取并记录源的帧率、视频/音频编解码器等信息，并输出到日志以便诊断。
+5. 文档与示例：新增 Docker 下使用推流的详细教程。
+6. 默认 EPG：增加默认的 EPG 订阅以提升开箱体验。
+
+### 🐛 优化与修复
+
+1. 降低推流模块 CPU 占用，优化转码效率与兼容性。
+2. 修复本地源推流结果的输出路径错误。
+3. 修复无法处理属性为空的 M3U 订阅源时导致无结果的问题。
+4. 优化对 GitHub 订阅源的访问与自动内容转换逻辑，提升稳定性。
+5. 修复 GUI 中运行进度的国际化显示问题。
+
+<details>
+  <summary>English</summary>
+
+### 2026/3/11
+
+### 🚀 New Features
+
+1. Streaming: Support automatic encoder switching during push streaming for on-the-fly transcoding, improving
+   compatibility and success rates.
+2. Subscription/EPG request headers: Allow setting User-Agent (UA) and other verification headers for subscription or
+   EPG requests.
+3. Preserve raw subscription data: Optionally retain original subscription interface data under `output/log/subscribe`
+   for troubleshooting and secondary processing.
+4. Source metadata collection: Collect and log source properties such as frame rate, video codec and audio codec for
+   diagnostics.
+5. Docs & examples: Added a detailed Docker guide for using push streaming.
+6. Default EPG: Added a default EPG subscription to improve out-of-the-box experience.
+
+### 🐛 Optimizations & Fixes
+
+1. Reduced CPU usage in the streaming module; improved transcoding efficiency and compatibility.
+2. Fixed incorrect output path for local-source streaming results.
+3. Fixed issue where M3U subscription sources with empty attributes could not be processed.
+4. Improved access and automatic content normalization for GitHub-based subscription sources.
+5. Fixed localization/internationalization issue in GUI runtime progress display.
+
+</details>
+
 ## v2.0.0
 
 <div align="center">

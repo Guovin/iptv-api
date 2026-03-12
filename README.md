@@ -25,6 +25,9 @@
   <a href="https://hub.docker.com/repository/docker/guovern/iptv-api">
     <img src="https://img.shields.io/docker/pulls/guovern/iptv-api?label=Docker%20Pulls" />
   </a>
+  <a href="https://github.com/Guovin/iptv-api/stargazers">
+    <img src="https://img.shields.io/github/stars/guovin/iptv-api?label=Stars" />
+  </a>
   <a href="https://github.com/Guovin/iptv-api/fork">
     <img src="https://img.shields.io/github/forks/guovin/iptv-api?label=Forks" />
   </a>
@@ -65,12 +68,12 @@
 |:----------|:----:|:-------------------------------------------|
 | **自定义模板** |  ✅   | 生成自己想要的频道菜单                                |
 | **频道别名**  |  ✅   | 提升频道结果获取量与准确率，支持正则表达式                      |
-| **多源聚合**  |  ✅   | 本地源、订阅源                                    |
-| **推流**    |  ✅   | 改善弱网播放体验，支持浏览器直接播放                         |
+| **多源聚合**  |  ✅   | 本地源、订阅源（支持设置UA）                            |
+| **推流**    |  ✅   | 改善弱网播放体验，支持浏览器直接播放，自动转码适配                  |
 | **回放类接口** |  ✅   | 回放类接口的获取与生成                                |
 | **EPG**   |  ✅   | 获取并显示频道预告内容                                |
 | **频道台标**  |  ✅   | 自定义频道台标，支持本地添加或远程库                         |
-| **测速验效**  |  ✅   | 获取延迟、速率、分辨率，过滤无效接口，支持实时输出结果                |
+| **测速验效**  |  ✅   | 获取延迟、速率、分辨率、帧率，过滤无效接口，支持实时输出结果             |
 | **高级偏好**  |  ✅   | 速率、分辨率、黑/白名单、归属地与运营商自定义过滤                  |
 | **结果管理**  |  ✅   | 结果分类存储与访问、日志记录、未匹配频道记录、统计分析、冻结过滤/解冻回归、数据缓存 |
 | **定时任务**  |  ✅   | 定时或间隔执行更新                                  |
@@ -305,6 +308,8 @@ docker run -d -p 80:8080 guovern/iptv-api
 | /hls/ipv6/txt | 推流ipv6 txt接口 |
 | /hls/ipv6/m3u | 推流ipv6 m3u接口 |
 | /stat         | 推流状态统计接口     |
+
+[如何使用推流？](./docs/tutorial.md#推流使用教程)
 
 ## 更新日志
 

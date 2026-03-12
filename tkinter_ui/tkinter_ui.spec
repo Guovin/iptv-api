@@ -20,6 +20,7 @@ a = Analysis(
         ('../config/epg.txt', 'config'),
         ('../config/alias.txt', 'config'),
         ('../config/logo', 'config/logo'),
+        ('../locales', 'locales'),
         ('../utils/ip_checker/data/qqwry.ipdb', 'utils/ip_checker/data'),
         ('../utils/nginx-rtmp-win32', 'utils/nginx-rtmp-win32'),
         ('../static/images/alipay.jpg', 'static/images'),

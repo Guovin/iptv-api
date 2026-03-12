@@ -2,6 +2,8 @@ import datetime
 import os
 import sys
 
+from utils.ffmpeg import check_ffmpeg_installed_status
+
 sys.path.append(os.path.dirname(sys.path[0]))
 import tkinter as tk
 from tkinter import messagebox
@@ -19,7 +21,6 @@ from prefer import PreferUI
 from local import LocalUI
 from subscribe import SubscribeUI
 from epg import EpgUI
-from utils.speed import check_ffmpeg_installed_status
 import pystray
 from service.app import run_service
 
