@@ -23,7 +23,7 @@ log.setLevel(logging.ERROR)
 @app.route("/")
 def show_index():
     return get_result_file_content(
-        path=constants.hls_result_path if config.open_rtmp else config.final_file,
+        path=config.final_file,
         file_type="m3u" if config.open_m3u_result else "txt"
     )
 
@@ -113,7 +113,7 @@ def show_ipv4_m3u():
 @app.route("/ipv4")
 def show_ipv4_result():
     return get_result_file_content(
-        path=constants.hls_ipv4_result_path if config.open_rtmp else constants.ipv4_result_path,
+        path=constants.ipv4_result_path,
         file_type="m3u" if config.open_m3u_result else "txt"
     )
 
@@ -134,7 +134,7 @@ def show_ipv6_m3u():
 @app.route("/ipv6")
 def show_ipv6_result():
     return get_result_file_content(
-        path=constants.hls_ipv6_result_path if config.open_rtmp else constants.ipv6_result_path,
+        path=constants.ipv6_result_path,
         file_type="m3u" if config.open_m3u_result else "txt"
     )
 
@@ -160,7 +160,7 @@ def show_hls_ipv6_m3u():
 @app.route("/content")
 def show_content():
     return get_result_file_content(
-        path=constants.hls_result_path if config.open_rtmp else config.final_file,
+        path=config.final_file,
         file_type="m3u" if config.open_m3u_result else "txt",
         show_content=True
     )
@@ -294,11 +294,14 @@ def run_service():
             if config.open_rtmp and sys.platform == "win32":
                 start_rtmp_service()
             public_url = get_public_url()
-            base_api = f"{public_url}/hls" if config.open_rtmp else public_url
-            print(t("msg.statistic_log_path").format(path=f"{public_url}/log/statistic"))
-            print(t("msg.ipv4_api").format(api=f"{base_api}/ipv4"))
-            print(t("msg.ipv6_api").format(api=f"{base_api}/ipv6"))
-            print(t("msg.full_api").format(api=base_api))
+            mode = [t("name.direct_connection")]
+            if config.open_rtmp:
+                mode.append(t("name.push_streaming"))
+            for m in mode:
+                if m == t("name.push_streaming"):
+                    print(t("msg.rtmp_full_api").format(mode=m, api=f"{public_url}/hls"))
+                else:
+                    print(t("msg.full_api").format(mode=m, api=public_url))
             app.run(host="127.0.0.1", port=config.app_port)
     except Exception as e:
         print(t("msg.error_service_start_failed").format(info=e))
