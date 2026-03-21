@@ -10,6 +10,8 @@ name: 'Update schedule'
 # If scheduled execution is required, use other deployment methods.
 
 on:
+  push:
+    branches: [ master ]
   workflow_dispatch:
 
 jobs:
