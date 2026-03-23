@@ -1,0 +1,18 @@
+name: Proxy Trigger
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [ external_update ]
+
+jobs:
+  trigger_original:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Main Workflow
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # 使用 GitHub CLI 触发名为 "main.yml" 的工作流
+          # 注意：这要求 main.yml 必须已经存在于你的分支中
+          gh workflow run main.yml --ref master
