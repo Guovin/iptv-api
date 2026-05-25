@@ -1,5 +1,5 @@
 #EXTM3U x-tvg-url="http://qyong.site:1234/playback.xml" catchup="append" catchup-source="?playbackbegin=${(b)yyyyMMddHHmmss}&playbackend=${(e)yyyyMMddHHmmss}"
-#EXTINF:-1 tvg-logo="https://raw.githubusercontent.com/jn950/live/refs/heads/main/tvlogo/momo.png" group-title="MO测试",2026-05-24
+#EXTINF:-1 tvg-logo="https://raw.githubusercontent.com/jn950/live/refs/heads/main/tvlogo/momo.png" group-title="MO测试",2026-05-25
 http://my9.ltd/momo-480.mp4
 #EXTINF:-1 tvg-logo="http://raw.githubusercontent.com/jn950/live/refs/heads/main/tvlogo/2.png" group-title="MO测试",2
 http://120.209.208.163:9003/hls/2/index.m3u8
