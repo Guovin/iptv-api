@@ -24,12 +24,14 @@ jobs:
         id: vars
         run: echo "BRANCH_NAME=${{ github.repository_owner == 'Guovin' && 'gd' || 'master' }}" >> $GITHUB_ENV
 
-      - uses: actions/checkout@v3
+      # 修改1：checkout v3 -> v4
+      - uses: actions/checkout@v4
         with:
           ref: ${{ env.BRANCH_NAME }}
 
+      # 修改2：setup-python v4 -> v5，保留 pipenv 缓存写法
       - name: Run with setup-python 3.13
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.13'
           update-environment: true
@@ -82,10 +84,10 @@ jobs:
             git push --force
           fi
 
-      # 清理旧的 workflow 运行记录，只保留最近的 5 条
+      # 修改3：github-script v6 -> v7
       - name: Cleanup old workflow runs (keep only 5)
         if: always()
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           script: |
             const owner = context.repo.owner;
