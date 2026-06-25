@@ -250,6 +250,14 @@ class ConfigManager:
         return self.config.getboolean("Settings", "open_epg", fallback=True)
 
     @property
+    def catchup(self):
+        return self.config.get("Settings", "catchup", fallback="").strip()
+
+    @property
+    def catchup_source(self):
+        return self.config.get("Settings", "catchup_source", fallback="").strip()
+
+    @property
     def speed_test_limit(self):
         return self.config.getint("Settings", "speed_test_limit", fallback=5)
 

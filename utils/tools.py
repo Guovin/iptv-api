@@ -444,7 +444,15 @@ def convert_to_m3u(path=None, first_channel_name=None, data=None):
     """
     if os.path.exists(path):
         with open(path, "r", encoding="utf-8") as file:
-            m3u_output = f'#EXTM3U x-tvg-url="{get_epg_url()}"\n' if config.open_epg else "#EXTM3U\n"
+            # 构建 #EXTM3U 行的属性
+            extm3u_attrs = []
+            if config.open_epg:
+                extm3u_attrs.append(f'x-tvg-url="{get_epg_url()}"')
+            if config.catchup:
+                extm3u_attrs.append(f'catchup="{config.catchup}"')
+            if config.catchup_source:
+                extm3u_attrs.append(f'catchup-source="{config.catchup_source}"')
+            m3u_output = f'#EXTM3U {" ".join(extm3u_attrs)}\n' if extm3u_attrs else "#EXTM3U\n"
             current_group = None
             logo_url = get_logo_url()
             from_fanmingming = "https://raw.githubusercontent.com/fanmingming/live/main/tv" in logo_url
