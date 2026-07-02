@@ -6,19 +6,21 @@ CCTV-4,http://198.204.240.250:82/live/cctv4k.m3u8
 CCTV-5,http://112.27.235.94:8000/hls/5/index.m3u8
 CCTV-5+,http://ottproxy2.ist.ooo/livehls/MOB-U1-NO/03.m3u8
 CCTV-6,http://69.30.245.50/live/cctv6.m3u8
-CCTV-7,http://112.27.235.94:8000/hls/8/index.m3u8
+CCTV-7,http://74.91.26.218:82/live/cctv7hd.m3u8
 CCTV-8,http://198.204.240.250:82/live/cctv8k.m3u8
 CCTV-9,http://112.27.235.94:8000/hls/10/index.m3u8
 CCTV-10,http://74.91.26.218:82/live/cctv10hd.m3u8
 CCTV-11,http://74.91.26.218:82/live/cctv11hd.m3u8
-CCTV-12,http://112.27.235.94:8000/hls/13/index.m3u8
+CCTV-12,http://74.91.26.218:82/live/cctv12hd.m3u8
 CCTV-13,http://74.91.26.218:82/live/cctv13hd.m3u8
 CCTV-14,http://74.91.26.218:82/live/cctv14hd.m3u8
-CCTV-15,http://74.91.26.218:82/live/cctv15hd.m3u8
+CCTV-15,http://45.192.97.170:8880/play/16.m3u8
 CCTV-16,http://74.91.26.218:82/live/cctv16hd.m3u8
 CCTV-17,http://74.91.26.218:82/live/cctv17hd.m3u8
+CCTV4欧洲,http://45.192.97.170:8880/play/18.m3u8
+CCTV4美洲,http://45.192.97.170:8880/play/19.m3u8
 老故事,http://112.27.235.94:8000/hls/50/index.m3u8
-CGTN,https://amg00405-rakutentv-cgtn-rakuten-i9tar.amagi.tv/master.m3u8
+CGTN,http://217.20.112.199:8080/cgtn/index.m3u8
 CGTN纪录,https://english-livebkali.cgtn.com/live/doccgtn_0.m3u8
 CGTN记录,https://english-livetx.cgtn.com/hls/yypdjlctzb_hd.m3u8
 CGTN英语,https://english-livebkali.cgtn.com/live/encgtn_0.m3u8
@@ -33,12 +35,10 @@ CHC家庭影院,http://61.162.52.6:8088/newlive/live/hls/60/live.m3u8
 湖北卫视,http://112.27.235.94:8000/hls/41/index.m3u8
 黑龙江卫视,http://112.27.235.94:8000/hls/48/index.m3u8
 重庆卫视,http://112.27.235.94:8000/hls/36/index.m3u8
-东方卫视,http://bp-resource-dfl.bestv.cn/155/3/video.m3u8
 东南卫视,http://112.27.235.94:8000/hls/38/index.m3u8
 贵州卫视,http://112.27.235.94:8000/hls/46/index.m3u8
 河北卫视,http://112.27.235.94:8000/hls/39/index.m3u8
 河南卫视,http://112.27.235.94:8000/hls/37/index.m3u8
-吉林卫视,http://cssbyd.imwork.net:8082/hls/41/index.m3u8
 江苏卫视,http://112.27.235.94:8000/hls/32/index.m3u8
 江西卫视,http://112.27.235.94:8000/hls/44/index.m3u8
 辽宁卫视,http://112.27.235.94:8000/hls/47/index.m3u8
@@ -59,19 +59,16 @@ CHC家庭影院,http://61.162.52.6:8088/newlive/live/hls/60/live.m3u8
 延边2,http://stream5.jlntv.cn/wq/playlist.m3u8
 Bread TV面包台,https://video.bread-tv.com:8091/hls-live24/online/index.m3u8
 大立电视台,http://www.dalitv.com.tw:4568/live/dali/index.m3u8
-TVB星河,http://php.jdshipin.com/TVOD/iptv.php?id=xinghe
 桦甸,http://stream10.jlntv.cn/huadian/sd/live.m3u8?zjild
 浙江国际,https://ali-m-l.cztv.com/channels/lantian/channel010/1080p.m3u8
 人间卫视,http://61.216.67.119:1935/bltvhd/bltv1/chunklist_w1266569526.m3u
 深圳卫视,http://112.27.235.94:8000/hls/33/index.m3u8
-新闻综合,https://m3u8channel.yunxya.com/nmip-media/channellive/channel100028/playlist.m3u8
 福州少儿,http://live.zohi.tv/video/s10001-fztv-4/index.m3u8
 ☘️北京频道,#genre#
 北京卡酷少儿,http://218.13.170.98:9901/tsfile/live/1021_1.m3u8
 耀才财经,https://v3.mediacast.hk/webcast/bshdlive-pc/chunklist_w99771165.m3u8
 ☘️上海频道,#genre#
-江津新闻综合,http://222.179.155.21:1935/ch1.m3u8
-新纪实,http://bp-resource-dfl.bestv.cn/155/3/video.m3u8
+武义新闻综合,http://l.cztvcloud.com/channels/lantian/SXwuyi1/720p.m3u8
 普陀山,https://gcalic.v.myalicdn.com/gc/pts01_1/index.m3u8
 ☘️天津频道,#genre#
 天津卫视,http://112.27.235.94:8000/hls/42/index.m3u8
@@ -82,24 +79,21 @@ TVB星河,http://php.jdshipin.com/TVOD/iptv.php?id=xinghe
 荣昌综合 [Not 24/7],http://183.64.181.25:40023/rongchang01.m3u8
 江津新闻综合,http://222.179.155.21:1935/ch1.m3u8
 ☘️广东频道,#genre#
-东莞新闻综合,https://stream.sun0769.com/dgrtv1/mp4tv1_800/index.m3u8
-东莞生活资讯,https://stream.sun0769.com/dgrtv1/mp4tv2_800/index.m3u8
-南国都市,https://tencentplay.gztv.com/live/nanguodushi.m3u8?txSecret=550af55c0ea34ce492748481415b6dfa&txTime=1903e7b17de
+南国都市,http://tencentplay.gztv.com/live/nanguodushi.m3u8?txSecret=140110ae3d6c936a77f94c4f4d85b0d3&txTime=18d57929bd4
 广东卫视,http://112.27.235.94:8000/hls/30/index.m3u8
 广东大湾区,http://222.128.55.152:9080/live/dwq.m3u8
-广东少儿,http://gmxw.7766.org:808/hls/175/index.m3u8
 广州新闻,http://tencentplay.gztv.com/live/xinwen.m3u8?txSecret=d2c2db0b598c02ec1b5623728434d367&txTime=18d57929bd3
 泰山白云亭悬崖,https://gcalic.v.myalicdn.com/gc/hkts02_1/index.m3u8
 广州综合,http://tencentplay.gztv.com/live/zonghes.m3u8?txSecret=c8dbe86d6f86eb1a21999ab479fd5667&txTime=18d3c4690e8
 龙门飞甲,http://jsmov2.a.yximgs.com/bs3/video-hls/5203346449046555193_hlsb.m3u8
 ☘️浙江频道,#genre#
-浙江钱江,http://l.cztvcloud.com/channels/lantian/SXyuyao2/720p.m3u8
+浙江钱江,https://ali-m-l.cztv.com/channels/lantian/channel002/1080p.m3u8
 浙江经济生活,http://ali-m-l.cztv.com/channels/lantian/channel03/1080p.m3u8#https://ali-m-l.cztv.com/channels/lantian/channel003/1080p.m3u8#http://ali-m-l.cztv.com/channels/lantian/channel003/1080p.m3u8
 浙江教育,http://ali-m-l.cztv.com/channels/lantian/channel04/720p.m3u8
-浙江民生,http://ali-m-l.cztv.com/channels/lantian/channel006/1080p.m3u8
+浙江民生,https://ali-m-l.cztv.com/channels/lantian/channel006/1080p.m3u8
 浙江新闻,https://ali-m-l.cztv.com/channels/lantian/channel007/1080p.m3u8
-浙江少儿,http://ali-m-l.cztv.com/channels/lantian/channel008/1080p.m3u8
-浙江教科,http://ali-m-l.cztv.com/channels/lantian/channel004/1080p.m3u8
+浙江少儿,https://ali-m-l.cztv.com/channels/lantian/channel008/1080p.m3u8
+浙江教科,https://ali-m-l.cztv.com/channels/lantian/channel004/1080p.m3u8
 浙江经视,http://ali-m-l.cztv.com/channels/lantian/channel003/720p.m3u8
 浙江国际,https://ali-m-l.cztv.com/channels/lantian/channel010/1080p.m3u8
 之江纪录,https://ali-m-l.cztv.com/channels/lantian/channel012/1080p.m3u8
@@ -112,10 +106,7 @@ TVB星河,http://php.jdshipin.com/TVOD/iptv.php?id=xinghe
 湖州新闻综合,http://hzcm-live.media.hugd.com/3f5fa7d64c7c46a38c6bd8ad35e836cc/65128273761b4731ae53729ea6dcf932.m3u8?auth_key=2277598215-9d21c15111244bea8d298c361d31a72e-0-d031198f58d44b0e91ba2e3f3b188865
 湖州文化娱乐,http://hzcm-live.media.hugd.com/613c47f0ab0d4eaa98b21378d0db6ded/0051d31c9dd543a7825eea4e49675b2a.m3u8?auth_key=2277598059-0a5ebfa1c0dc4671b42a60810fc37039-0-fa625b7d1feab612062453c12e3c8887
 绍兴电视台公共,http://live.shaoxing.com.cn/video/s10001-sxtv2/index.m3u8?%E5%85%B3%E6%B3%A8%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%8F%B7[%E6%99%B4%E5%9B%AD]
-萧山生活,https://l.cztvcloud.com/channels/lantian/SXxiaoshan2/720p.m3u8
-萧山新闻综合,https://l.cztvcloud.com/channels/lantian/SXxiaoshan1/720p.m3u8
-苍南新闻综合,https://l.cztvcloud.com/channels/lantian/SXcangnan1/720p.m3u8
-诸暨新闻综合,https://l.cztvcloud.com/channels/lantian/SXzhuji3/720p.m3u8
+萧山生活频道,http://l.cztvcloud.com/channels/lantian/SXxiaoshan2/720p.m3u8?zzhed
 龙游生活娱乐,https://l.cztvcloud.com/channels/lantian/SXlongyou2/720p.m3u8
 龙泉新闻综合,http://l.cztvcloud.com/channels/lantian/SXlongquan1/720p.m3u8
 青田电视台,http://l.cztvcloud.com/channels/lantian/SXqingtian1/720p.m3u8
@@ -123,34 +114,16 @@ TVB星河,http://php.jdshipin.com/TVOD/iptv.php?id=xinghe
 象山综合,http://play-sh13.quklive.com/live/1702360350551252.m3u8?auth_key=2037107484-800189c57a5a44d3b823b60cf84f6756-0-a6f6828a62d5c167cff5e68735fa0d39
 缙云综合,http://l.cztvcloud.com/channels/lantian/SXjinyun1/720p.m3u8?zzhed
 缙云新闻综合,http://l.cztvcloud.com/channels/lantian/SXjinyun1/720p.m3u8
-海宁新闻综合,https://p2hs.vzan.com/slowlive/317913155078575177/live.m3u8
 洞头综合,http://l.cztvcloud.com/channels/lantian/SXdongtou1/720p.m3u8
 永嘉新闻综合,http://l.cztvcloud.com/channels/lantian/SXyongjia1/720p.m3u8
 武义新闻综合,http://l.cztvcloud.com/channels/lantian/SXwuyi1/720p.m3u8
-普陀电视台,https://l.cztvcloud.com/channels/lantian/SXputuo1/720p.m3u8
 新昌生活,http://l.cztvcloud.com/channels/lantian/SXxinchang2/720p.m3u8
-新昌新聞綜合 [Not 24/7],https://l.cztvcloud.com/channels/lantian/SXxinchang1/720p.m3u8
-文成综合,http://l.cztvcloud.com/channels/lantian/SXwencheng1/720p.m3u8?zzhed?
-文成新闻综合,http://l.cztvcloud.com/channels/lantian/SXwencheng1/720p.m3u8
-开化新闻综合,http://l.cztvcloud.com/channels/lantian/SXkaihua1/720p.m3u8?zzhed
-开化国家公园,http://l.cztvcloud.com/channels/lantian/SXkaihua2/720p.m3u8
-庆元综合,http://l.cztvcloud.com/channels/lantian/SXqingyuan1/720p.m3u8
-庆元新闻综合,http://l.cztvcloud.com/channels/lantian/SXqingyuan1/720p.m3u8?fbl=
-平湖民生休闲,http://l.cztvcloud.com/channels/lantian/SXpinghu2/720p.m3u8
-余姚新闻综合,https://l.cztvcloud.com/channels/lantian/SXyuyao1/720p.m3u8
 餘姚姚江文化 [Not 24/7],https://l.cztvcloud.com/channels/lantian/SXyuyao2/720p.m3u8
-义乌新闻综合,https://44911.hlsplay.aodianyun.com/tv_radio_44911/tv_channel_1796.m3u8?auth_key=4830573978-0-0-92824c2c03f95906a3c49a4aa28f1709&extra_key=Yc1XsmxOKy2UBoPM4Wy5vCPsEYqnj06taCR2SRB2Xrg2w28NPilH03KdIbbM5wgSql-VBohSnoO9AOKl94q2t2DWMftz-XB-2qUX-UjXcS80StcSZahBFjrKLivXaRjiY5r2NOMKWMKFbv-S0Bz2G6iEXgCK8yGjtrFHDcPfAQEE0pvXq0Bwy34b7We8zARN&ali_ffmpeg_version=mpengine
 中国蓝新闻,http://ali-m-l.cztv.com/channels/lantian/channel009/1080p.m3u8
-上虞1新闻综合 [Not 24/7],https://l.cztvcloud.com/channels/lantian/SXshangyu1/720p.m3u8
-上虞3新商都 [Not 24/7],https://l.cztvcloud.com/channels/lantian/SXshangyu3/720p.m3u8
-嵊州综合 [Not 24/7],https://l.cztvcloud.com/channels/lantian/SXshengzhou1/720p.m3u8
 ☘️江苏频道,#genre#
 南京教科,http://nklive.nbs.cn/hls/75b3c462-b831-4de7-a34b-5d3221db2069/index.m3u8
 南京新闻综合,http://nklive.nbs.cn/hls/d511bc9d-a694-4453-b3a2-4fc842cc97a1/index.m3u8
 南京玄武湖公园,https://gcalic.v.myalicdn.com/gc/xwh01_1/index.m3u8
-句容党建,http://jrlive.jrntv.com/live/_definst_/dangjians/playlist.m3u8?%E5%85%B3%E6%B3%A8%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%8F%B7[%E6%99%B4%E5%9B%AD]
-句容影院,http://jrlive.jrntv.com/live/_definst_/yingshis/chunklist_w1994429382.m3u8?zjiangsd
-句容生活,http://jrlive.jrntv.com/live/_definst_/shenghuos/playlist.m3u8?%E5%85%B3%E6%B3%A8%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%8F%B7[%E6%99%B4%E5%9B%AD]
 宜兴新闻,http://yixing-tv-ori-hls.jstv.com/yixing-tv-ori/yixing_xw.m3u8
 新沂新闻,http://live.xysrmt.cn/xwzh/sd/live.m3u8?zjiangsd"
 新沂生活,http://live.xysrmt.cn/shpd/sd/live.m3u8?zjiangsd
@@ -159,13 +132,6 @@ TVB星河,http://php.jdshipin.com/TVOD/iptv.php?id=xinghe
 靖宇,http://stream8.jlntv.cn/jytv/sd/live.m3u8?zjild
 江苏徐州云龙湖风景区云龙山观景台西,https://gcalic.v.myalicdn.com/gc/ylh04_1/index.m3u8
 武进生活,http://live.wjyanghu.com/live/CH2.m3u8
-苏州,https://live-auth.51kandianshi.com/szgd/csztv4k_hd.m3u8
-苏州文化生活,https://live-auth.51kandianshi.com/szgd/csztv3.m3u8
-苏州新闻综合,https://live-auth.51kandianshi.com/szgd/csztv1.m3u8
-苏州生活资讯,https://live-auth.51kandianshi.com/szgd/csztv5.m3u8
-苏州社会经济,https://live-auth.51kandianshi.com/szgd/csztv2.m3u8
-镇江二套社会民生,http://zjtv-wshls.homecdn.com/live/2aa16.m3u8
-镇江新闻综合,http://zjtv-wshls.homecdn.com/live/2aa50.m3u8
 靖江新闻綜合 [Not 24/7],http://visit.jjbctv.com:1935/live/xwzhmb/playlist.m3u8
 ☘️安徽频道,#genre#
 安徽导视,http://dspdhls.appcoo.com:8888/live/dspd/index.m3u8
@@ -173,7 +139,7 @@ TVB星河,http://php.jdshipin.com/TVOD/iptv.php?id=xinghe
 固镇新闻,http://www.guzhenm.com:7001/hls/hd-live.m3u8?%E5%85%B3%E6%B3%A8%E5%BE%AE%E4%BF%A1%E5%85%AC%E4%BC%97%E5%8F%B7[%E6%99%B4%E5%9B%AD]
 黄山,https://gcalic.v.myalicdn.com/gc/ahhs01_1/index.m3u8
 铜陵新闻综合,https://ls.qingting.fm/live/21303/64k.m3u8
-祁门综合,http://zbbf2.ahbztv.com/live/416.m3u8?zanhd
+广德生活,https://live.gdtv.ah.cn/live/newsTV.m3u8
 七台河新闻综合,http://live.qthnews.org.cn:1935/live/live1/800k/tzwj_video.m3u8
 亳州农村,http://zbbf2.ahbztv.com/live/418.m3u8
 RT News,https://rt-glb.rttv.com/dvr/rtnews/playlist_4500Kb.m3u8
@@ -193,7 +159,6 @@ RT News,https://rt-glb.rttv.com/dvr/rtnews/playlist_4500Kb.m3u8
 ☘️湖北频道,#genre#
 武汉一台新闻综合,https://ls.qingting.fm/live/20198/64k.m3u8
 江夏新闻综合,http://59.175.226.142:280/gb28181/xwzh.m3u8?zhubd
-荆门新闻综合,http://stream.jmtv.com.cn/xwzh/sd/live.m3u8
 ☘️湖南频道,#genre#
 CHC电影,http://183.237.95.108:9901/tsfile/live/1008_1.m3u8?key=txiptv&playlive=0&authid=0
 湖南卫视,http://112.27.235.94:8000/hls/31/index.m3u8
@@ -213,7 +178,6 @@ CHC电影,http://183.237.95.108:9901/tsfile/live/1008_1.m3u8?key=txiptv&playlive
 乐山大佛全景,https://gcalic.v.myalicdn.com/gc/lsdfgfl_1/index.m3u8
 乐至综合,http://175.155.106.72:89/live1/live1.m3u8?zsicd
 剑阁综合,https://m3u8.channel.dzsm.com/nmip-media/channellive/channel105549/playlist.m3u8
-名山综合,https://m3u8channel-bx.yunxya.com/nmip-media/channellive/channel104666/playlist.m3u8
 四川卫视,http://112.27.235.94:8000/hls/35/index.m3u8
 四川四姑娘山隆珠措,https://gcalic.v.myalicdn.com/gc/sgns02_1/index.m3u8
 四川峨眉山云海日出,https://gcalic.v.myalicdn.com/gc/emsarm_1/index.m3u8
@@ -223,54 +187,44 @@ CHC电影,http://183.237.95.108:9901/tsfile/live/1008_1.m3u8?key=txiptv&playlive
 朝天综合,https://m3u8.channel.dzsm.com/nmip-media/channellive/channel104601/playlist.m3u8
 荥经综合,https://file.ysxtv.cn/nmip-media/channellive/channel101492/playlist.m3u8
 都江堰鱼嘴,https://gcalic.v.myalicdn.com/gc/djyqyl1_1/index.m3u8
-雅安新闻综合,https://play.yunxya.com/channellive/xinwen.m3u8
 龙泉新闻综合,http://l.cztvcloud.com/channels/lantian/SXlongquan1/720p.m3u8
 ☘️贵州频道,#genre#
 安顺新闻,https://ls.qingting.fm/live/5022203/64k.m3u8
 贵州卫视,http://112.27.235.94:8000/hls/46/index.m3u8
 贵州省兴义市万峰林,https://gcalic.v.myalicdn.com/gc/xywfl_1/index.m3u8
 ☘️云南频道,#genre#
+丽江古城万古楼遥望玉龙雪山,https://gcalic.v.myalicdn.com/gc/ljgcwglytylxs_1/index.m3u8
 云南丽江玉龙雪山草甸,https://gcalic.v.myalicdn.com/gc/hkylxs06_1/index.m3u8
 云南丽江蓝月谷,https://gcalic.v.myalicdn.com/gc/ylxs12_1/index.m3u8
 云南卫视,http://112.27.235.94:8000/hls/40/index.m3u8
-云南娱乐,https://hwapi.yntv.net/62hdvf/q9vs1b.m3u8
 云南都市,https://hwapi.yntv.net/62hdvf/rjwt14.m3u8
 ☘️陕西频道,#genre#
 陕西卫视,http://112.27.235.94:8000/hls/43/index.m3u8
 黄龙,https://gcalic.v.myalicdn.com/gc/hlzycc_1/index.m3u8
 黄龙,https://gcalic.v.myalicdn.com/gc/hlzycc_1/index.m3u8
-新昌休闲影视 [Not 24/7],https://l.cztvcloud.com/channels/lantian/SXxinchang2/720p.m3u8
 ☘️甘肃频道,#genre#
 张掖七彩丹霞,https://gcalic.v.myalicdn.com/gc/zyqcdx01_1/index.m3u8
 ☘️青海频道,#genre#
 西宁新闻综合,https://liveout.xntv.tv/a65jur/96iln2.m3u8?zqinghd
 ☘️宁夏频道,#genre#
-普陀电视台,https://l.cztvcloud.com/channels/lantian/SXputuo1/720p.m3u8
 绍兴公共,http://live.shaoxing.com.cn/video/s10001-sxtv2/index.m3u8
 大立电视台,http://www.dalitv.com.tw:4568/live/dali/index.m3u8
 ☘️新疆频道,#genre#
-伊犁哈萨克,http://110.153.180.106:55555/out_3/index.m3u8
 伊犁经济法制,http://110.153.180.106:55555/out_4/index.m3u8
 伊犁维吾尔,http://110.153.180.106:55555/out_2/index.m3u8
-兵团五师双河新闻综合,http://liveout.btzx.com.cn/62ds9e/4nxdih.m3u8?fbl=
-可克达拉综合,http://file.loulannews.cn/nmip-media/channellive/channel103824/playlist.m3u8
 奎屯哈萨克语,http://218.84.12.186:8002/hls/main/playlist.m3u8?zxinjd
 奎屯汉语,http://218.84.12.186:8001/hls/main/playlist.m3u8?zxinjd
 新疆天山,http://gctxyc.liveplay.myqcloud.com/gc/xjtcdhsz_1/index.m3u8
 玛纳斯综合,http://218.84.127.245:1026/hls/main1/playlist.m3u8?zxinjd,
 伊犁维吾尔,http://110.153.180.106:55555/out_2/index.m3u8
-伊犁哈萨克,http://110.153.180.106:55555/out_3/index.m3u8
-兵团五师双河新闻综合,http://liveout.btzx.com.cn/62ds9e/4nxdih.m3u8?fbl=
 奎屯哈萨克语,http://218.84.12.186:8002/hls/main/playlist.m3u8?zxinjd
 ☘️内蒙古频道,#genre#
 内蒙古卫视,http://112.27.235.94:8000/hls/49/index.m3u8
 ☘️山西频道,#genre#
 万荣综合,http://60.222.246.220:19433/hls1.m3u8
 太谷新闻综合,https://p2.vzan.com/slowlive/596867413819827251/live.m3u8?zbid=1725814272&amp;tpid=1516989100&amp;type=0
-定襄综合,http://lbyzztfe.live.sxmty.com/live/hls/645ff4c60e0a49f0a203abbd73dd8be9/0720e665f10f48e98c9639f4f492fb4a-1.m3u8?zshanxd
 陕西卫视,http://112.27.235.94:8000/hls/43/index.m3u8
 长子综合,https://www.wxhcgbds.com:8081/channelTv/WXTV_1.m3u8?zshanxd
-平遥新闻综合,https://tntgjhjb.live.sxmty.com/live/hls/3a4585ac11ec4e1bb07b419101b370c3/baf63e2b313440c2a25d7859f9b73b05-1.m3u8?zshanxd
 ☘️辽宁频道,#genre#
 乌镇西市河,https://gcalic.v.myalicdn.com/gc/zjwzbblh_1/index.m3u8
 泰山太平岭,https://gcalic.v.myalicdn.com/gc/hkts09_1/index.m3u8
@@ -280,7 +234,6 @@ CHC电影,http://183.237.95.108:9901/tsfile/live/1008_1.m3u8?key=txiptv&playlive
 辽宁青少,http://dassby.qqff.top:99/live/辽宁教育青少/index.m3u8
 ☘️吉林频道,#genre#
 东丰,http://stream5.jlntv.cn/df/sd/live.m3u8?zjild
-九台综合,http://stream10.jlntv.cn/jiutaitv/sd/live.m3u8
 双辽,http://stream5.jlntv.cn/sl/sd/live.m3u8?zjild
 吉林市新闻综合 [Geo-blocked],https://stream2.jlntv.cn/jilin1/sd/live.m3u8
 德惠综合,http://stream11.jlntv.cn/dehuitv/sd/live.m3u8
@@ -307,7 +260,6 @@ CHC电影,http://183.237.95.108:9901/tsfile/live/1008_1.m3u8?key=txiptv&playlive
 哈尔滨娱乐,http://stream.hrbtv.net/ylpd/sd/live.m3u8?zheild
 哈尔滨影视,http://stream.hrbtv.net/yspd/sd/live.m3u8?zheild
 哈尔滨新闻综合,http://stream.hrbtv.net/xwzh/sd/live.m3u8?zheild
-哈尔滨生活,http://111.43.126.240:9003/hls/3/index.m3u8
 哈尔滨资讯,http://stream.hrbtv.net/zxpd/sd/live.m3u8
 哈尔滨都市咨询,http://stream.hrbtv.net/zxpd/sd/live.m3u8?zheild
 恒山悬空寺全景,https://gcalic.v.myalicdn.com/gc/hsxksqj_1/index.m3u8
@@ -316,7 +268,6 @@ CHC电影,http://183.237.95.108:9901/tsfile/live/1008_1.m3u8?key=txiptv&playlive
 黑龙江少儿,https://ls.qingting.fm/live/4972/64k.m3u8
 黑龙江新闻,https://ls.qingting.fm/live/4974/64k.m3u8
 ☘️河北频道,#genre#
-任丘综合,https://jwcdnqx.hebyun.com.cn/live/rqtv1/1500k/tzwj_video.m3u8
 平泉综合,https://jwcdnqx.hebyun.com.cn/live/pqzh/1500k/tzwj_video.m3u8
 昌黎综合,https://jwcdnqx.hebyun.com.cn/live/clzhpd/1500k/tzwj_video.m3u8
 河北,https://event.pull.hebtv.com:443/live/live101.m3u8
@@ -324,14 +275,10 @@ CHC电影,http://183.237.95.108:9901/tsfile/live/1008_1.m3u8?key=txiptv&playlive
 河北卫视,http://112.27.235.94:8000/hls/39/index.m3u8
 河北少儿,http://1.94.31.214/php/hebei.php?id=sekj
 河北影视,http://1.94.31.214/php/hebei.php?id=hbys
-河北经济,http://1.94.31.214/php/hebei.php?id=jjsh
-河北都市,http://1.94.31.214/php/hebei.php?id=hbds
-清河经济综艺,https://jwcdnqx.hebyun.com.cn/live/qinghe1/1500k/tzwj_video.m3u8
 滦平新闻,http://jwplay.hebyun.com.cn/live/LPTV001/1500k/tzwj_video.m3u8
 邢台生活,https://jwcdnqx.hebyun.com.cn/live/xtcsshpd/1500k/tzwj_video.m3u8
 邢台综合,https://jwplay.hebyun.com.cn:443/live/xtsrmtzs/1500k/tzwj_video.m3u8
 邯郸公共频道,https://jwcdnqx.hebyun.com.cn/live/hdgg/1500k/tzwj_video.m3u8
-邯郸新闻,https://jwcdnqx.hebyun.com.cn/live/hdxwzh/1500k/tzwj_video.m3u8
 邯郸科技教育,https://jwcdnqx.hebyun.com.cn/live/hdkj/1500k/tzwj_video.m3u8
 🌊港·澳·台,#genre#
 华丽翡翠台,http://php.jdshipin.com/TVOD/iptv.php?id=huali2
@@ -350,204 +297,795 @@ JOCX-DTV,https://fujitv4.mov3.co/hls/fujitv.m3u8
 JOEX-DTV,https://tvasahi.mov3.co/hls/tvasahi.m3u8
 JORX-DTV,https://tbs5.mov3.co/hls/tbs.m3u8
 
-# ========== 智能补充分类（经测速过滤） ==========
+# ========== 智能补充分类 ==========
 
-🎵 音乐频道,#genre#
-张茜42首经典,http://45.192.97.170:8880/play/5409.m3u8
-冷漠40首经典,http://45.192.97.170:8880/play/5425.m3u8
-云朵40首经典,http://45.192.97.170:8880/play/5432.m3u8
+📻 网络电台,#genre#
+亚洲经典,http://45.192.97.170:8880/play/5684.m3u8
+香港古典音乐,http://45.192.97.170:8880/play/5694.m3u8
+四川音乐,http://45.192.97.170:8880/play/5695.m3u8
+贵州音乐,http://45.192.97.170:8880/play/5696.m3u8
+湖北音乐,http://45.192.97.170:8880/play/5697.m3u8
+吉林音乐,http://45.192.97.170:8880/play/5698.m3u8
+江西音乐,http://45.192.97.170:8880/play/5699.m3u8
+山西音乐,http://45.192.97.170:8880/play/5700.m3u8
+福建音乐,http://45.192.97.170:8880/play/5701.m3u8
+河北音乐,http://45.192.97.170:8880/play/5702.m3u8
+浙江音乐,http://45.192.97.170:8880/play/5703.m3u8
+CRI环球资讯广播,http://45.192.97.170:8880/play/5704.m3u8
+CRI华语环球广播,http://45.192.97.170:8880/play/5705.m3u8
+CRI英语环球广播 China Plus Radio,http://45.192.97.170:8880/play/5706.m3u8
+CRI南海之声,http://45.192.97.170:8880/play/5707.m3u8
+CRI粤语国际,http://45.192.97.170:8880/play/5708.m3u8
+CNR中国之声,http://45.192.97.170:8880/play/5709.m3u8
+CNR经济之声,http://45.192.97.170:8880/play/5710.m3u8
+上海长三角之声,http://45.192.97.170:8880/play/5711.m3u8
+上海第一财经广播,http://45.192.97.170:8880/play/5712.m3u8
+江苏新闻综合广播,http://45.192.97.170:8880/play/5713.m3u8
+江苏文艺广播,http://45.192.97.170:8880/play/5714.m3u8
+江苏财经广播,http://45.192.97.170:8880/play/5715.m3u8
+安徽之声,http://45.192.97.170:8880/play/5716.m3u8
+安徽经济广播,http://45.192.97.170:8880/play/5718.m3u8
+安徽交通广播,http://45.192.97.170:8880/play/5719.m3u8
+安徽旅游广播·高速之声,http://45.192.97.170:8880/play/5720.m3u8
+安徽戏曲广播·动听995,http://45.192.97.170:8880/play/5721.m3u8
+安徽故事广播,http://45.192.97.170:8880/play/5722.m3u8
+湖北之声,http://45.192.97.170:8880/play/5723.m3u8
+福建都市广播·私家车987,http://45.192.97.170:8880/play/5725.m3u8
+江西都市广播,http://45.192.97.170:8880/play/5727.m3u8
+山东交通广播,http://45.192.97.170:8880/play/5728.m3u8
+山东体育休闲广播,http://45.192.97.170:8880/play/5729.m3u8
+山东经济广播,http://45.192.97.170:8880/play/5730.m3u8
+山东乡村广播,http://45.192.97.170:8880/play/5731.m3u8
+陕西交通广播,http://45.192.97.170:8880/play/5732.m3u8
+陕西经济广播·896汽车调频,http://45.192.97.170:8880/play/5733.m3u8
+浙江交通之声,http://45.192.97.170:8880/play/5740.m3u8
+浙江民生资讯广播,http://45.192.97.170:8880/play/5741.m3u8
+浙江城市之声,http://45.192.97.170:8880/play/5742.m3u8
+浙江旅游之声,http://45.192.97.170:8880/play/5743.m3u8
+宁波新闻综合广播,http://45.192.97.170:8880/play/5744.m3u8
+宁波交通广播,http://45.192.97.170:8880/play/5745.m3u8
+宁波经济广播,http://45.192.97.170:8880/play/5746.m3u8
+四川经济广播,http://45.192.97.170:8880/play/5747.m3u8
+四川文艺广播,http://45.192.97.170:8880/play/5748.m3u8
+四川旅游生活广播,http://45.192.97.170:8880/play/5749.m3u8
+四川交通广播,http://45.192.97.170:8880/play/5750.m3u8
+四川综合广播四川之声,http://45.192.97.170:8880/play/5751.m3u8
+四川私家车广播,http://45.192.97.170:8880/play/5752.m3u8
+贵州经济广播,http://45.192.97.170:8880/play/5753.m3u8
+贵州旅游广播,http://45.192.97.170:8880/play/5754.m3u8
+贵州故事广播,http://45.192.97.170:8880/play/5755.m3u8
+贵州综合广播,http://45.192.97.170:8880/play/5756.m3u8
+延边文艺生活广播,http://45.192.97.170:8880/play/5757.m3u8
+辽宁经济广播,http://45.192.97.170:8880/play/5760.m3u8
+辽宁交通广播,http://45.192.97.170:8880/play/5761.m3u8
+黑龙江都市女性广播,http://45.192.97.170:8880/play/5762.m3u8
+黑龙江高校广播,http://45.192.97.170:8880/play/5763.m3u8
+黑龙江老年少儿广播·爱家调频,http://45.192.97.170:8880/play/5764.m3u8
+黑龙江朝鲜语广播,http://45.192.97.170:8880/play/5765.m3u8
+内蒙古农村牧区广播绿野之声,http://45.192.97.170:8880/play/5766.m3u8
+内蒙古新闻广播,http://45.192.97.170:8880/play/5767.m3u8
+内蒙古经济生活广播,http://45.192.97.170:8880/play/5768.m3u8
+内蒙古评书曲艺广播,http://45.192.97.170:8880/play/5769.m3u8
+内蒙古蒙语对外广播草原之声,http://45.192.97.170:8880/play/5770.m3u8
+内蒙古蒙语新闻综合广播,http://45.192.97.170:8880/play/5771.m3u8
+锡林郭勒汉语广播,http://45.192.97.170:8880/play/5772.m3u8
+锡林郭勒蒙语广播,http://45.192.97.170:8880/play/5773.m3u8
+阿拉善汉语广播,http://45.192.97.170:8880/play/5774.m3u8
+阿拉善蒙语广播,http://45.192.97.170:8880/play/5775.m3u8
+呼伦贝尔汉语广播,http://45.192.97.170:8880/play/5776.m3u8
+新疆私家车广播,http://45.192.97.170:8880/play/5778.m3u8
+甘肃经济广播,http://45.192.97.170:8880/play/5779.m3u8
+广西北部湾之声,http://45.192.97.170:8880/play/5782.m3u8
+云南新闻广播,http://45.192.97.170:8880/play/5784.m3u8
+云南经济广播·私家车电台,http://45.192.97.170:8880/play/5785.m3u8
+云南交通之声,http://45.192.97.170:8880/play/5786.m3u8
+宁夏经济广播,http://45.192.97.170:8880/play/5791.m3u8
+宁夏旅游广播,http://45.192.97.170:8880/play/5793.m3u8
+青海新闻综合广播,http://45.192.97.170:8880/play/5794.m3u8
+青海经济广播,http://45.192.97.170:8880/play/5795.m3u8
+开州之声,http://45.192.97.170:8880/play/5796.m3u8
+NPR·KJZZ,http://45.192.97.170:8880/play/5797.m3u8
+NPR·WBEZ,http://45.192.97.170:8880/play/5798.m3u8
+NPR·KQED,http://45.192.97.170:8880/play/5801.m3u8
+CRI HIT FM,http://45.192.97.170:8880/play/5802.m3u8
+CRI HIT FM,http://45.192.97.170:8880/play/5803.m3u8
+陕西音乐广播,http://45.192.97.170:8880/play/5804.m3u8
+陕西青少广播·好听1055,http://45.192.97.170:8880/play/5805.m3u8
+山东音乐广播,http://45.192.97.170:8880/play/5806.m3u8
+山东经典音乐广播,http://45.192.97.170:8880/play/5807.m3u8
+内蒙古音乐之声,http://45.192.97.170:8880/play/5811.m3u8
+湖北经典音乐广播,http://45.192.97.170:8880/play/5812.m3u8
+甘肃青春调频,http://45.192.97.170:8880/play/5813.m3u8
+甘肃都市调频,http://45.192.97.170:8880/play/5814.m3u8
+广西音乐广播,http://45.192.97.170:8880/play/5815.m3u8
+广西经济广播·女主播电台,http://45.192.97.170:8880/play/5816.m3u8
+云南音乐广播,http://45.192.97.170:8880/play/5817.m3u8
+四川城市之音,http://45.192.97.170:8880/play/5818.m3u8
+四川岷江音乐,http://45.192.97.170:8880/play/5819.m3u8
+楚天音乐广播,http://45.192.97.170:8880/play/5820.m3u8
+江苏音乐广播,http://45.192.97.170:8880/play/5821.m3u8
+江苏经典流行音乐广播,http://45.192.97.170:8880/play/5822.m3u8
+浙江音乐调频·动听968,http://45.192.97.170:8880/play/5823.m3u8
+河北音乐广播,http://45.192.97.170:8880/play/5824.m3u8
+深圳飞扬971,http://45.192.97.170:8880/play/5826.m3u8
+深圳生活942,http://45.192.97.170:8880/play/5827.m3u8
+海南音乐广播,http://45.192.97.170:8880/play/5828.m3u8
+贵州音乐广播,http://45.192.97.170:8880/play/5829.m3u8
+贵州都市广播,http://45.192.97.170:8880/play/5830.m3u8
+宁夏音乐广播,http://45.192.97.170:8880/play/5831.m3u8
+黑龙江音乐广播,http://45.192.97.170:8880/play/5834.m3u8
+CGTN Radio,http://45.192.97.170:8880/play/5839.m3u8
+长三角之声,http://45.192.97.170:8880/play/5840.m3u8
+第一财经广播,http://45.192.97.170:8880/play/5841.m3u8
+AsiaFM 亚洲经典,http://45.192.97.170:8880/play/5842.m3u8
+AsiaFM 亚洲天空,http://45.192.97.170:8880/play/5843.m3u8
+湖北农村广播,http://45.192.97.170:8880/play/5845.m3u8
+万州综合广播,http://45.192.97.170:8880/play/5846.m3u8
+万州交通广播,http://45.192.97.170:8880/play/5847.m3u8
+四川新闻广播,http://45.192.97.170:8880/play/5848.m3u8
+河南农村广播大象资讯台,http://45.192.97.170:8880/play/5849.m3u8
+北京经典969,http://45.192.97.170:8880/play/5850.m3u8
+深圳飞扬971,http://45.192.97.170:8880/play/5851.m3u8
+深圳生活942,http://45.192.97.170:8880/play/5852.m3u8
+青岛音乐体育广播,http://45.192.97.170:8880/play/5853.m3u8
+北京新闻,http://45.192.97.170:8880/play/5855.m3u8
+北京文艺,http://45.192.97.170:8880/play/5856.m3u8
+北京科教,http://45.192.97.170:8880/play/5857.m3u8
+北京影视,http://45.192.97.170:8880/play/5858.m3u8
+北京财经,http://45.192.97.170:8880/play/5859.m3u8
+北京生活,http://45.192.97.170:8880/play/5860.m3u8
+第一财经,http://45.192.97.170:8880/play/5861.m3u8
+湖南潇湘之声,http://45.192.97.170:8880/play/5862.m3u8
+湖南经济广播,http://45.192.97.170:8880/play/5863.m3u8
+湖南旅游广播·PoPoPod播客电台,http://45.192.97.170:8880/play/5864.m3u8
+湖南交通广播,http://45.192.97.170:8880/play/5865.m3u8
+湖南金鹰之声,http://45.192.97.170:8880/play/5866.m3u8
+湖南综合广播,http://45.192.97.170:8880/play/5867.m3u8
+江苏故事广播,http://45.192.97.170:8880/play/5868.m3u8
+江苏新闻综合广播,http://45.192.97.170:8880/play/5869.m3u8
+江苏新闻广播,http://45.192.97.170:8880/play/5870.m3u8
+江苏文艺广播,http://45.192.97.170:8880/play/5871.m3u8
+江苏金陵之声,http://45.192.97.170:8880/play/5872.m3u8
+江苏交通广播,http://45.192.97.170:8880/play/5873.m3u8
+安徽交通广播,http://45.192.97.170:8880/play/5878.m3u8
+安徽旅游广播·高速之声,http://45.192.97.170:8880/play/5879.m3u8
+安徽戏曲广播·动听995,http://45.192.97.170:8880/play/5880.m3u8
+安徽故事广播,http://45.192.97.170:8880/play/5881.m3u8
+湖北之声,http://45.192.97.170:8880/play/5882.m3u8
+楚天交通广播,http://45.192.97.170:8880/play/5883.m3u8
+湖北亲子广播,http://45.192.97.170:8880/play/5884.m3u8
+湖北生活广播,http://45.192.97.170:8880/play/5885.m3u8
+湖北城市之声,http://45.192.97.170:8880/play/5886.m3u8
+湖北资讯广播,http://45.192.97.170:8880/play/5887.m3u8
+河北文艺广播,http://45.192.97.170:8880/play/5888.m3u8
+河北交通广播,http://45.192.97.170:8880/play/5890.m3u8
+福建新闻广播,http://45.192.97.170:8880/play/5893.m3u8
+福建都市广播·私家车987,http://45.192.97.170:8880/play/5894.m3u8
+福建交通广播,http://45.192.97.170:8880/play/5895.m3u8
+福建经济广播,http://45.192.97.170:8880/play/5896.m3u8
+福建东南广播,http://45.192.97.170:8880/play/5897.m3u8
+江西综合新闻广播,http://45.192.97.170:8880/play/5898.m3u8
+江西信息交通广播,http://45.192.97.170:8880/play/5900.m3u8
+江西农村广播·绿色985,http://45.192.97.170:8880/play/5902.m3u8
+山东交通广播,http://45.192.97.170:8880/play/5903.m3u8
+山东体育休闲广播,http://45.192.97.170:8880/play/5904.m3u8
+山东经济广播,http://45.192.97.170:8880/play/5905.m3u8
+山东乡村广播,http://45.192.97.170:8880/play/5906.m3u8
+陕西交通广播,http://45.192.97.170:8880/play/5907.m3u8
+陕西经济广播·896汽车调频,http://45.192.97.170:8880/play/5908.m3u8
+陕西都市广播·陕广新闻,http://45.192.97.170:8880/play/5909.m3u8
+陕西农村广播,http://45.192.97.170:8880/play/5910.m3u8
+陕西戏曲广播,http://45.192.97.170:8880/play/5911.m3u8
+陕西新闻广播,http://45.192.97.170:8880/play/5912.m3u8
+浙江之声,http://45.192.97.170:8880/play/5913.m3u8
+浙江经济广播,http://45.192.97.170:8880/play/5914.m3u8
+浙江交通之声,http://45.192.97.170:8880/play/5915.m3u8
+浙江民生资讯广播,http://45.192.97.170:8880/play/5916.m3u8
+浙江城市之声,http://45.192.97.170:8880/play/5917.m3u8
+浙江旅游之声,http://45.192.97.170:8880/play/5918.m3u8
+重庆都市广播·私家车938,http://45.192.97.170:8880/play/5919.m3u8
+广东新闻广播,http://45.192.97.170:8880/play/5920.m3u8
+广东城市之声,http://45.192.97.170:8880/play/5923.m3u8
+广东南粤之声,http://45.192.97.170:8880/play/5924.m3u8
+珠江经济台,http://45.192.97.170:8880/play/5925.m3u8
+南方生活广播,http://45.192.97.170:8880/play/5926.m3u8
+羊城交通广播,http://45.192.97.170:8880/play/5927.m3u8
+深圳交通广播,http://45.192.97.170:8880/play/5928.m3u8
+海南新闻广播,http://45.192.97.170:8880/play/5929.m3u8
+海南交通广播,http://45.192.97.170:8880/play/5930.m3u8
+四川经济广播,http://45.192.97.170:8880/play/5931.m3u8
+四川文艺广播,http://45.192.97.170:8880/play/5932.m3u8
+四川交通广播,http://45.192.97.170:8880/play/5933.m3u8
+四川综合广播四川之声,http://45.192.97.170:8880/play/5934.m3u8
+四川私家车广播,http://45.192.97.170:8880/play/5935.m3u8
+贵州经济广播,http://45.192.97.170:8880/play/5936.m3u8
+贵州旅游广播,http://45.192.97.170:8880/play/5937.m3u8
+贵州故事广播,http://45.192.97.170:8880/play/5938.m3u8
+贵州综合广播,http://45.192.97.170:8880/play/5939.m3u8
+河南新闻广播,http://45.192.97.170:8880/play/5940.m3u8
+河南经济广播,http://45.192.97.170:8880/play/5941.m3u8
+河南戏曲广播,http://45.192.97.170:8880/play/5942.m3u8
+河南教育广播,http://45.192.97.170:8880/play/5943.m3u8
+河南信息广播,http://45.192.97.170:8880/play/5944.m3u8
+吉林新闻综合广播,http://45.192.97.170:8880/play/5945.m3u8
+吉林交通广播,http://45.192.97.170:8880/play/5946.m3u8
+吉林乡村广播,http://45.192.97.170:8880/play/5947.m3u8
+延边新闻广播,http://45.192.97.170:8880/play/5948.m3u8
+辽宁之声,http://45.192.97.170:8880/play/5949.m3u8
+辽宁乡村广播,http://45.192.97.170:8880/play/5950.m3u8
+辽宁经济广播,http://45.192.97.170:8880/play/5951.m3u8
+黑龙江交通广播,http://45.192.97.170:8880/play/5954.m3u8
+黑龙江都市女性广播,http://45.192.97.170:8880/play/5955.m3u8
+黑龙江高校广播,http://45.192.97.170:8880/play/5956.m3u8
+黑龙江老年少儿广播·爱家调频,http://45.192.97.170:8880/play/5957.m3u8
+黑龙江乡村广播,http://45.192.97.170:8880/play/5958.m3u8
+黑龙江朝鲜语广播,http://45.192.97.170:8880/play/5959.m3u8
+内蒙古农村牧区广播绿野之声,http://45.192.97.170:8880/play/5960.m3u8
+内蒙古新闻广播,http://45.192.97.170:8880/play/5961.m3u8
+内蒙古经济生活广播,http://45.192.97.170:8880/play/5962.m3u8
+内蒙古评书曲艺广播,http://45.192.97.170:8880/play/5963.m3u8
+内蒙古蒙语对外广播草原之声,http://45.192.97.170:8880/play/5964.m3u8
+内蒙古蒙语新闻综合广播,http://45.192.97.170:8880/play/5965.m3u8
+锡林郭勒汉语广播,http://45.192.97.170:8880/play/5966.m3u8
+锡林郭勒蒙语广播,http://45.192.97.170:8880/play/5967.m3u8
+阿拉善汉语广播,http://45.192.97.170:8880/play/5968.m3u8
+阿拉善蒙语广播,http://45.192.97.170:8880/play/5969.m3u8
+呼伦贝尔汉语广播,http://45.192.97.170:8880/play/5970.m3u8
+呼伦贝尔蒙语广播,http://45.192.97.170:8880/play/5971.m3u8
+新疆新闻广播,http://45.192.97.170:8880/play/5972.m3u8
+新疆交通广播,http://45.192.97.170:8880/play/5973.m3u8
+新疆私家车广播,http://45.192.97.170:8880/play/5974.m3u8
+新疆绿色广播,http://45.192.97.170:8880/play/5975.m3u8
+西藏都市生活广播,http://45.192.97.170:8880/play/5976.m3u8
+西藏汉语广播,http://45.192.97.170:8880/play/5978.m3u8
+西藏藏语广播,http://45.192.97.170:8880/play/5979.m3u8
+广西交通广播,http://45.192.97.170:8880/play/5983.m3u8
+云南新闻广播,http://45.192.97.170:8880/play/5984.m3u8
+云南经济广播·私家车电台,http://45.192.97.170:8880/play/5985.m3u8
+云南交通之声,http://45.192.97.170:8880/play/5986.m3u8
+云南旅游广播·香格里拉之声,http://45.192.97.170:8880/play/5987.m3u8
+云南教育广播·知道分子,http://45.192.97.170:8880/play/5990.m3u8
+宁夏经济广播,http://45.192.97.170:8880/play/5991.m3u8
+宁夏旅游广播,http://45.192.97.170:8880/play/5992.m3u8
+青海新闻综合广播,http://45.192.97.170:8880/play/5993.m3u8
+青海经济广播,http://45.192.97.170:8880/play/5994.m3u8
+安徽音乐广播,http://45.192.97.170:8880/play/5995.m3u8
+陕西青少广播·好听1055,http://45.192.97.170:8880/play/5996.m3u8
+CRI HIT FM,http://45.192.97.170:8880/play/6000.m3u8
+江西音乐广播,http://45.192.97.170:8880/play/6001.m3u8
+内蒙古音乐之声,http://45.192.97.170:8880/play/6002.m3u8
+湖北经典音乐广播,http://45.192.97.170:8880/play/6003.m3u8
+广西音乐广播,http://45.192.97.170:8880/play/6004.m3u8
+广西经济广播·女主播电台,http://45.192.97.170:8880/play/6005.m3u8
+云南音乐广播,http://45.192.97.170:8880/play/6006.m3u8
+四川城市之音,http://45.192.97.170:8880/play/6007.m3u8
+楚天音乐广播,http://45.192.97.170:8880/play/6009.m3u8
+
+🎤 韩国女团,#genre#
+歌团★021,http://45.192.97.170:8880/play/5526.m3u8
+歌团★022,http://45.192.97.170:8880/play/5527.m3u8
+歌团★023,http://45.192.97.170:8880/play/5528.m3u8
+歌团★024,http://45.192.97.170:8880/play/5529.m3u8
+歌团★026,http://45.192.97.170:8880/play/5530.m3u8
+歌团★027,http://45.192.97.170:8880/play/5531.m3u8
+歌团★029,http://45.192.97.170:8880/play/5532.m3u8
+歌团★030,http://45.192.97.170:8880/play/5533.m3u8
+歌团★031,http://45.192.97.170:8880/play/5534.m3u8
+歌团★033,http://45.192.97.170:8880/play/5535.m3u8
+歌团★034,http://45.192.97.170:8880/play/5536.m3u8
+歌团★035,http://45.192.97.170:8880/play/5537.m3u8
+歌团★036,http://45.192.97.170:8880/play/5538.m3u8
+歌团★037,http://45.192.97.170:8880/play/5539.m3u8
+歌团★038,http://45.192.97.170:8880/play/5540.m3u8
+歌团★042,http://45.192.97.170:8880/play/5541.m3u8
+歌团★043,http://45.192.97.170:8880/play/5542.m3u8
+歌团★045,http://45.192.97.170:8880/play/5543.m3u8
+歌团★048,http://45.192.97.170:8880/play/5544.m3u8
+歌团★049,http://45.192.97.170:8880/play/5545.m3u8
+歌团★050,http://45.192.97.170:8880/play/5546.m3u8
+歌团★051,http://45.192.97.170:8880/play/5547.m3u8
+歌团★052,http://45.192.97.170:8880/play/5548.m3u8
+歌团★053,http://45.192.97.170:8880/play/5549.m3u8
+歌团★054,http://45.192.97.170:8880/play/5550.m3u8
+歌团★056,http://45.192.97.170:8880/play/5551.m3u8
+歌团★057,http://45.192.97.170:8880/play/5552.m3u8
+歌团★058,http://45.192.97.170:8880/play/5553.m3u8
+歌团★059,http://45.192.97.170:8880/play/5554.m3u8
+歌团★060,http://45.192.97.170:8880/play/5555.m3u8
+歌团★061,http://45.192.97.170:8880/play/5556.m3u8
+歌团★062,http://45.192.97.170:8880/play/5557.m3u8
+歌团★064,http://45.192.97.170:8880/play/5558.m3u8
+歌团★065,http://45.192.97.170:8880/play/5559.m3u8
+歌团★066,http://45.192.97.170:8880/play/5560.m3u8
+歌团★067,http://45.192.97.170:8880/play/5561.m3u8
+歌团★068,http://45.192.97.170:8880/play/5562.m3u8
+歌团★069,http://45.192.97.170:8880/play/5563.m3u8
+歌团★070,http://45.192.97.170:8880/play/5564.m3u8
+歌团★071,http://45.192.97.170:8880/play/5565.m3u8
+歌团★072,http://45.192.97.170:8880/play/5566.m3u8
+歌团★074,http://45.192.97.170:8880/play/5567.m3u8
+歌团★075,http://45.192.97.170:8880/play/5568.m3u8
+歌团★076,http://45.192.97.170:8880/play/5569.m3u8
+歌团★078,http://45.192.97.170:8880/play/5570.m3u8
+歌团★079,http://45.192.97.170:8880/play/5571.m3u8
+歌团★080,http://45.192.97.170:8880/play/5572.m3u8
+歌团★081,http://45.192.97.170:8880/play/5573.m3u8
+歌团★082,http://45.192.97.170:8880/play/5574.m3u8
+歌团★083,http://45.192.97.170:8880/play/5575.m3u8
+歌团★084,http://45.192.97.170:8880/play/5576.m3u8
+歌团★085,http://45.192.97.170:8880/play/5577.m3u8
+歌团★086,http://45.192.97.170:8880/play/5578.m3u8
+歌团★087,http://45.192.97.170:8880/play/5579.m3u8
+歌团★088,http://45.192.97.170:8880/play/5580.m3u8
+歌团★090,http://45.192.97.170:8880/play/5581.m3u8
+歌团★092,http://45.192.97.170:8880/play/5582.m3u8
+歌团★093,http://45.192.97.170:8880/play/5583.m3u8
+歌团★094,http://45.192.97.170:8880/play/5584.m3u8
+歌团★095,http://45.192.97.170:8880/play/5585.m3u8
+歌团★096,http://45.192.97.170:8880/play/5586.m3u8
+歌团★097,http://45.192.97.170:8880/play/5587.m3u8
+歌团★098,http://45.192.97.170:8880/play/5588.m3u8
+歌团★099,http://45.192.97.170:8880/play/5589.m3u8
+歌团★100,http://45.192.97.170:8880/play/5590.m3u8
+歌团★101,http://45.192.97.170:8880/play/5591.m3u8
+歌团★102,http://45.192.97.170:8880/play/5592.m3u8
+歌团★103,http://45.192.97.170:8880/play/5593.m3u8
+歌团★104,http://45.192.97.170:8880/play/5594.m3u8
+歌团★105,http://45.192.97.170:8880/play/5595.m3u8
+歌团★106,http://45.192.97.170:8880/play/5596.m3u8
+歌团★107,http://45.192.97.170:8880/play/5597.m3u8
+歌团★108,http://45.192.97.170:8880/play/5598.m3u8
+歌团★109,http://45.192.97.170:8880/play/5599.m3u8
+歌团★110,http://45.192.97.170:8880/play/5600.m3u8
+歌团★111,http://45.192.97.170:8880/play/5601.m3u8
+歌团★112,http://45.192.97.170:8880/play/5602.m3u8
+歌团★113,http://45.192.97.170:8880/play/5603.m3u8
+歌团★114,http://45.192.97.170:8880/play/5604.m3u8
+歌团★116,http://45.192.97.170:8880/play/5605.m3u8
+歌团★118,http://45.192.97.170:8880/play/5606.m3u8
+歌团★119,http://45.192.97.170:8880/play/5607.m3u8
+歌团★120,http://45.192.97.170:8880/play/5608.m3u8
+歌团★121,http://45.192.97.170:8880/play/5609.m3u8
+歌团★122,http://45.192.97.170:8880/play/5610.m3u8
+歌团★123,http://45.192.97.170:8880/play/5611.m3u8
+歌团★125,http://45.192.97.170:8880/play/5612.m3u8
+歌团★126,http://45.192.97.170:8880/play/5613.m3u8
+歌团★127,http://45.192.97.170:8880/play/5614.m3u8
+歌团★128,http://45.192.97.170:8880/play/5615.m3u8
+歌团★129,http://45.192.97.170:8880/play/5616.m3u8
+歌团★130,http://45.192.97.170:8880/play/5617.m3u8
+歌团★131,http://45.192.97.170:8880/play/5618.m3u8
+歌团★133,http://45.192.97.170:8880/play/5619.m3u8
+歌团★134,http://45.192.97.170:8880/play/5620.m3u8
+歌团★135,http://45.192.97.170:8880/play/5621.m3u8
+歌团★136,http://45.192.97.170:8880/play/5622.m3u8
+歌团★137,http://45.192.97.170:8880/play/5623.m3u8
+歌团★138,http://45.192.97.170:8880/play/5624.m3u8
+歌团★139,http://45.192.97.170:8880/play/5625.m3u8
+歌团★140,http://45.192.97.170:8880/play/5626.m3u8
+歌团★141,http://45.192.97.170:8880/play/5627.m3u8
+歌团★142,http://45.192.97.170:8880/play/5628.m3u8
+歌团★143,http://45.192.97.170:8880/play/5629.m3u8
+歌团★145,http://45.192.97.170:8880/play/5630.m3u8
+歌团★146,http://45.192.97.170:8880/play/5631.m3u8
+歌团★147,http://45.192.97.170:8880/play/5632.m3u8
+歌团★148,http://45.192.97.170:8880/play/5633.m3u8
+歌团★149,http://45.192.97.170:8880/play/5634.m3u8
+歌团★150,http://45.192.97.170:8880/play/5635.m3u8
+歌团★151,http://45.192.97.170:8880/play/5636.m3u8
+歌团★152,http://45.192.97.170:8880/play/5637.m3u8
+歌团★153,http://45.192.97.170:8880/play/5638.m3u8
+
+🎬 电影频道,#genre#
+鬼妇2：村庄,http://45.192.97.170:8880/play/5174.m3u8
+生死排爆,http://45.192.97.170:8880/play/5175.m3u8
+海底潜伏,http://45.192.97.170:8880/play/5176.m3u8
+抗倭传奇,http://45.192.97.170:8880/play/5177.m3u8
+阿糠,http://45.192.97.170:8880/play/5179.m3u8
+死命必达,http://45.192.97.170:8880/play/5180.m3u8
+苍月,http://45.192.97.170:8880/play/5181.m3u8
+深山狙击,http://45.192.97.170:8880/play/5182.m3u8
+寂静之夜,http://45.192.97.170:8880/play/5183.m3u8
+双龙会,http://45.192.97.170:8880/play/5185.m3u8
+黄飞鸿之狮王争霸,http://45.192.97.170:8880/play/5186.m3u8
+黄飞鸿之男儿当自强,http://45.192.97.170:8880/play/5187.m3u8
+警察故事,http://45.192.97.170:8880/play/5188.m3u8
+赌侠2之上海滩赌圣,http://45.192.97.170:8880/play/5189.m3u8
+镖行天下之牡丹阁,http://45.192.97.170:8880/play/5191.m3u8
+叶问：终极一战,http://45.192.97.170:8880/play/5192.m3u8
+消失的凶手,http://45.192.97.170:8880/play/5193.m3u8
+香江花月夜,http://45.192.97.170:8880/play/5194.m3u8
+绝代双骄,http://45.192.97.170:8880/play/5195.m3u8
+武林外传,http://45.192.97.170:8880/play/5196.m3u8
+新上海滩,http://45.192.97.170:8880/play/5197.m3u8
+生财有道,http://45.192.97.170:8880/play/5198.m3u8
+建党伟业,http://45.192.97.170:8880/play/5199.m3u8
+午夜43路,http://45.192.97.170:8880/play/5200.m3u8
+红高粱,http://45.192.97.170:8880/play/5201.m3u8
+内当家,http://45.192.97.170:8880/play/5202.m3u8
+长安道,http://45.192.97.170:8880/play/5203.m3u8
+芙蓉镇,http://45.192.97.170:8880/play/5204.m3u8
+战狼,http://45.192.97.170:8880/play/5205.m3u8
+
+🎬 动漫频道,#genre#
+反叛的鲁路修,http://45.192.97.170:8880/play/1604.m3u8
+超自然武装当哒当,http://45.192.97.170:8880/play/1605.m3u8
+新世纪福音战士,http://45.192.97.170:8880/play/1606.m3u8
+足球小将,http://45.192.97.170:8880/play/1607.m3u8
+轻羽飞扬,http://45.192.97.170:8880/play/1608.m3u8
+虫师,http://45.192.97.170:8880/play/1609.m3u8
+魔神英雄传,http://45.192.97.170:8880/play/1610.m3u8
+埋堆堆直播1,http://45.192.97.170:8880/play/1611.m3u8
+埋堆堆直播2,http://45.192.97.170:8880/play/1612.m3u8
+国产动漫系列,http://45.192.97.170:8880/play/1613.m3u8
+
+🔥 热门歌曲,#genre#
 汪明荃30首经典,http://45.192.97.170:8880/play/5407.m3u8
-刘若英42首经典,http://45.192.97.170:8880/play/5431.m3u8
-李翊君20首经典,http://45.192.97.170:8880/play/5414.m3u8
-魏佳艺40首经典,http://45.192.97.170:8880/play/5430.m3u8
-陈瑞36首经典,http://45.192.97.170:8880/play/5435.m3u8
-云菲菲40首经典,http://45.192.97.170:8880/play/5434.m3u8
 梅朵40首经典,http://45.192.97.170:8880/play/5408.m3u8
-卓依婷40首经典,http://45.192.97.170:8880/play/5427.m3u8
-陶喆30首经典,http://45.192.97.170:8880/play/5417.m3u8
-林忆莲30首经典,http://45.192.97.170:8880/play/5421.m3u8
+张茜42首经典,http://45.192.97.170:8880/play/5409.m3u8
+甄妮40首经典,http://45.192.97.170:8880/play/5410.m3u8
+林志炫34首经典,http://45.192.97.170:8880/play/5411.m3u8
 金海心38首经典,http://45.192.97.170:8880/play/5412.m3u8
-腾格尔30首经典,http://45.192.97.170:8880/play/5422.m3u8
+毛阿敏40首经典,http://45.192.97.170:8880/play/5413.m3u8
+李翊君20首经典,http://45.192.97.170:8880/play/5414.m3u8
+许蒿30首经典,http://45.192.97.170:8880/play/5415.m3u8
 张杰40首经典,http://45.192.97.170:8880/play/5416.m3u8
+陶喆30首经典,http://45.192.97.170:8880/play/5417.m3u8
+林俊杰31首经典,http://45.192.97.170:8880/play/5418.m3u8
+陈慧娴30首经典,http://45.192.97.170:8880/play/5419.m3u8
+王力宏16首经典,http://45.192.97.170:8880/play/5420.m3u8
+林忆莲30首经典,http://45.192.97.170:8880/play/5421.m3u8
+腾格尔30首经典,http://45.192.97.170:8880/play/5422.m3u8
+汤潮40首经典,http://45.192.97.170:8880/play/5423.m3u8
+陈淑桦32首经典,http://45.192.97.170:8880/play/5424.m3u8
+冷漠40首经典,http://45.192.97.170:8880/play/5425.m3u8
 梦然40首经典,http://45.192.97.170:8880/play/5426.m3u8
-乔玲儿42首经典,http://45.192.97.170:8880/play/5433.m3u8
+卓依婷40首经典,http://45.192.97.170:8880/play/5427.m3u8
 姜育恒40首经典,http://45.192.97.170:8880/play/5428.m3u8
 童安格40首经典,http://45.192.97.170:8880/play/5429.m3u8
-林志炫34首经典,http://45.192.97.170:8880/play/5411.m3u8
-甄妮40首经典,http://45.192.97.170:8880/play/5410.m3u8
-任贤齐36首经典,http://45.192.97.170:8880/play/5437.m3u8
-陈慧娴30首经典,http://45.192.97.170:8880/play/5419.m3u8
-林俊杰31首经典,http://45.192.97.170:8880/play/5418.m3u8
+魏佳艺40首经典,http://45.192.97.170:8880/play/5430.m3u8
+刘若英42首经典,http://45.192.97.170:8880/play/5431.m3u8
+云朵40首经典,http://45.192.97.170:8880/play/5432.m3u8
+乔玲儿42首经典,http://45.192.97.170:8880/play/5433.m3u8
+云菲菲40首经典,http://45.192.97.170:8880/play/5434.m3u8
+陈瑞36首经典,http://45.192.97.170:8880/play/5435.m3u8
 韩宝仪40首经典,http://45.192.97.170:8880/play/5436.m3u8
-王力宏16首经典,http://45.192.97.170:8880/play/5420.m3u8
-毛阿敏40首经典,http://45.192.97.170:8880/play/5413.m3u8
-汤潮40首经典,http://45.192.97.170:8880/play/5423.m3u8
-许蒿30首经典,http://45.192.97.170:8880/play/5415.m3u8
+任贤齐36首经典,http://45.192.97.170:8880/play/5437.m3u8
+烟雨人间,http://45.192.97.170:8880/play/5438.m3u8
+阿果吉曲,http://45.192.97.170:8880/play/5439.m3u8
+阿果吉曲,http://45.192.97.170:8880/play/5440.m3u8
+你的万水千山,http://45.192.97.170:8880/play/5441.m3u8
+人生如歌,http://45.192.97.170:8880/play/5442.m3u8
+孤独的王,http://45.192.97.170:8880/play/5443.m3u8
+作酒,http://45.192.97.170:8880/play/5444.m3u8
+逃之夭夭,http://45.192.97.170:8880/play/5445.m3u8
+两个世界,http://45.192.97.170:8880/play/5446.m3u8
+闽南语歌曲,http://45.192.97.170:8880/play/5447.m3u8
+阿衣莫,http://45.192.97.170:8880/play/5448.m3u8
+☆泡沫,http://45.192.97.170:8880/play/5449.m3u8
+☆或者累,http://45.192.97.170:8880/play/5450.m3u8
+☆好想抱着你,http://45.192.97.170:8880/play/5451.m3u8
+☆我会等,http://45.192.97.170:8880/play/5452.m3u8
+☆吻得太逼真,http://45.192.97.170:8880/play/5453.m3u8
+☆忘川彼岸,http://45.192.97.170:8880/play/5454.m3u8
+☆晚风心里吹,http://45.192.97.170:8880/play/5455.m3u8
+☆天若有情,http://45.192.97.170:8880/play/5456.m3u8
+☆她会魔法吧,http://45.192.97.170:8880/play/5457.m3u8
+☆如愿,http://45.192.97.170:8880/play/5458.m3u8
+☆木偶戏,http://45.192.97.170:8880/play/5459.m3u8
+☆剑魂,http://45.192.97.170:8880/play/5460.m3u8
+☆桃花诺,http://45.192.97.170:8880/play/5461.m3u8
+☆作酒,http://45.192.97.170:8880/play/5462.m3u8
+☆下个路口见,http://45.192.97.170:8880/play/5463.m3u8
+☆我在广州等你,http://45.192.97.170:8880/play/5464.m3u8
+☆不再联系,http://45.192.97.170:8880/play/5465.m3u8
+☆斑马斑马,http://45.192.97.170:8880/play/5466.m3u8
+☆卜卦,http://45.192.97.170:8880/play/5467.m3u8
+☆一笑江湖,http://45.192.97.170:8880/play/5468.m3u8
+☆爱不得忘不得,http://45.192.97.170:8880/play/5469.m3u8
+☆难忘,http://45.192.97.170:8880/play/5470.m3u8
+☆虞美人,http://45.192.97.170:8880/play/5471.m3u8
+☆人生何处不相逢,http://45.192.97.170:8880/play/5472.m3u8
+☆我曾用心爱着你,http://45.192.97.170:8880/play/5473.m3u8
+☆忘了,http://45.192.97.170:8880/play/5474.m3u8
+☆西域美女,http://45.192.97.170:8880/play/5475.m3u8
+☆越南神曲,http://45.192.97.170:8880/play/5476.m3u8
+☆错位时空,http://45.192.97.170:8880/play/5477.m3u8
+☆可不可以,http://45.192.97.170:8880/play/5478.m3u8
+☆女孩,http://45.192.97.170:8880/play/5479.m3u8
+☆真的爱你,http://45.192.97.170:8880/play/5480.m3u8
+☆嘉宾,http://45.192.97.170:8880/play/5481.m3u8
+☆若把你,http://45.192.97.170:8880/play/5482.m3u8
+☆你的样子,http://45.192.97.170:8880/play/5483.m3u8
+☆合适,http://45.192.97.170:8880/play/5484.m3u8
+☆很好听dj,http://45.192.97.170:8880/play/5485.m3u8
+☆护花使者,http://45.192.97.170:8880/play/5486.m3u8
+☆月亮不曾奔我来,http://45.192.97.170:8880/play/5487.m3u8
+☆特别的爱给特别的你,http://45.192.97.170:8880/play/5488.m3u8
+☆笼子,http://45.192.97.170:8880/play/5489.m3u8
+☆念平生,http://45.192.97.170:8880/play/5490.m3u8
+☆听,http://45.192.97.170:8880/play/5491.m3u8
+☆灵魂习惯,http://45.192.97.170:8880/play/5492.m3u8
+☆做酒,http://45.192.97.170:8880/play/5493.m3u8
+☆燕无歇,http://45.192.97.170:8880/play/5494.m3u8
+☆无哥骷,http://45.192.97.170:8880/play/5495.m3u8
+☆来迟,http://45.192.97.170:8880/play/5496.m3u8
+☆向云端,http://45.192.97.170:8880/play/5497.m3u8
+羞答答的玫瑰,http://45.192.97.170:8880/play/5498.m3u8
+难却,http://45.192.97.170:8880/play/5499.m3u8
+旧梦一场,http://45.192.97.170:8880/play/5500.m3u8
+都说,http://45.192.97.170:8880/play/5501.m3u8
+当我取过她,http://45.192.97.170:8880/play/5502.m3u8
+此生过半,http://45.192.97.170:8880/play/5503.m3u8
+38度6,http://45.192.97.170:8880/play/5504.m3u8
+言不由衷,http://45.192.97.170:8880/play/5505.m3u8
+我的心太乱,http://45.192.97.170:8880/play/5506.m3u8
+热情如火,http://45.192.97.170:8880/play/5507.m3u8
+她没有,http://45.192.97.170:8880/play/5508.m3u8
+醒不来的梦,http://45.192.97.170:8880/play/5509.m3u8
+泡沫,http://45.192.97.170:8880/play/5510.m3u8
+虞美人,http://45.192.97.170:8880/play/5511.m3u8
+我会等,http://45.192.97.170:8880/play/5512.m3u8
+忘川彼岸,http://45.192.97.170:8880/play/5513.m3u8
+晚风心里吹,http://45.192.97.170:8880/play/5514.m3u8
+她会魔法吧,http://45.192.97.170:8880/play/5516.m3u8
+思念指甲绕,http://45.192.97.170:8880/play/5517.m3u8
+如愿,http://45.192.97.170:8880/play/5518.m3u8
+你的眼神,http://45.192.97.170:8880/play/5519.m3u8
+红尘毒酒,http://45.192.97.170:8880/play/5520.m3u8
+白日烟火,http://45.192.97.170:8880/play/5521.m3u8
+一半疯了,http://45.192.97.170:8880/play/5522.m3u8
+那个谁,http://45.192.97.170:8880/play/5523.m3u8
+你是不是,http://45.192.97.170:8880/play/5524.m3u8
+酒倾城,http://45.192.97.170:8880/play/5525.m3u8
 
-🏀 体育竞赛频道,#genre#
-Arryadia HD 1 (1080p),https://stream-lb.livemediama.com/arryadia-hd-01/hls/master.m3u8
-FTV (720p),https://master.tucableip.com/ftvhd/index.m3u8
-Bahrain Sports 1 (720p) [Not 24/7],https://5c7b683162943.streamlock.net/live/ngrp:sportsone_all/playlist.m3u8
-Arryadia HD 2 (1080p),https://stream-lb.livemediama.com/arryadia-hd-02/hls/master.m3u8
-HTSpor TV (1080p),https://ciner.daioncdn.net/ht-spor/ht-spor.m3u8?app=web
-Alkass Four (1080p),https://liveeu-gcp.alkassdigital.net/alkass4-p/main.m3u8
-Alkass Six (1080p),https://liveeu-gcp.alkassdigital.net/alkass6-p/main.m3u8
-ACCDN (1080p),https://raycom-accdn-firetv.amagi.tv/playlist.m3u8
-CCTV-Golf & Tennis (1080p),http://38.75.136.137:98/gslb/dsdqpub/gefwq.m3u8?auth=testpub
-Cricket Gold (1080p),https://streams2.sofast.tv/ptnr-yupptv/title-cricketgold/v1/master/611d79b11b77e2f571934fd80ca1413453772ac7/b2048bb8-1686-4432-aa50-647245383e0c/manifest.m3u8
-CBS Sports HQ (1080p) [Geo-blocked],https://propee33f9c2.airspace-cdn.cbsivideo.com/index.m3u8
-CBS Sports Golazo Network (720p),https://proped3fhg87.airspace-cdn.cbsivideo.com/golazo-live-dai/master/golazo-live-dai.m3u8
-CCTV-16 (1080p),http://74.91.26.218:82/live/cctv16hd.m3u8
-ColimdoT TV (720p),https://cnn.livestreaminggroup.info:3132/live/colimdotvlive.m3u8
-CCTV-Storm Football (1080p),http://38.75.136.137:98/gslb/dsdqpub/fyzq.m3u8?auth=testpub
-ge Fast (1080p),https://amg00716-globo-amg00716c1-tcl-br-9495.playouts.now.amagi.tv/playlist.m3u8
-Arryadia HD 3 (1080p),https://stream-lb.livemediama.com/arryadia-hd-03/hls/master.m3u8
-CazeTV (1080i),https://dfr80qz435crc.cloudfront.net/MNOP/Amagi/Caze/Caze_TV_BR/Caze_TV.m3u8
-FloHockey 24/7 (1080p),https://amg02278-amg02278c2-flosports-worldwide-9916.playouts.now.amagi.tv/playlist.m3u8
-Gol Classics (1080p),https://d71gqtnep83vb.cloudfront.net/gol_classics/gol_classics.m3u8
-Esport3 (1080p) [Not 24/7],https://directes-tv-int.3catdirectes.cat/live-content/esport3-hls/master.m3u8
-Game+ (720p),https://a-cdn.klowdtv.com/live2/fntsy_720p/playlist.m3u8
-CCTV-Billiards (1080p),http://38.75.136.137:98/gslb/dsdqpub/ystq.m3u8?auth=testpub
-F1 Channel (1080p) [Geo-blocked],https://amg12058-c15studio-amg12058c1-lg-us-5787.playouts.now.amagi.tv/playlist.m3u8
-Golf Channel,https://dash4.antik.sk/live/test_golf_channel/playlist.m3u8
-KSA Sports 1 (1080p),https://aloula-redirect.vercel.app/9/playlist.m3u8
-beIN Sports XTRA en Espanol (1080p),https://dc1644a9jazgj.cloudfront.net/beIN_Sports_Xtra_Espanol.m3u8
-ATG Live (720p),https://kanal75xto-llhls.akamaized.net/live/Data/atg-kanal-15-02a-rr/HLS-Legacy-HL/atg-kanal-15-02a-rr.m3u8
-Jordan Sport (1080p),http://93.184.10.248/JordanSport/index.m3u8
-ČT Sport (720p),http://88.212.15.19/live/test_ctsport_25p/playlist.m3u8
-DraftKings Network (1080p),https://na.linear.zype.com/e0bd0e23-a958-4e43-8164-4f2fef8876a8/fd3614bd-90bf-4530-a277-65ae3a1720c8-zype/live.m3u8
-Lacrosse TV (720p),https://a-cdn.klowdtv.com/live2/lsn_720p/playlist.m3u8
-ACI Sport TV (1080p),https://webstream.multistream.it/memfs/e2cb3629-c1a2-495b-b43a-9eb386f04ed8.m3u8
-FightBox,https://iptv.prosto.tv/ch118/index.m3u8
-KHL (720p),http://31.148.48.15/KHL_TV/index.m3u8
-KSA Sports 2 (1080p),https://aloula-redirect.vercel.app/10/playlist.m3u8
-KHL Prime (720p),http://31.148.48.15/KHL_TV_HD/index.m3u8
-beIN Sports USA (720p),http://23.237.104.106:8080/USA_BEIN/index.m3u8
-Đồng Nai 2 (480p) [Not 24/7],http://118.107.85.4:1935/live/smil:DNTV2.smil/chunklist.m3u8
-ADO TV (720p),https://strhls.streamakaci.tv/ortb/ortb2-multi/playlist.m3u8
-FUEL TV (1080p),https://amg01074-fueltv-fueltvemeaen-rakuten-b6j62.amagi.tv/hls/amagi_hls_data_rakutenAA-fueltvemeaen/CDN/master.m3u8
-DAZN Combat (1080p),https://dazn-combat-rakuten.amagi.tv/hls/amagi_hls_data_rakutenAA-dazn-combat-rakuten/CDN/master.m3u8
-Africa 24 Sport (1080p),https://africa24.vedge.infomaniak.com/livecast/ik:africa24sport/manifest.m3u8
-ITV Deportes (720p),https://thm-it-roku.otteravision.com/thm/it/it.m3u8
-A Spor (1080p),https://rnttwmjcin.turknet.ercdn.net/lcpmvefbyo/aspor/aspor.m3u8
-Alkass Two (1080p),https://liveeu-gcp.alkassdigital.net/alkass2-p/main.m3u8
-BEK TV Sports West (720p),https://cdn3.wowza.com/5/ZWQ1K2NYTmpFbGsr/BEK-WOWZA-1/smil:BEKPRIMEW.smil/playlist.m3u8
-FloRacing 24/7 (1080p),https://amg02278-amg02278c1-flosports-worldwide-7592.playouts.now.amagi.tv/playlist.m3u8
-Arryadia (480p),https://snrtworker.kharazbelaid.workers.dev/?id=arryadia.m3u8
-30A Golf Kingdom (720p),https://30a-tv.com/feeds/vidaa/golf.m3u8
-Al Iraqia Sport (720p),https://imn-live.esite-lab.com/hls/iraqia-sports-1.m3u8
-Alkass SHOOF 2 (1080p),https://liveeu-gcp.alkassdigital.net/shooflive2/main.m3u8
-Arryadia (720p),https://stream-lb.livemediama.com/arryadia/hls/master.m3u8
-ESPN8 The Ocho (1080p),https://d3b6q2ou5kp8ke.cloudfront.net/ESPNTheOcho.m3u8
-Fox Deportes (1280p),https://cors-proxy.cooks.fyi/http://23.237.104.106:8080/USA_FOX_DEPORTES/index.m3u8
-KCMN-LD6 (1080p),https://cdn-uw2-prod.tsv2.amagi.tv/linear/amg02873-kravemedia-mtrspt1-distrotv/playlist.m3u8
-Alkass One (1080p),https://liveeu-gcp.alkassdigital.net/alkass1-p/main.m3u8
-KTV Sport Plus (1080p),https://kwtsplta.cdn.mangomolo.com/spl/smil:spl.stream.smil/chunklist.m3u8
-DD Sports SD (1080p),https://d3qs3d2rkhfqrt.cloudfront.net/out/v1/b17adfe543354fdd8d189b110617cddd/index.m3u8
-Bahrain Sports 2 (720p) [Not 24/7],https://5c7b683162943.streamlock.net/live/ngrp:bahrainsportstwo_all/playlist.m3u8
-fubo Sports Network (1080p),https://dnf08l6u6uxnz.cloudfront.net/master.m3u8
-L1 Max (1080p),http://45.4.1.201:8000/play/a123/index.m3u8
-INTROUBLE (1080p),https://amg00861-amg00861c6-stirr-us-8229.playouts.now.amagi.tv/playlist.m3u8
-Alkass Three (1080p),https://liveeu-gcp.alkassdigital.net/alkass3-p/main.m3u8
-Alkass SHOOF (1080p),https://liveeu-gcp.alkassdigital.net/shooflive/main.m3u8
-beIN SPORTS XTRA (1080p),https://bein-xtra-bein.amagi.tv/playlist.m3u8
-FTF Sports (720p),https://1657061170.rsc.cdn77.org/HLS/FTF-LINEAR.m3u8
-KSA Sports 3 (1080p),https://aloula-redirect.vercel.app/16/playlist.m3u8
-KTV Sport (1080p),https://kwtspta.cdn.mangomolo.com/sp/smil:sp.stream.smil/chunklist.m3u8
-Horse TV (720p),https://a-cdn.klowdtv.com/live2/horsetv_720p/playlist.m3u8
-AS3 Sport TV (1080p),https://streamtv.as3sport.online:3394/hybrid/play.m3u8
-Belarus-5 HD (1080p),https://adpnetworkhd-cmd.github.io/iptv/Belarus5.m3u8
-Fuel TV (1080p),https://amg01074-fueltv-fueltvau-samsungau-g09kq.amagi.tv/playlist/amg01074-fueltv-fueltvau-samsungau/playlist.m3u8
-ESPNU (720p),http://23.237.104.106:8080/USA_ESPNU/index.m3u8
-Gol (1080p),https://adpnetworkhd-cmd.github.io/iptv/GOL.m3u8
-L1 (1080p),http://45.4.1.201:8000/play/a1ai/index.m3u8
-FB TV,http://1hskrdto.rocketcdn.com/fenerbahcetv.smil/playlist.m3u8
-Fuel TV (1080p),https://amg01074-fueltv-amg01074c1-stirr-us-4214.playouts.now.amagi.tv/playlist.m3u8
-Arryadia HD TNT (1080p),https://stream-lb.livemediama.com/arryadia-tnt/hls/master.m3u8
-Futbol (1080p),https://live.teleradiocom.tj/8/3m.m3u8
-Meridiano TV (576p),http://181.78.8.199:8000/play/a0fr/index.m3u8
-Premier Sports 2 (1080p),https://amg19223-amg19223c4-amgplt0351.playout.now3.amagi.tv/playlist/amg19223-amg19223c4-amgplt0351/playlist.m3u8
-More Than Sports TV (1080p),https://mts1.iptv-playoutcenter.de/mts/mts-web/playlist.m3u8
-Rally TV (1080p),https://rally-tv-live.akamaized.net/hls/live/2117704/RallyTV-Pri/master.m3u8
-MSG (720p),http://23.237.104.106:8080/USA_MSG/index.m3u8
-Бокс ТВ (720p),http://31.148.48.15/Boks_TV/index.m3u8
-TVR Sport,https://tvr-sport.lg.mncdn.com/tvrsport/smil:tvrsport.smil/chunklist_b5160000.m3u8
-TyC Sports (1080p),https://amg26268-amg26268c14-freelivesports-emea-10267.playouts.now.amagi.tv/ts-us-e2-n2/playlist/amg26268-sportsstudio-tycsports-freelivesportsemea/playlist.m3u8
-Overtime (1080p),https://d1a8aq6t30gkqj.cloudfront.net/v1/amc_overtime_1/samsungheadend_us/latest/main/hls/playlist_hd.m3u8
-Ovacion TV (720p) [Not 24/7],http://cdn2.ujjina.com:1935/iptvovacion1/liveovacion1tv/playlist.m3u8
-RTI La 3 (1080p) [Not 24/7],http://69.64.57.208/la3/index.m3u8
-Sporty TV,https://dash2.antik.sk/live/sporty_tv/index.m3u8
-TVS Classic Sports (360p),https://rpn.bozztv.com/gusa/gusa-tvs/index.m3u8
-TJK TV (1080p),https://tjktv-live.tjk.org/tjktv.m3u8
-World Poker Tour (1080p),https://amg00477-samsungelectron-worldpokertour-samsunguk-81igb.amagi.tv/playlist/amg00477-samsungelectron-worldpokertour-samsunguk/playlist.m3u8
-TVS Boxing (360p),https://rpn.bozztv.com/gusa/gusa-tvsboxing/index.m3u8
-Red Bull TV (1080p),https://rbmn-live.akamaized.net/hls/live/590964/BoRB-AT/master.m3u8
-Movistar Deportes (1080p),http://45.4.1.201:8000/play/a13e/index.m3u8
-Sky Racing 1 (720p),https://636ffd31f0e12.streamlock.net/RacingStream1/RacingStream1/playlist.m3u8
-TVS Turbo (360p),https://rpn.bozztv.com/gusa/gusa-tvsturbo/index.m3u8
-Sportitalia (1080p),https://edge-001.streamup.eu/sportitalia/sihd_abr/playlist.m3u8
-TV Cuatro 4.3 (1080p),https://5ca3e84a76d30.streamlock.net/tv43gto/tv43gto.smil/.m3u8
-Strongman (720p),https://rightsboosterltd-scl-1-eu.rakuten.wurl.tv/playlist.m3u8
-Астрахань.Ru Sport (720p),https://streaming.astrakhan.ru/astrakhanrusporthd/playlist.m3u8
-TVS Sports Bureau (720p),https://rpn.bozztv.com/gusa/gusa-tvssportsbureau/index.m3u8
-Racer Network (1080p),https://amg00378-mavtv-amg00378c2-samsung-au-1790.playouts.now.amagi.tv/playlist/amg00378-mavtvfast-motorsportsnetwork-samsungau/playlist.m3u8
-MMA-TV (576p),http://31.148.48.15/M1_Global/index.m3u8
-Strongman Champions League (720p),https://rightsboosterltd-scl-2-eu.rakuten.wurl.tv/playlist.m3u8
-SPOTV 2 (1080p),http://primestreams.tv:826/live/mookie22/49aV7nBsK4/119516.m3u8
-Willow Sports (1080p),https://d36r8jifhgsk5j.cloudfront.net/Willow_TV.m3u8
-Tele Rebelde (480p) [Not 24/7],https://tv.picta.cu/telerebelde/telerebelde_1.m3u8
-Monterrico TV,https://h.jcp.live.opencaster.com/play_src/index.m3u8
-Win Sports (1080p),http://138.121.15.230:9002/WIN-SPORT/index.m3u8
-Star Sports 2 Hindi HD (1080p),http://103.157.248.140:8000/play/a01m/index.m3u8
-PGA Tour (1080p),https://d11k1mnrgfposz.cloudfront.net/playlist.m3u8
-MadeinBO TV (1080p),https://srvx1.selftv.video/dmchannel/live/playlist.m3u8
-Match! Strana (720p),http://31.148.48.15/Match_Strana/index.m3u8
-Oman Sports TV (1080p) [Not 24/7],https://partneta.cdn.mgmlcdn.com/omsport/smil:omsport.stream.smil/chunklist.m3u8
-San Marino RTV Sport (720p),https://d2hrvno5bw6tg2.cloudfront.net/smrtv-ch02/smil:ch-02.smil/master.m3u8
-Persiana Fight,https://fighthls.persiana.live/hls/stream.m3u8
-viju+ Sport,https://stream8.cinerama.uz/1229/tracks-v1a1/mono.m3u8
-Nautical Channel (720p),https://a-cdn.klowdtv.com/live2/nautical_720p/playlist.m3u8
-Premier Sports (1080p),https://amg19223-amg19223c3-amgplt0351.playout.now3.amagi.tv/playlist/amg19223-amg19223c3-amgplt0351/playlist.m3u8
-World of Freesports (1080p),https://mainstreammedia-worldoffreesportsintl-rakuten.amagi.tv/playlist.m3u8
-QazSport (480p) [Geo-blocked],https://qazsporttv-stream.qazcdn.com/qazsporttv/qazsporttv/playlist.m3u8
-RACER International (1080p),https://amg00378-mavtv-amg00378c2-rakuten-us-1048.playouts.now.amagi.tv/playlist/amg00378-mavtvfast-motorsportsnetwork-rakutenus/playlist.m3u8
-MLB Channel (1080p) [Geo-blocked],https://pb-2y9ox4r1fy550.akamaized.net/playlist.m3u8
-Teletrak (720p),https://unlimited6-cl.dps.live/sportinghd/sportinghd.smil/playlist.m3u8
-TVS Women Sports (720p),https://rpn.bozztv.com/gusa/gusa-tvswsn/index.m3u8
-NHL Network (1080p),https://nhl-firetv.amagi.tv/playlist.m3u8
-Strongman Champions League (720p),https://rightsboosterltd-scl-1-be.samsung.wurl.tv/playlist.m3u8
-Sport,https://stream8.cinerama.uz/1004/tracks-v1a1/mono.m3u8
-Real Madrid TV English [Geo-blocked],https://rmtv.akamaized.net/hls/live/2043154/rmtv-en-web/bitrate_3.m3u8
-МАТЧ! Игра (720p),http://31.148.48.15/Match_Igra_HD/index.m3u8
-SuperTennis (1080p),https://live-embed.supertennix.hiway.media/restreamer/supertennix_client/gpu-a-c0-16/restreamer/outgest/aa3673f1-e178-44a9-a947-ef41db73211a/manifest.m3u8
-SPOTV (720p),http://primestreams.tv:826/live/mookie22/49aV7nBsK4/119515.m3u8
-Беларусь 5 Интернет (1080p) [Not 24/7],https://edge59.dc.beltelecom.by/ngtrk/smil:belarus5int.smil/playlist.m3u8
-World of Freesports (1080p),https://mainstreammedia-worldoffreesportsintl-rakuten.amagi.tv/hls/amagi_hls_data_rakutenAA-mainstreammediafreesportsintl-rakuten/CDN/master.m3u8
-Pac 12 Insider (1080p),https://pac12-firetv.amagi.tv/playlist.m3u8
-Unite8 Sports 1 HD (1080p),http://103.114.11.37:8081/UNITEDHINDI/index.m3u8
-Swerve Combat (1080p),https://linear-253.frequency.stream/mt/roku/253/hls/master/playlist.m3u8
-MMA TV.com (1080p),https://streams2.sofast.tv/vglive-sk-462904/playlist.m3u8
-Sky Racing 2 (720p),https://636ffd31f0e12.streamlock.net/RacingStream2/RacingStream2/playlist.m3u8
-МАТЧ! Арена (720p),http://31.148.48.15/Match_Arena_HD/index.m3u8
-Willow Sports (1080p),https://d36r8jifhgsk5j.cloudfront.net/Willow_TV1080p.m3u8
-TR Sport (480p),https://livetr.teleromagna.it/mia/live/playlist.m3u8
-Teledeporte (720p) [Geo-blocked],https://rtvelivestream.rtve.es/rtvesec/tdp/tdp_main.m3u8
-TyC Sports USA,http://45.170.130.224:8000/play/a020/index.m3u8
-Русский Экстрим (576p),http://31.148.48.15/Russkiy_Ekstrim/index.m3u8
-Tigo Sports+,http://45.170.130.224:8000/play/a04i/index.m3u8
-Türkmenistan Sport (406p) [Not 24/7],https://alpha.tv.online.tm/hls/ch004.m3u8
-TVS Sports (720p) [Not 24/7],https://rpn.bozztv.com/gusa/gusa-tvssports/index.m3u8
-МАТЧ! Боец (576p),http://31.148.48.15/Match_Boec/index.m3u8
-NHRA TV (1080p),https://d265y4sk8257lt.cloudfront.net/nh.m3u8
-Sportivnyy (1080p),https://live-3.otcnet.ru/sportivny/index.m3u8
-Suspilne. Sport,https://iptv.prosto.tv/ch112/tracks-v2a1/mono.m3u8?21yo=0&e=1783247457&id=921233&ip=178.136.40.86&live=1&secret=9szoe89y&st=jPS6nYqNZLDECF8uSDa74g
-Trace Sport Stars (Australia) (1080p),https://lightning-tracesport-samsungau.amagi.tv/playlist.m3u8
-Tennis Channel (1080p),https://cdn-ue1-prod.tsv2.amagi.tv/linear/amg01444-tennischannelth-tennischannelnl-samsungnl/playlist.m3u8
-NBA TV (1080p) [Geo-blocked],https://amg00556-amg00556c3-firetv-us-6060.playouts.now.amagi.tv/playlist.m3u8
-NFL Channel (1080p) [Geo-blocked],https://pb-we3ltka9xobj6.akamaized.net/master.m3u8
-W14DK-D 14.5 All Sports Television Network,https://2-fss-2.streamhoster.com/pl_118/204972-2205186-1/playlist.m3u8
-TVS Bowling Network (720p),https://rpn.bozztv.com/gusa/gusa-tvsbowling/index.m3u8
-Racer Select (1080p),https://amg00378-amg00378c4-freelivesports-emea-5637.playouts.now.amagi.tv/playlist.m3u8
-Trace Sport Stars,http://ott.watch/XE5QWWBZ87/256/tracks-v1a1/mono.ts.m3u8
-Футбол (720p),http://31.148.48.15/Futbol_HD/index.m3u8
-Беларусь 5 (1080p) [Not 24/7],https://ngtrk.dc.beltelecom.by/ngtrk/smil:belarus5.smil/playlist.m3u8
+🎭 戏曲频道,#genre#
+百听不厌！,http://45.192.97.170:8880/play/6168.m3u8
+冀萍,http://45.192.97.170:8880/play/6169.m3u8
+朱建军,http://45.192.97.170:8880/play/6170.m3u8
+名家王爱爱,http://45.192.97.170:8880/play/6171.m3u8
+山西省晋剧院一团,http://45.192.97.170:8880/play/6172.m3u8
+山西省晋剧院青年团《大清唱》中集,http://45.192.97.170:8880/play/6173.m3u8
+山西晋剧全本戏大全,http://45.192.97.170:8880/play/6174.m3u8
+陈云龙.flv,http://45.192.97.170:8880/play/6175.m3u8
+刘汉银《杨八姐游春》,http://45.192.97.170:8880/play/6176.m3u8
+山西省小程玉英剧团,http://45.192.97.170:8880/play/6177.m3u8
+
+🎧 动感舞曲,#genre#
+21年DJ爆红网络洗脑神曲,http://45.192.97.170:8880/play/5639.m3u8
+劲爆DJ串烧,http://45.192.97.170:8880/play/5640.m3u8
+《爱难求情难断…》,http://45.192.97.170:8880/play/5641.m3u8
+龙飘飘《往事》,http://45.192.97.170:8880/play/5642.m3u8
+美酒加咖啡龙飘飘,http://45.192.97.170:8880/play/5643.m3u8
+刀郎经典歌曲精选,http://45.192.97.170:8880/play/5644.m3u8
+几首绝美情歌DJ精选,http://45.192.97.170:8880/play/5645.m3u8
+《天路》《驼铃》《鸿雁》《九儿》《绒花》《小芳》,http://45.192.97.170:8880/play/5646.m3u8
+《驼铃》《卓玛》《天边》《鸿雁》《天路》草原歌曲,http://45.192.97.170:8880/play/5647.m3u8
+毛宁《涛声依旧》《晚秋》《心雨》《春风吻上我的脸》《大中国》,http://45.192.97.170:8880/play/5648.m3u8
+山歌《阿里山的姑娘》《康定情歌》《山路十八弯》《敖包相会》,http://45.192.97.170:8880/play/5649.m3u8
+《涛声依旧》《雾里看花》《窗外》《心雨》《听心》《晚秋》《母亲》,http://45.192.97.170:8880/play/5650.m3u8
+张也《望星空/为了谁/人间第一情/红梅赞/高天上流云》,http://45.192.97.170:8880/play/5651.m3u8
+【粤语老歌】《千千阙歌》《初恋情人》《漫步人生路》等,http://45.192.97.170:8880/play/5652.m3u8
+降央卓玛：这几首歌曲太动听,http://45.192.97.170:8880/play/5653.m3u8
+【老歌DJ版】《精选8首》,http://45.192.97.170:8880/play/5654.m3u8
+2021一夜火爆几首DJ舞曲,http://45.192.97.170:8880/play/5655.m3u8
+2021《精选5首酒吧DJ舞曲》,http://45.192.97.170:8880/play/5656.m3u8
+陶醉的几首DJ舞曲,http://45.192.97.170:8880/play/5657.m3u8
+粤语和华语经典歌曲【完整版】,http://45.192.97.170:8880/play/5658.m3u8
+好歌分享《精选6首伤感DJ舞曲》,http://45.192.97.170:8880/play/5659.m3u8
+2021爆红《6首女生版伤感DJ》,http://45.192.97.170:8880/play/5660.m3u8
+美人热舞洗脑DJ舞曲HD,http://45.192.97.170:8880/play/5661.m3u8
+2021五首女声伤感DJ情歌精品,http://45.192.97.170:8880/play/5662.m3u8
+情歌DJ《怎么可以这么冷血》《为爱受尽相思罪》,http://45.192.97.170:8880/play/5663.m3u8
+DJ劲爆舞曲《在我心中有个你》《东南西北风》《一万个对不起》等,http://45.192.97.170:8880/play/5664.m3u8
+DJ情歌串烧《痴情恋歌》《红颜知己》《事与愿违》《缘分相遇》HD,http://45.192.97.170:8880/play/5665.m3u8
+动听DJ情歌《红颜知己》《今夜为你醉》《别忘记我在等你》等HD,http://45.192.97.170:8880/play/5666.m3u8
+DJ伤感好听《红颜知己》《事与愿违》《缘分相遇》《知念歌》HD,http://45.192.97.170:8880/play/5667.m3u8
+DJ情歌《昨夜的我又梦到了你》《心上的人儿你在哪》等,http://45.192.97.170:8880/play/5668.m3u8
+《给我一把爱情火》《无情风雨无情的你》《昨夜的我又梦到了你》,http://45.192.97.170:8880/play/5669.m3u8
+刀郎经典老歌合集《披着羊皮的狼》《西海情歌》《威胁的惩罚》,http://45.192.97.170:8880/play/5673.m3u8
+《来生再去拥抱你》《梨花飞情人泪》《落雨的秋》《梦醉荷塘》HD,http://45.192.97.170:8880/play/5675.m3u8
+我用自己的方式爱你,http://45.192.97.170:8880/play/5679.m3u8
+
+💃 广场舞,#genre#
+爱不停息,http://45.192.97.170:8880/play/5206.m3u8
+爱的很绝对输的很狼狈,http://45.192.97.170:8880/play/5207.m3u8
+爱火,http://45.192.97.170:8880/play/5208.m3u8
+爱你却不敢告诉你,http://45.192.97.170:8880/play/5209.m3u8
+爱你是那么的辛苦,http://45.192.97.170:8880/play/5210.m3u8
+爱你一生不舍弃,http://45.192.97.170:8880/play/5211.m3u8
+爱你一万年,http://45.192.97.170:8880/play/5212.m3u8
+爱情骗子请你离开我,http://45.192.97.170:8880/play/5213.m3u8
+爱我的小妹妹快快来,http://45.192.97.170:8880/play/5214.m3u8
+爱悠悠情悠悠,http://45.192.97.170:8880/play/5215.m3u8
+白头到老不分离,http://45.192.97.170:8880/play/5216.m3u8
+表白,http://45.192.97.170:8880/play/5217.m3u8
+别让我等候,http://45.192.97.170:8880/play/5218.m3u8
+不白活一回,http://45.192.97.170:8880/play/5219.m3u8
+不该把爱情想得太美,http://45.192.97.170:8880/play/5220.m3u8
+不期而遇,http://45.192.97.170:8880/play/5221.m3u8
+不挽留没回头,http://45.192.97.170:8880/play/5222.m3u8
+不要走,http://45.192.97.170:8880/play/5223.m3u8
+不知道,http://45.192.97.170:8880/play/5224.m3u8
+擦伤,http://45.192.97.170:8880/play/5225.m3u8
+藏爱,http://45.192.97.170:8880/play/5226.m3u8
+草原上最美的姑娘,http://45.192.97.170:8880/play/5227.m3u8
+策马情歌,http://45.192.97.170:8880/play/5228.m3u8
+茶山情歌,http://45.192.97.170:8880/play/5229.m3u8
+潮湿的心,http://45.192.97.170:8880/play/5230.m3u8
+痴情换真心,http://45.192.97.170:8880/play/5231.m3u8
+除了你,http://45.192.97.170:8880/play/5232.m3u8
+错过缘分错过你,http://45.192.97.170:8880/play/5233.m3u8
+错位时空,http://45.192.97.170:8880/play/5234.m3u8
+待你厌倦江湖,http://45.192.97.170:8880/play/5235.m3u8
+但愿,http://45.192.97.170:8880/play/5236.m3u8
+弹棉花,http://45.192.97.170:8880/play/5237.m3u8
+等不到的爱,http://45.192.97.170:8880/play/5238.m3u8
+点燃一根烟,http://45.192.97.170:8880/play/5239.m3u8
+冬天里的一把火,http://45.192.97.170:8880/play/5240.m3u8
+都说,http://45.192.97.170:8880/play/5241.m3u8
+二十年后再相会,http://45.192.97.170:8880/play/5242.m3u8
+返老还童丹,http://45.192.97.170:8880/play/5243.m3u8
+风含情水含笑,http://45.192.97.170:8880/play/5244.m3u8
+风飘飘雨潇潇,http://45.192.97.170:8880/play/5245.m3u8
+浮生记,http://45.192.97.170:8880/play/5246.m3u8
+福到咱家,http://45.192.97.170:8880/play/5247.m3u8
+感情我赌输,http://45.192.97.170:8880/play/5248.m3u8
+高山青,http://45.192.97.170:8880/play/5249.m3u8
+哥哥不要把我忘,http://45.192.97.170:8880/play/5250.m3u8
+歌在飞,http://45.192.97.170:8880/play/5251.m3u8
+故乡情,http://45.192.97.170:8880/play/5252.m3u8
+还没有爱够,http://45.192.97.170:8880/play/5253.m3u8
+海市蜃楼,http://45.192.97.170:8880/play/5254.m3u8
+喝的是酒想的是你,http://45.192.97.170:8880/play/5255.m3u8
+何必西天万里遥,http://45.192.97.170:8880/play/5256.m3u8
+何不潇洒走一回,http://45.192.97.170:8880/play/5257.m3u8
+红颜知己,http://45.192.97.170:8880/play/5258.m3u8
+花都开了你来不来,http://45.192.97.170:8880/play/5259.m3u8
+花蝴蝶飞,http://45.192.97.170:8880/play/5260.m3u8
+花开满山破,http://45.192.97.170:8880/play/5261.m3u8
+画你,http://45.192.97.170:8880/play/5262.m3u8
+欢乐中国年,http://45.192.97.170:8880/play/5263.m3u8
+黄玫瑰,http://45.192.97.170:8880/play/5264.m3u8
+回家的路,http://45.192.97.170:8880/play/5265.m3u8
+活成自己想要的模样,http://45.192.97.170:8880/play/5266.m3u8
+活着,http://45.192.97.170:8880/play/5267.m3u8
+寂寞沙洲冷,http://45.192.97.170:8880/play/5268.m3u8
+家乡的姑娘真漂亮,http://45.192.97.170:8880/play/5269.m3u8
+家在御江南,http://45.192.97.170:8880/play/5270.m3u8
+剑魂,http://45.192.97.170:8880/play/5271.m3u8
+江南梦,http://45.192.97.170:8880/play/5272.m3u8
+今生只为遇见你,http://45.192.97.170:8880/play/5273.m3u8
+今夜的雨是谁的眼泪,http://45.192.97.170:8880/play/5274.m3u8
+纠缠不休,http://45.192.97.170:8880/play/5275.m3u8
+究竟是为了什么,http://45.192.97.170:8880/play/5276.m3u8
+九十九步,http://45.192.97.170:8880/play/5277.m3u8
+九月九的酒,http://45.192.97.170:8880/play/5278.m3u8
+酒醉的蝴蝶,http://45.192.97.170:8880/play/5279.m3u8
+旧梦,http://45.192.97.170:8880/play/5280.m3u8
+就让我爱你,http://45.192.97.170:8880/play/5281.m3u8
+渴望,http://45.192.97.170:8880/play/5282.m3u8
+渴望弹跳32步,http://45.192.97.170:8880/play/5283.m3u8
+狂沙,http://45.192.97.170:8880/play/5284.m3u8
+来生不再错过你,http://45.192.97.170:8880/play/5285.m3u8
+来生早点遇到你,http://45.192.97.170:8880/play/5286.m3u8
+来跳舞,http://45.192.97.170:8880/play/5287.m3u8
+浪迹天涯,http://45.192.97.170:8880/play/5288.m3u8
+老乡,http://45.192.97.170:8880/play/5289.m3u8
+两个世界,http://45.192.97.170:8880/play/5290.m3u8
+流泪的飞蛾,http://45.192.97.170:8880/play/5291.m3u8
+马缨花情歌,http://45.192.97.170:8880/play/5292.m3u8
+美丽的格桑花,http://45.192.97.170:8880/play/5293.m3u8
+梦里全是你的温柔,http://45.192.97.170:8880/play/5294.m3u8
+闽南摇,http://45.192.97.170:8880/play/5295.m3u8
+茉莉花,http://45.192.97.170:8880/play/5296.m3u8
+你的玫瑰,http://45.192.97.170:8880/play/5297.m3u8
+你的万水千山,http://45.192.97.170:8880/play/5298.m3u8
+你还是从前的你吗,http://45.192.97.170:8880/play/5299.m3u8
+你能不能不要离开我,http://45.192.97.170:8880/play/5300.m3u8
+你是恩赐也是劫,http://45.192.97.170:8880/play/5301.m3u8
+你是我的小苹果,http://45.192.97.170:8880/play/5302.m3u8
+你跳舞的样子是最美,http://45.192.97.170:8880/play/5303.m3u8
+你像三月桃花开,http://45.192.97.170:8880/play/5304.m3u8
+你潇洒我漂亮,http://45.192.97.170:8880/play/5305.m3u8
+你在家乡还好吗,http://45.192.97.170:8880/play/5306.m3u8
+漂洋过海来看你,http://45.192.97.170:8880/play/5307.m3u8
+平静的水,http://45.192.97.170:8880/play/5308.m3u8
+青青河边草,http://45.192.97.170:8880/play/5309.m3u8
+情歌轻轻唱,http://45.192.97.170:8880/play/5310.m3u8
+情破了心碎了,http://45.192.97.170:8880/play/5311.m3u8
+让我爱你到永远,http://45.192.97.170:8880/play/5312.m3u8
+三生三幸,http://45.192.97.170:8880/play/5313.m3u8
+桑吉卓玛,http://45.192.97.170:8880/play/5314.m3u8
+山谷里的思恋,http://45.192.97.170:8880/play/5315.m3u8
+山那边,http://45.192.97.170:8880/play/5316.m3u8
+伤心的酒吧,http://45.192.97.170:8880/play/5317.m3u8
+谁陪我到最后,http://45.192.97.170:8880/play/5318.m3u8
+谁在意我流下的泪,http://45.192.97.170:8880/play/5319.m3u8
+神仙姑娘,http://45.192.97.170:8880/play/5320.m3u8
+十五的月亮,http://45.192.97.170:8880/play/5321.m3u8
+是酒也是泪,http://45.192.97.170:8880/play/5322.m3u8
+是谁制造了酸菜,http://45.192.97.170:8880/play/5323.m3u8
+熟悉的老情歌,http://45.192.97.170:8880/play/5324.m3u8
+水乡新娘,http://45.192.97.170:8880/play/5325.m3u8
+说再见不该在秋天,http://45.192.97.170:8880/play/5326.m3u8
+斯卡布罗集市,http://45.192.97.170:8880/play/5327.m3u8
+虽然不能一起走,http://45.192.97.170:8880/play/5328.m3u8
+太想恋,http://45.192.97.170:8880/play/5329.m3u8
+叹这一生,http://45.192.97.170:8880/play/5330.m3u8
+桃花园,http://45.192.97.170:8880/play/5331.m3u8
+桃花运,http://45.192.97.170:8880/play/5332.m3u8
+特别的爱送特别的你,http://45.192.97.170:8880/play/5333.m3u8
+天籁传奇,http://45.192.97.170:8880/play/5334.m3u8
+天籁之爱,http://45.192.97.170:8880/play/5335.m3u8
+天若有情,http://45.192.97.170:8880/play/5336.m3u8
+天知籁之爱,http://45.192.97.170:8880/play/5337.m3u8
+甜蜜蜜,http://45.192.97.170:8880/play/5338.m3u8
+听闻远方有你,http://45.192.97.170:8880/play/5339.m3u8
+听心,http://45.192.97.170:8880/play/5340.m3u8
+晚秋,http://45.192.97.170:8880/play/5341.m3u8
+万人迷,http://45.192.97.170:8880/play/5342.m3u8
+往事只能回味,http://45.192.97.170:8880/play/5343.m3u8
+问心无愧最自在,http://45.192.97.170:8880/play/5344.m3u8
+问星海,http://45.192.97.170:8880/play/5345.m3u8
+问自己,http://45.192.97.170:8880/play/5346.m3u8
+我的玫瑰卓玛拉,http://45.192.97.170:8880/play/5347.m3u8
+我的妹妹你真美,http://45.192.97.170:8880/play/5348.m3u8
+我的心只为你等待,http://45.192.97.170:8880/play/5349.m3u8
+我们还能不能回到从前,http://45.192.97.170:8880/play/5350.m3u8
+我心中的那片海,http://45.192.97.170:8880/play/5351.m3u8
+我要上班,http://45.192.97.170:8880/play/5352.m3u8
+我一直在等你,http://45.192.97.170:8880/play/5353.m3u8
+我有故事谁有酒,http://45.192.97.170:8880/play/5354.m3u8
+我在家乡等着你,http://45.192.97.170:8880/play/5355.m3u8
+我只想告诉你,http://45.192.97.170:8880/play/5356.m3u8
+相思,http://45.192.97.170:8880/play/5357.m3u8
+相遇那么美,http://45.192.97.170:8880/play/5358.m3u8
+想你的时候问月亮,http://45.192.97.170:8880/play/5359.m3u8
+想你想不够,http://45.192.97.170:8880/play/5360.m3u8
+想思夜难眠,http://45.192.97.170:8880/play/5361.m3u8
+潇洒的走,http://45.192.97.170:8880/play/5362.m3u8
+潇小城,http://45.192.97.170:8880/play/5363.m3u8
+小城故事,http://45.192.97.170:8880/play/5364.m3u8
+小芳,http://45.192.97.170:8880/play/5365.m3u8
+小河边,http://45.192.97.170:8880/play/5366.m3u8
+小酒娘,http://45.192.97.170:8880/play/5367.m3u8
+小菊花,http://45.192.97.170:8880/play/5368.m3u8
+小可爱,http://45.192.97.170:8880/play/5369.m3u8
+小妹妹送情郎,http://45.192.97.170:8880/play/5370.m3u8
+小眼神儿,http://45.192.97.170:8880/play/5371.m3u8
+心中最美的风景线,http://45.192.97.170:8880/play/5372.m3u8
+幸福快车,http://45.192.97.170:8880/play/5373.m3u8
+许你一世情缘,http://45.192.97.170:8880/play/5374.m3u8
+雪山阿佳,http://45.192.97.170:8880/play/5375.m3u8
+烟雨城,http://45.192.97.170:8880/play/5376.m3u8
+燕雀南飞,http://45.192.97.170:8880/play/5377.m3u8
+燕无歇,http://45.192.97.170:8880/play/5378.m3u8
+要爱你就来,http://45.192.97.170:8880/play/5379.m3u8
+野花香,http://45.192.97.170:8880/play/5380.m3u8
+夜太深,http://45.192.97.170:8880/play/5381.m3u8
+一朵情花开,http://45.192.97.170:8880/play/5382.m3u8
+一路生花,http://45.192.97.170:8880/play/5383.m3u8
+一起向未来,http://45.192.97.170:8880/play/5384.m3u8
+一生守候这份情,http://45.192.97.170:8880/play/5385.m3u8
+拥抱你的温柔,http://45.192.97.170:8880/play/5386.m3u8
+余生好好爱自己,http://45.192.97.170:8880/play/5387.m3u8
+余生快乐每一天,http://45.192.97.170:8880/play/5388.m3u8
+余生只爱一个你,http://45.192.97.170:8880/play/5389.m3u8
+远方的朋友我想你,http://45.192.97.170:8880/play/5390.m3u8
+愿你,http://45.192.97.170:8880/play/5391.m3u8
+愿为你守候,http://45.192.97.170:8880/play/5392.m3u8
+月下情缘,http://45.192.97.170:8880/play/5393.m3u8
+站在草原望北京,http://45.192.97.170:8880/play/5394.m3u8
+长相依,http://45.192.97.170:8880/play/5395.m3u8
+祝福,http://45.192.97.170:8880/play/5396.m3u8
+转身不必说再会,http://45.192.97.170:8880/play/5397.m3u8
+自己美,http://45.192.97.170:8880/play/5398.m3u8
+总有一天等到你,http://45.192.97.170:8880/play/5399.m3u8
+走破几双鞋,http://45.192.97.170:8880/play/5400.m3u8
+走天涯,http://45.192.97.170:8880/play/5401.m3u8
+最爱的人就是你,http://45.192.97.170:8880/play/5402.m3u8
+最美不过你的笑,http://45.192.97.170:8880/play/5403.m3u8
+最亲的人,http://45.192.97.170:8880/play/5404.m3u8
+醉倾城,http://45.192.97.170:8880/play/5405.m3u8
+BYD蹦野迪,http://45.192.97.170:8880/play/5406.m3u8
