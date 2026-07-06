@@ -357,7 +357,11 @@ Contact via email: `360996299@qq.com`
 
 ## Star History
 
-[![Star History Chart](https://starchart.cc/Guovin/iptv-api.svg?variant=adaptive)](https://starchart.cc/Guovin/iptv-api)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=Guovin/iptv-api&type=date&theme=dark&legend=top-left" />
+  <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=Guovin/iptv-api&type=date&legend=top-left" />
+  <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=Guovin/iptv-api&type=date&legend=top-left" />
+</picture>
 
 ## Donations
 
