@@ -74,6 +74,12 @@ class ConfigManager:
         )
 
     @property
+    def open_filter_ad(self):
+        return self.config.getboolean(
+            "Settings", "open_filter_ad", fallback=True
+        )
+
+    @property
     def ipv_type(self):
         return self.config.get("Settings", "ipv_type", fallback="all").lower()
 
@@ -214,6 +220,13 @@ class ConfigManager:
         return self.config.getboolean("Settings", "open_supply", fallback=False)
 
     @property
+    def sort_by(self):
+        raw = self.config.get("Settings", "sort_by", fallback="speed")
+        allowed = ("speed", "delay", "resolution")
+        result = [s.strip().lower() for s in str(raw).split(",") if s.strip().lower() in allowed]
+        return result or ["speed"]
+
+    @property
     def update_time_position(self):
         return self.config.get("Settings", "update_time_position", fallback="top")
 
@@ -234,8 +247,14 @@ class ConfigManager:
         return self.config.getboolean("Settings", "speed_test_filter_host", fallback=False)
 
     @property
+    def cdn_urls(self):
+        raw = self.config.get("Settings", "cdn_url", fallback="")
+        return [u.strip() for u in re.split(r"[,\n]", raw) if u.strip()]
+
+    @property
     def cdn_url(self):
-        return self.config.get("Settings", "cdn_url", fallback="")
+        urls = self.cdn_urls
+        return urls[0] if urls else ""
 
     @property
     def open_rtmp(self):
@@ -246,8 +265,16 @@ class ConfigManager:
         return self.config.getboolean("Settings", "open_headers", fallback=False)
 
     @property
+    def user_agent(self):
+        return self.config.get("Settings", "user_agent", fallback="").strip()
+
+    @property
     def open_epg(self):
         return self.config.getboolean("Settings", "open_epg", fallback=True)
+
+    @property
+    def open_subscribe_epg(self):
+        return self.config.getboolean("Settings", "open_subscribe_epg", fallback=False)
 
     @property
     def speed_test_limit(self):
@@ -302,6 +329,10 @@ class ConfigManager:
     @property
     def logo_type(self):
         return self.config.get("Settings", "logo_type", fallback="png")
+
+    @property
+    def open_subscribe_logo(self):
+        return self.config.getboolean("Settings", "open_subscribe_logo", fallback=False)
 
     @property
     def rtmp_idle_timeout(self):

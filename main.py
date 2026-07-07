@@ -129,7 +129,7 @@ class UpdateSource:
     # ----------------------------
     # stage 2: fetch subscribe/epg (concurrent)
     # ----------------------------
-    async def _fetch_subscribe(self, channel_names: list[str]):
+    async def _fetch_subscribe(self, channel_names: list[str], epg_urls_out: set = None):
         whitelist_entries, default_entries = get_subscribe_entries(constants.subscribe_path)
         disabled_count = count_disabled_urls(constants.subscribe_path)
 
@@ -163,21 +163,38 @@ class UpdateSource:
             names=channel_names,
             whitelist=whitelist_urls,
             callback=self.update_progress,
+            epg_urls_out=epg_urls_out,
         )
 
-    async def _fetch_epg(self, channel_names: list[str]):
-        return await get_epg(channel_names, callback=self.update_progress)
+    async def _fetch_epg(self, channel_names: list[str], extra_entries: list = None):
+        return await get_epg(channel_names, callback=self.update_progress, extra_entries=extra_entries)
 
     async def visit_page(self, channel_names: list[str] = None):
         """
         Visits subscribe and epg pages concurrently to fetch data.
         """
         channel_names = channel_names or []
+        open_subscribe = config.open_method.get("subscribe")
+        open_epg = config.open_method.get("epg")
+
+        if open_subscribe and open_epg and config.open_subscribe_epg:
+            discovered_epg_urls: set[str] = set()
+            try:
+                self.subscribe_result = await self._fetch_subscribe(channel_names, epg_urls_out=discovered_epg_urls)
+            except Exception as e:
+                print(f"subscribe_result failed: {e}", flush=True)
+                self.subscribe_result = {}
+            try:
+                self.epg_result = await self._fetch_epg(channel_names, extra_entries=sorted(discovered_epg_urls))
+            except Exception as e:
+                print(f"epg_result failed: {e}", flush=True)
+                self.epg_result = {}
+            return
 
         cors: list[tuple[str, asyncio.Future]] = []
-        if config.open_method.get("subscribe"):
+        if open_subscribe:
             cors.append(("subscribe_result", asyncio.create_task(self._fetch_subscribe(channel_names))))
-        if config.open_method.get("epg"):
+        if open_epg:
             cors.append(("epg_result", asyncio.create_task(self._fetch_epg(channel_names))))
 
         if not cors:

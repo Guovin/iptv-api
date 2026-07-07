@@ -1,4 +1,3 @@
-import os
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
 from logging import INFO
@@ -18,8 +17,10 @@ from utils.tools import (
     merge_objects,
     get_pbar_remaining,
     get_name_value,
-    get_logger, join_url,
-    github_blob_to_raw,
+    get_m3u_epg_urls,
+    get_logger,
+    get_request_url_candidates,
+    request_first,
     save_url_content, close_logger_handlers,
     disable_urls_in_file,
 )
@@ -30,26 +31,12 @@ async def get_channels_by_subscribe_urls(
         names=None,
         whitelist=None,
         callback=None,
+        epg_urls_out=None,
 ):
     """
     Get the channels by subscribe urls
     """
     normalized_names = {format_channel_name(name) for name in (names or []) if name}
-    if not os.getenv("GITHUB_ACTIONS") and config.cdn_url:
-        def _map_raw(u):
-            raw_u = github_blob_to_raw(u)
-            return join_url(config.cdn_url, raw_u) if "raw.githubusercontent.com" in raw_u else raw_u
-
-        def _map_entry(e):
-            if isinstance(e, dict):
-                e = e.copy()
-                e.setdefault('source_url', e.get('url'))
-                e['url'] = _map_raw(e.get('url'))
-                return e
-            return {'url': _map_raw(e), 'source_url': e}
-
-        urls = [_map_entry(u) for u in urls]
-        whitelist = [_map_raw(u) for u in whitelist] if whitelist else None
     if whitelist:
         index_map = {u: i for i, u in enumerate(whitelist)}
 
@@ -80,8 +67,11 @@ async def get_channels_by_subscribe_urls(
     open_headers = config.open_headers
     open_unmatch_category = config.open_unmatch_category
     open_auto_disable_source = config.open_auto_disable_source
+    open_subscribe_epg = config.open_subscribe_epg
     disabled_urls = set()
     disabled_lock = Lock()
+    discovered_epg_urls = set()
+    epg_discover_lock = Lock()
 
     def _mark_disabled(source_url: str, reason: str):
         if not open_auto_disable_source or not source_url:
@@ -101,8 +91,14 @@ async def get_channels_by_subscribe_urls(
         try:
             response = None
             try:
-                response = retry_func(lambda: get_soup_requests(subscribe_url, timeout=request_timeout,
-                                                                headers_override=headers), name=subscribe_url)
+                candidates = get_request_url_candidates(subscribe_url)
+                response = retry_func(
+                    lambda: request_first(
+                        candidates,
+                        lambda u: get_soup_requests(u, timeout=request_timeout, headers_override=headers),
+                    ),
+                    name=subscribe_url,
+                )
             except Exception as e:
                 print(e, flush=True)
                 disable_reason = t("msg.auto_disable_request_failed")
@@ -120,6 +116,11 @@ async def get_channels_by_subscribe_urls(
                     pass
                 if content:
                     m3u_type = True if "#EXTM3U" in content else False
+                    if open_subscribe_epg and m3u_type:
+                        found_epg_urls = get_m3u_epg_urls(content)
+                        if found_epg_urls:
+                            with epg_discover_lock:
+                                discovered_epg_urls.update(found_epg_urls)
                     data = get_name_value(
                         content,
                         pattern=(
@@ -141,9 +142,11 @@ async def get_channels_by_subscribe_urls(
                             url_partition = url.partition("$")
                             url = url_partition[0]
                             info = url_partition[2]
+                            item_headers = {**(headers or {}), **(item.get("headers") or {})}
                             value = {
                                 "url": url,
-                                "headers": item.get("headers", None),
+                                "headers": item_headers or None,
+                                "tvg_logo": item.get("tvg_logo") or None,
                                 "extra_info": info
                             }
                             if in_whitelist:
@@ -190,5 +193,8 @@ async def get_channels_by_subscribe_urls(
             disabled_count = counts["disabled"]
         print(t("msg.auto_disable_source_done").format(name=mode_name, active_count=active_count,
                                                        disabled_count=disabled_count), flush=True)
+        if epg_urls_out is not None and discovered_epg_urls:
+            epg_urls_out.update(discovered_epg_urls)
+            print(t("msg.subscribe_epg_found").format(count=len(discovered_epg_urls)), flush=True)
         close_logger_handlers(logger)
         return subscribe_results

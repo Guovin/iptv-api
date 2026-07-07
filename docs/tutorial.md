@@ -117,6 +117,9 @@
 > 1. 对于开启显示接口信息，由于部分播放器（如`PotPlayer`）不支持解析接口补充信息，导致无法正常播放，可修改配置:`open_url_info
 =False`（GUI：取消勾选显示接口信息）关闭该功能
 > 2. 如果你的网络确定支持IPv6，可修改配置:`ipv6_support = True`(GUI：勾选`强制认为当前网络支持IPv6`）跳过支持性检查
+> 3. 如需为接口指定播放/测速请求头，可配置全局 `user_agent`（统一 UA），或在 `config/subscribe.txt` 的订阅地址后追加 `UA=值`（针对单个订阅源）；UA 会写入 `.m3u` 结果，无需开启 `open_headers`
+> 4. 配置 `location`（归属地）/`isp`（运营商）后，默认会直接过滤掉不匹配的接口；若开启 `open_supply = True`，不匹配的接口将不再丢弃，而是降权排到该频道结果末尾作为补充，避免可用接口被误删
+> 5. 通过 `sort_by` 自定义每个频道内接口的排序优先级，逗号分隔，可选 `speed`（速率）、`delay`（延迟）、`resolution`（分辨率），按从前到后依次比较，例如 `resolution,speed` 表示优先按分辨率、其次按速率排序
 
 #### 添加数据源与更多
 
@@ -124,6 +127,15 @@
 
   由于没有提供默认订阅地址，所以您需要自行添加，否则更新结果可能为空。支持txt和m3u地址作为订阅，程序将依次读取其中的频道接口数据。
   ![订阅源](./images/subscribe.png '订阅源')
+
+  如果某个订阅源需要特定的 `User-Agent` 才能访问，可在订阅地址后追加 `UA=值` 指定（包含空格时用引号包裹），例如：
+
+  ```text
+  https://example.com/sub.m3u UA=okHttp/Mod-1.5.0.0
+  https://example.com/sub2.m3u UA="Mozilla/5.0 xxx"
+  ```
+
+  该 `UA` 会同时用于：拉取该订阅内容、对该订阅源下各接口测速、以及写入 `.m3u` 结果（供播放器使用），无需开启 `open_headers`。若希望对所有接口统一指定一个 UA（避免逐条添加），可在配置中设置全局 `user_agent`。优先级：接口自带 UA（m3u 内含 `#EXTVLCOPT`）> 订阅地址 UA > 全局 `user_agent` > 内置默认 UA。注意：请求头只能写入 `.m3u` 结果，`.txt` 格式无法携带 UA。
 
 
 - 本地源（`config/local.txt`）
@@ -304,6 +316,8 @@ docker run -d -p 80:8080 guovern/iptv-api
 | PUBLIC_DOMAIN   | 公网域名或IP地址，决定外部访问或推流结果的Host地址      | 127.0.0.1 |
 | PUBLIC_PORT     | 公网端口，设置为映射后的端口，决定外部访问地址和推流结果地址的端口 | 80        |
 | NGINX_HTTP_PORT | HTTP服务端口，外部访问需要映射该端口              | 8080      |
+
+> 当宿主机/Docker 已启用 IPv6 时，容器会自动同时监听 IPv6 地址，无需额外配置；纯 IPv4 或禁用 IPv6 的环境则自动跳过。
 
 如果需要修改环境变量，在上述运行命令后添加以下参数：
 

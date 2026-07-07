@@ -5,11 +5,13 @@ from bs4 import BeautifulSoup
 
 from utils.config import config
 
+DEFAULT_USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
+
 headers = {
     "Accept": "*/*",
     "Connection": "keep-alive",
     "Accept-Language": "zh-CN,zh;q=0.8",
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+    "User-Agent": config.user_agent or DEFAULT_USER_AGENT,
 }
 
 

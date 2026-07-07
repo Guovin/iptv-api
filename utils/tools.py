@@ -207,7 +207,8 @@ def get_total_urls(
         ipv_type_prefer = ["all"]
     if not origin_prefer_bool:
         origin_type_prefer = ["all"]
-    categorized_urls = {origin: {ipv_type: [] for ipv_type in ipv_type_prefer} for origin in origin_type_prefer}
+    primary_urls = {origin: {ipv_type: [] for ipv_type in ipv_type_prefer} for origin in origin_type_prefer}
+    supply_urls = {origin: {ipv_type: [] for ipv_type in ipv_type_prefer} for origin in origin_type_prefer}
     total_urls = []
     for info in info_list:
         channel_id, url, origin, resolution, url_ipv_type, extra_info = (
@@ -241,6 +242,7 @@ def get_total_urls(
         if not origin_prefer_bool:
             origin = "all"
 
+        categorized_urls = supply_urls if info.get("supply") else primary_urls
         if ipv_prefer_bool:
             if url_ipv_type in ipv_type_prefer:
                 categorized_urls[origin][url_ipv_type].append(info)
@@ -248,21 +250,25 @@ def get_total_urls(
             categorized_urls[origin]["all"].append(info)
 
     urls_limit = config.urls_limit if apply_limit else None
-    for origin in origin_type_prefer:
-        if urls_limit is not None and len(total_urls) >= urls_limit:
-            break
-        for ipv_type in ipv_type_prefer:
+
+    def fill_urls(categorized):
+        for origin in origin_type_prefer:
             if urls_limit is not None and len(total_urls) >= urls_limit:
                 break
-            urls = categorized_urls[origin].get(ipv_type, [])
-            if not urls:
-                continue
-            if urls_limit is None:
-                total_urls.extend(urls)
-            else:
-                remaining = urls_limit - len(total_urls)
-                limit_urls = urls[:remaining]
-                total_urls.extend(limit_urls)
+            for ipv_type in ipv_type_prefer:
+                if urls_limit is not None and len(total_urls) >= urls_limit:
+                    break
+                urls = categorized[origin].get(ipv_type, [])
+                if not urls:
+                    continue
+                if urls_limit is None:
+                    total_urls.extend(urls)
+                else:
+                    remaining = urls_limit - len(total_urls)
+                    total_urls.extend(urls[:remaining])
+
+    fill_urls(primary_urls)
+    fill_urls(supply_urls)
 
     if urls_limit is not None:
         total_urls = total_urls[:urls_limit]
@@ -472,9 +478,6 @@ def convert_to_m3u(path=None, first_channel_name=None, data=None):
                             )
                         tvg_id = get_channel_epg_id(use_name) or processed_channel_name
 
-                        m3u_output += f'#EXTINF:-1 tvg-id="{tvg_id}" tvg-name="{processed_channel_name}" tvg-logo="{join_url(logo_url, f"{processed_channel_name}.{config.logo_type}")}"'
-                        if current_group:
-                            m3u_output += f' group-title="{current_group}"'
                         item_data = {}
                         if data:
                             item_list = data.get(original_channel_name, [])
@@ -482,17 +485,26 @@ def convert_to_m3u(path=None, first_channel_name=None, data=None):
                                 if item["url"] == channel_link:
                                     item_data = item
                                     break
+                        channel_logo = ""
+                        if config.open_subscribe_logo and item_data:
+                            channel_logo = item_data.get("tvg_logo") or ""
+                        if not channel_logo:
+                            channel_logo = join_url(logo_url, f"{processed_channel_name}.{config.logo_type}")
+
+                        m3u_output += f'#EXTINF:-1 tvg-id="{tvg_id}" tvg-name="{processed_channel_name}" tvg-logo="{channel_logo}"'
+                        if current_group:
+                            m3u_output += f' group-title="{current_group}"'
                         if item_data:
                             catchup = item_data.get("catchup")
                             if catchup:
                                 for key, value in catchup.items():
                                     m3u_output += f' {key}="{value}"'
                         m3u_output += f",{original_channel_name}\n"
-                        if item_data and config.open_headers:
-                            headers = item_data.get("headers")
-                            if headers:
-                                for key, value in headers.items():
-                                    m3u_output += f"#EXTVLCOPT:http-{key.lower()}={value}\n"
+                        item_headers = dict(item_data.get("headers") or {}) if item_data else {}
+                        if config.user_agent and "User-Agent" not in item_headers:
+                            item_headers["User-Agent"] = config.user_agent
+                        for key, value in item_headers.items():
+                            m3u_output += f"#EXTVLCOPT:http-{key.lower()}={value}\n"
                         m3u_output += f"{channel_link}\n"
             m3u_file_path = os.path.splitext(path)[0] + ".m3u"
             with open(m3u_file_path, "w", encoding="utf-8") as m3u_file:
@@ -648,6 +660,25 @@ def get_headers_key_value(content: str) -> dict:
     return key_value
 
 
+def get_m3u_epg_urls(content: str) -> list[str]:
+    """
+    Extract EPG urls declared in the m3u #EXTM3U header (url-tvg / x-tvg-url).
+    """
+    urls = []
+    for line in content.splitlines():
+        stripped = line.strip()
+        if not stripped.startswith("#EXTM3U"):
+            continue
+        attributes = get_headers_key_value(stripped[len("#EXTM3U"):])
+        for key in ("urltvg", "xtvgurl"):
+            for url in attributes.get(key, "").split(","):
+                url = url.strip()
+                if url.startswith(("http://", "https://")) and url not in urls:
+                    urls.append(url)
+        break
+    return urls
+
+
 def get_name_value(content, pattern, open_headers=False, check_value=True):
     """
     Extract name and value from content using a regex pattern.
@@ -674,7 +705,7 @@ def get_name_value(content, pattern, open_headers=False, check_value=True):
         catchup = {k: v for k, v in catchup.items() if v}
         if not open_headers and headers:
             return
-        item = {"name": name, "value": value, "catchup": catchup}
+        item = {"name": name, "value": value, "catchup": catchup, "tvg_logo": attributes.get("tvglogo", "")}
         if open_headers:
             item["headers"] = headers
         result.append(item)
@@ -923,6 +954,37 @@ def github_blob_to_raw(url: str) -> str:
 
     raw_url = f"https://raw.githubusercontent.com/{owner}/{repo}/{branch}/{safe_path}"
     return raw_url
+
+
+def get_request_url_candidates(url: str) -> List[str]:
+    """
+    Build the ordered list of candidate request urls for a source url. For
+    raw.githubusercontent.com urls every configured CDN mirror in
+    config.cdn_urls is prefixed in order so a failed mirror can fall back to
+    the next one; other urls return themselves. CDN is skipped under GitHub Actions.
+    """
+    if not os.getenv("GITHUB_ACTIONS") and config.cdn_urls:
+        raw_url = github_blob_to_raw(url)
+        if "raw.githubusercontent.com" in raw_url:
+            return [join_url(cdn, raw_url) for cdn in config.cdn_urls]
+        return [raw_url]
+    return [url]
+
+
+def request_first(candidates: List[str], fetch):
+    """
+    Try fetch(url) for each candidate url in order, returning the first
+    successful result; raise the last error if every candidate fails.
+    """
+    last_error = None
+    for url in candidates:
+        try:
+            return fetch(url)
+        except Exception as e:
+            last_error = e
+    if last_error:
+        raise last_error
+    return None
 
 
 def add_port_to_url(url: str, port: int) -> str:

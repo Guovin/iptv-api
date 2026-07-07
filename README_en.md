@@ -51,11 +51,31 @@
     - [Docker](#docker)
 - [📖 Detailed Tutorial](./docs/tutorial_en.md)
 - [🗓️ Changelog](./CHANGELOG.md)
+- [🤝 Sponsors](#sponsors)
 - [❤️ Donations](#donations)
 - [👀 Follow](#follow)
 - [⭐️ Star History](#star-history)
 - [⚠️ Disclaimer](#disclaimer)
 - [⚖️ License](#license)
+
+## Sponsors
+
+<p align="center">
+  <a href="https://www.ipwo.net/?ref=githubGuovin">
+    <img src="./docs/images/ipwo.png" alt="Sponsored by IPWO - Residential Proxy Network">
+  </a>
+</p>
+<p align="center">
+  <sub>
+    <a href="https://www.ipwo.net/?ref=githubGuovin"><strong>IPWO</strong></a> provides a stable residential proxy network for compliant scenarios such as public data collection, API debugging, automated testing, and multi-region access verification.
+    Supports HTTP / HTTPS / SOCKS5. Coupon code: <strong><code>0105</code></strong>.
+    Use it only with lawful authorization and in compliance with target site terms.
+  </sub>
+</p>
+
+<p align="center">
+  <a href="mailto:360996299@qq.com?subject=Become%20a%20sponsor">Become a sponsor</a>
+</p>
 
 > [!IMPORTANT]
 > 1. Go to the `Govin` WeChat public account and reply with `cdn` to get an acceleration address to improve access speed
@@ -77,6 +97,7 @@
 | **EPG**                       |    ✅    | Fetch and display channel program guides                                                                                                                    |
 | **Channel logos**             |    ✅    | Custom channel logos, supports local additions or a remote library                                                                                          |
 | **Speed test & validation**   |    ✅    | Obtain latency, bitrate, resolution, fps; filter invalid interfaces; supports real-time output                                                              |
+| **Ad filtering**              |    ✅    | Automatically identify and filter no-signal / advertisement placeholder loop sources                                                                        |
 | **Advanced preferences**      |    ✅    | Rate, resolution, blacklist/whitelist, location and ISP custom filters                                                                                      |
 | **Results management**        |    ✅    | Categorized storage and access of results, log recording, unmatched channel records, statistical analysis, freeze filtering/unfreeze rollback, data caching |
 | **Scheduled tasks**           |    ✅    | Scheduled or interval updates                                                                                                                               |
@@ -100,6 +121,7 @@
 | open_update_time         | Enable display of update time.                                                                                                                                                                                                                                                                                                              | True                                     |
 | open_url_info            | Enable to display interface description information, used to control whether to display interface source, resolution, protocol type and other information (content after `$`). The player uses this information to describe the interface. If some players (such as PotPlayer) do not support parsing and cannot play, you can turn it off. | False                                    |
 | open_epg                 | Enable EPG function, support channel display preview content.                                                                                                                                                                                                                                                                               | True                                     |
+| open_subscribe_epg       | Enable automatically extracting EPG addresses from the url-tvg/x-tvg-url of subscription m3u headers and merging them into the EPG sources, no need to manually maintain `config/epg.txt`. Configured epg.txt sources take priority, subscription sources only fill channels they do not cover. Requires open_epg = True.                       | False                                    |
 | open_m3u_result          | Enable converting and generating m3u file type result links, supporting the display of channel icons.                                                                                                                                                                                                                                       | True                                     |
 | urls_limit               | Number of interfaces per channel.                                                                                                                                                                                                                                                                                                           | 5                                        |
 | update_time_position     | Update time display position, takes effect only when `open_update_time` is enabled. Optional values: `top`, `bottom`. `top`: display at the top of the result, `bottom`: display at the bottom.                                                                                                                                             | top                                      |
@@ -116,18 +138,21 @@
 | app_port                 | Page service port, used to control the port number of the page service.                                                                                                                                                                                                                                                                     | 5180                                     |
 | public_scheme            | Public network protocol. Optional values: `http`, `https`.                                                                                                                                                                                                                                                                                  | http                                     |
 | public_domain            | Public network Host address, used to generate access URLs in the result; uses local machine IP by default.                                                                                                                                                                                                                                  | 127.0.0.1                                |
-| cdn_url                  | CDN proxy acceleration address, used for accelerated access to subscription sources, channel icons and other resources.                                                                                                                                                                                                                     |                                          |
+| cdn_url                  | CDN proxy acceleration address(es) for subscription sources, channel logos and other resources. Multiple are supported (comma-separated): subscription and EPG sources fall back through them in order until one succeeds; channel logos use the first address.                                                                                                                                                                                                                     |                                          |
 | http_proxy               | HTTP proxy address, used for network requests such as obtaining subscription sources                                                                                                                                                                                                                                                        |                                          |
 | open_local               | Enable local source function, will use the data in the template file and the local source file (`local.txt`).                                                                                                                                                                                                                               | True                                     |
 | open_subscribe           | Enable subscription source function.                                                                                                                                                                                                                                                                                                        | True                                     |
 | open_auto_disable_source | Enable automatic disabling of invalid sources. When the request fails after retries, the content is empty, or no matching value is found, the corresponding address in `config/subscribe.txt` and `config/epg.txt` will be prefixed with # to disable it.                                                                                   | True                                     |
 | open_history             | Enable using historical update results (including interfaces from template and result files), merged into this update.                                                                                                                                                                                                                      | True                                     |
 | open_headers             | Enable using request header authentication information contained in M3U, used for speed test and other operations. Note: only a few players support playing such interfaces with authentication info, so it is disabled by default.                                                                                                         | False                                    |
+| user_agent               | Global request User-Agent, used for fetching subscription sources, speed testing, and writing into the m3u result (no need to enable `open_headers`). Leave empty to use the built-in default UA. Priority: interface's own UA > subscription URL UA > global UA > built-in default UA.                                                     |                                          |
 | open_speed_test          | Enable speed test functionality to obtain response time, rate, and resolution.                                                                                                                                                                                                                                                              | True                                     |
 | open_filter_resolution   | Enable resolution filtering. Interfaces below the minimum resolution (`min_resolution`) will be filtered. GUI users need to manually install FFmpeg; the program will call FFmpeg to obtain interface resolution. Recommended to enable: although it increases speed test time, it more effectively distinguishes playable interfaces.      | True                                     |
 | open_filter_speed        | Enable speed filtering. Interfaces below the minimum speed (`min_speed`) will be filtered.                                                                                                                                                                                                                                                  | True                                     |
+| open_filter_ad           | Enable advertisement filtering. Automatically identify and filter no-signal / advertisement placeholder loop sources (short looping playlists containing `#EXT-X-ENDLIST`, or segment URLs containing ad keywords). The check reuses the playlist already fetched during the speed test stage, adding no extra requests or speed test time. | True                                     |
 | open_full_speed_test     | Enable full speed test, all interfaces under the channel (except for the whitelist) are speed tested, if turned off, when the number of valid speed test results reaches urls_limit, the remaining interfaces will stop speed testing                                                                                                       | False                                    |
-| open_supply              | Enable compensation mechanism mode. When the number of channel interfaces is insufficient, interfaces that do not meet the conditions (such as lower than minimum speed) but may still be available will be added to the result to avoid empty results.                                                                                     | False                                    |
+| open_supply              | Enable compensation mechanism mode. When the number of channel interfaces is insufficient, interfaces that do not meet the conditions (such as lower than minimum speed) but may still be available will be added to the result to avoid empty results. Once enabled, interfaces that do not match the `location`/`isp` will no longer be dropped directly, but downranked to the end of the channel result as a supplement.                                                                                     | False                                    |
+| sort_by                  | Result sorting dimensions, control the sorting priority of interfaces within each channel, compared in order from front to back, comma-separated. Optional values: `speed` (higher first), `delay` (lower first), `resolution` (higher first), e.g.: `resolution,speed`.                                                                    | speed                                    |
 | min_resolution           | Minimum interface resolution, takes effect only when `open_filter_resolution` is enabled.                                                                                                                                                                                                                                                   | 1280x720                                 |
 | max_resolution           | Maximum interface resolution, takes effect only when `open_filter_resolution` is enabled.                                                                                                                                                                                                                                                   | 3840x2160                                |
 | min_speed                | Minimum interface speed (unit: M/s), takes effect only when `open_filter_speed` is enabled.                                                                                                                                                                                                                                                 | 0.5                                      |
@@ -146,6 +171,7 @@
 | subscribe_num            | Preferred number of subscription source interfaces in the result.                                                                                                                                                                                                                                                                           | 10                                       |
 | logo_url                 | Channel logo library URL.                                                                                                                                                                                                                                                                                                                   |                                          |
 | logo_type                | Channel logo file type.                                                                                                                                                                                                                                                                                                                     | png                                      |
+| open_subscribe_logo      | Enable to prioritize the tvg-logo address provided in the subscription m3u, only fall back to the logo library when the subscription source does not provide one.                                                                                                                                                                            | False                                    |
 | open_rtmp                | Enable RTMP push function. Recommended only for owned or authorized content. Requires FFmpeg installed and uses local bandwidth to improve playback experience.                                                                                                                                                                            | True                                     |
 | nginx_http_port          | Nginx HTTP service port, used for the HTTP service of RTMP push forwarding.                                                                                                                                                                                                                                                                 | 8080                                     |
 | nginx_rtmp_port          | Nginx RTMP service port, used for the RTMP service of RTMP push forwarding.                                                                                                                                                                                                                                                                 | 1935                                     |
@@ -265,6 +291,8 @@ docker run -d -p 80:8080 guovern/iptv-api
 | PUBLIC_PORT     | Public port, set to the mapped port, determines external access address and the port used in push stream results | 80        |
 | NGINX_HTTP_PORT | Nginx HTTP service port, needs to be mapped for external access                                                  | 8080      |
 
+> When IPv6 is enabled on the host/Docker, the container automatically listens on IPv6 addresses as well, with no extra configuration; in IPv4-only or IPv6-disabled environments it is skipped automatically.
+
 If you need to modify environment variables, add the following parameters after the above run command:
 
 ```bash
@@ -351,13 +379,17 @@ WeChat public account search for Govin, or scan the code to receive updates and 
 
 ![Wechat public account](./static/images/qrcode.jpg)
 
-### Need more help?
+### Contact Me
 
-Contact via email: `360996299@qq.com`
+Contact via email: [360996299@qq.com](mailto:360996299@qq.com)
 
 ## Star History
 
-[![Star History Chart](https://starchart.cc/Guovin/iptv-api.svg?variant=adaptive)](https://starchart.cc/Guovin/iptv-api)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=Guovin/iptv-api&type=date&theme=dark&legend=top-left" />
+  <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=Guovin/iptv-api&type=date&legend=top-left" />
+  <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=Guovin/iptv-api&type=date&legend=top-left" />
+</picture>
 
 ## Donations
 
@@ -387,3 +419,5 @@ Contact via email: `360996299@qq.com`
 ## License
 
 [AGPL-3.0](./LICENSE) License &copy; 2024-PRESENT [Govin](https://github.com/guovin)
+
+> Note: This project is licensed under AGPL-3.0. If you operate a modified version as a network service (e.g., hosted service or publicly published container/image), you must provide users with the complete corresponding source code (including your modifications). See: https://www.gnu.org/licenses/agpl-3.0.html

@@ -134,6 +134,15 @@ Adjust the configuration as needed, here is the default configuration descriptio
      uncheck display interface information) to disable this feature.
 > 2. If your network supports IPv6, you can modify the configuration: `ipv6_support = True` (GUI: Check
      `Force assume the current network supports IPv6`) to skip the support check.
+> 3. To specify request headers for playback/speed testing, configure the global `user_agent` (a unified UA), or append
+     `UA=value` after a subscription URL in `config/subscribe.txt` (for a single subscription source); the UA is written
+     into the `.m3u` result without enabling `open_headers`.
+> 4. After configuring `location` / `isp`, non-matching interfaces are filtered out directly by default; if you enable
+     `open_supply = True`, non-matching interfaces are no longer dropped but downranked to the end of the channel result
+     as a supplement, avoiding the accidental removal of usable interfaces.
+> 5. Use `sort_by` to customize the sorting priority of interfaces within each channel, comma-separated, with optional
+     values `speed`, `delay`, and `resolution`, compared in order from front to back, e.g. `resolution,speed` sorts by
+     resolution first and then by speed.
 
 #### Add data sources and more
 
@@ -143,6 +152,20 @@ Adjust the configuration as needed, here is the default configuration descriptio
   be empty. Both `.txt` and `.m3u` URLs are supported as subscriptions, and the program will read channel interface
   entries from them sequentially.
   ![Subscription sources](./images/subscribe.png 'Subscription sources')
+
+  If a subscription source requires a specific `User-Agent` to be accessed, append `UA=value` after the subscription URL
+  (wrap it in quotes when it contains spaces), for example:
+
+  ```text
+  https://example.com/sub.m3u UA=okHttp/Mod-1.5.0.0
+  https://example.com/sub2.m3u UA="Mozilla/5.0 xxx"
+  ```
+
+  This `UA` is used for: fetching the subscription content, speed testing the interfaces under that subscription, and
+  writing into the `.m3u` result (for players) — no need to enable `open_headers`. If you want to apply one UA to all
+  interfaces (instead of adding it one by one), set the global `user_agent` in the configuration. Priority: interface's
+  own UA (`#EXTVLCOPT` embedded in m3u) > subscription URL UA > global `user_agent` > built-in default UA. Note: request
+  headers can only be written into the `.m3u` result; the `.txt` format cannot carry a UA.
 
 
 - Local sources（`config/local.txt`）
@@ -339,6 +362,8 @@ docker run -d -p 80:8080 guovern/iptv-api
 | PUBLIC_DOMAIN   | Public domain or IP address, determines external access and the Host used in push stream results                 | 127.0.0.1 |
 | PUBLIC_PORT     | Public port, set to the mapped port, determines external access address and the port used in push stream results | 80        |
 | NGINX_HTTP_PORT | Nginx HTTP service port, needs to be mapped for external access                                                  | 8080      |
+
+> When IPv6 is enabled on the host/Docker, the container automatically listens on IPv6 addresses as well, with no extra configuration; in IPv4-only or IPv6-disabled environments it is skipped automatically.
 
 If you need to modify environment variables, add the following parameters after the above run command:
 
