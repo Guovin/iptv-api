@@ -262,7 +262,7 @@ class ConfigManager:
 
     @property
     def open_headers(self):
-        return self.config.getboolean("Settings", "open_headers", fallback=False)
+        return self.config.getboolean("Settings", "open_headers", fallback=True)
 
     @property
     def user_agent(self):
@@ -274,7 +274,7 @@ class ConfigManager:
 
     @property
     def open_subscribe_epg(self):
-        return self.config.getboolean("Settings", "open_subscribe_epg", fallback=False)
+        return self.config.getboolean("Settings", "open_subscribe_epg", fallback=True)
 
     @property
     def speed_test_limit(self):
@@ -332,7 +332,7 @@ class ConfigManager:
 
     @property
     def open_subscribe_logo(self):
-        return self.config.getboolean("Settings", "open_subscribe_logo", fallback=False)
+        return self.config.getboolean("Settings", "open_subscribe_logo", fallback=True)
 
     @property
     def rtmp_idle_timeout(self):
@@ -414,7 +414,7 @@ class ConfigManager:
 
     @property
     def open_auto_disable_source(self):
-        return self.config.getboolean("Settings", "open_auto_disable_source", fallback=True)
+        return self.config.getboolean("Settings", "open_auto_disable_source", fallback=False)
 
     def load(self):
         """
