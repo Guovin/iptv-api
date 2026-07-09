@@ -18,6 +18,7 @@
   "msg.channel_logo_found": "✅ 本地台标数量：{count}",
   "msg.subscribe_urls_whitelist_total": "✅ 订阅源数量：{default_count}，订阅白名单数量：{whitelist_count}，停用地址数量：{disabled_count}，有效总数量：{total}",
   "msg.epg_urls_whitelist_total": "✅ EPG源数量：{default_count}，EPG白名单数量：{whitelist_count}，停用地址数量：{disabled_count}，有效总数量：{total}",
+  "msg.subscribe_epg_found": "📡 从订阅源中发现 {count} 个 EPG 地址",
   "msg.no_subscribe_urls": "❌ 没有找到有效的订阅地址，请检查文件：{file}，需要添加订阅地址后才能获取订阅源！",
   "msg.auto_disable_source": "⛔ {name}地址已自动停用：{url}（{reason}）",
   "msg.auto_disable_source_done": "\uD83C\uDD97 {name}: ✅ 有效地址数量：{active_count}，⛔ 停用地址数量：{disabled_count}",

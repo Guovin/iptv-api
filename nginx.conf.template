@@ -1,5 +1,7 @@
 worker_processes 1;
 
+pid /tmp/nginx.pid;
+
 error_log /var/log/nginx/error.log error;
 
 events {
@@ -24,6 +26,7 @@ rtmp {
 http {
     server {
         listen ${NGINX_HTTP_PORT};
+        ${IPV6_HTTP_LISTEN}
 
         location / {
             proxy_pass http://127.0.0.1:${APP_PORT};

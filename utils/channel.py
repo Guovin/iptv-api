@@ -56,6 +56,7 @@ channel_alias = Alias()
 ip_checker = IPChecker()
 location_list = config.location
 isp_list = config.isp
+open_supply = config.open_supply
 open_filter_speed = config.open_filter_speed
 min_speed = config.min_speed
 open_filter_resolution = config.open_filter_resolution
@@ -470,6 +471,7 @@ def append_data_to_info_data(
             isp = item.get("isp")
             headers = item.get("headers")
             catchup = item.get("catchup")
+            tvg_logo = item.get("tvg_logo")
             extra_info = item.get("extra_info", "")
 
             if not raw_url:
@@ -515,6 +517,7 @@ def append_data_to_info_data(
                         "isp": isp,
                         "headers": headers,
                         "catchup": catchup,
+                        "tvg_logo": tvg_logo,
                         "extra_info": extra_info
                     }
                     continue
@@ -522,6 +525,7 @@ def append_data_to_info_data(
                     continue
 
             url = normalized_url
+            supply = False
 
             if url_origin not in retain_origin:
                 if not skip_validation:
@@ -542,10 +546,14 @@ def append_data_to_info_data(
                             location, isp = ip_checker.find_map(ip)
 
                     if location and location_list and not any(item in location for item in location_list):
-                        continue
+                        if not open_supply:
+                            continue
+                        supply = True
 
                     if isp and isp_list and not any(item in isp for item in isp_list):
-                        continue
+                        if not open_supply:
+                            continue
+                        supply = True
 
             channel_list.append({
                 "id": channel_id,
@@ -561,7 +569,9 @@ def append_data_to_info_data(
                 "isp": isp,
                 "headers": headers,
                 "catchup": catchup,
-                "extra_info": extra_info
+                "tvg_logo": tvg_logo,
+                "extra_info": extra_info,
+                "supply": supply
             })
             existing_map[url] = len(channel_list) - 1
 
@@ -733,7 +743,6 @@ async def test_speed(data, ipv6=False, callback=None, on_task_complete=None):
     Test speed of channel data
     """
     ipv6_proxy_url = None if (not config.open_ipv6 or ipv6) else constants.ipv6_proxy
-    open_headers = config.open_headers
     open_full_speed_test = config.open_full_speed_test
     get_resolution = config.open_filter_resolution and check_ffmpeg_installed_status()
     semaphore = asyncio.Semaphore(config.speed_test_limit)
@@ -742,7 +751,7 @@ async def test_speed(data, ipv6=False, callback=None, on_task_complete=None):
 
     async def limited_get_speed(channel_info):
         async with semaphore:
-            headers = (open_headers and channel_info.get("headers")) or None
+            headers = channel_info.get("headers") or None
             return await get_speed(
                 channel_info,
                 headers=headers,

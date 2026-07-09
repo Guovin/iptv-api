@@ -1,5 +1,90 @@
 # 更新日志（Changelog）
 
+## v2.0.8
+
+### 2026/7/7
+
+### 🚀 新增功能
+
+1. 订阅源 EPG 自动补充：新增 `open_subscribe_epg`，支持从 M3U 头部 `url-tvg` / `x-tvg-url` 自动发现 EPG 地址并合并到 EPG 获取流程，已配置的 `config/epg.txt` 仍保持优先级（#1301）。
+2. 订阅源台标优先：新增 `open_subscribe_logo`，生成 M3U 结果时可优先使用订阅源中自带的 `tvg-logo`，未提供时再回退到台标库（#1301）。
+3. 多 CDN 回退：`cdn_url` 支持配置多个地址（英文逗号分隔），订阅源和 EPG 拉取 GitHub Raw 内容时会按顺序回退，任一镜像成功即使用该结果；台标等静态资源继续使用第一个地址（#1275）。
+4. 全局与订阅源 UA 增强：新增 `user_agent` 全局配置；订阅源中配置的 UA 现在可继续用于测速和 M3U 结果输出，优先级为接口自带 UA > 订阅地址 UA > 全局 UA > 内置默认 UA（#1372，#1380）。
+5. 结果排序策略：新增 `sort_by`，支持按 `speed`、`delay`、`resolution` 组合控制频道内接口排序（#1372）。
+6. Docker IPv6 监听：容器环境检测到 IPv6 支持时，Nginx 会自动增加 IPv6 HTTP 监听，改善仅 IPv6 公网环境访问体验（#1370）。
+7. 广告/占位源过滤：新增 `open_filter_ad`，测速阶段可识别并过滤无信号、广告、短循环占位等 HLS 源。
+
+### 🐛 优化与修复
+
+1. 优化 `open_supply` 补偿机制：当接口不匹配 `location` / `isp` 偏好但仍可用时，可降权排到频道结果末尾作为补充，避免直接丢弃导致结果不足（#1372）。
+2. 修复部分 RTP 接口无法测速、无法获取分辨率等信息的问题（#1384）。
+3. 更新 IP 归属库，提高归属地与运营商识别准确性。
+4. 升级 `requests`、`aiohttp`、`urllib3`、`pillow` 等依赖版本，修复安全公告中的风险项。
+5. 补充 AGPL-3.0 使用说明、赞助信息与相关文档内容，并优化 README 中的 Star History 展示。
+
+### 🤝 鸣谢
+
+感谢 [IPWO](https://www.ipwo.net/?ref=githubGuovin) 对本项目的赞助支持。IPWO 提供稳定的住宅代理网络，适用于公开数据采集、接口调试、自动化测试与多地区访问验证等合规场景，支持 HTTP / HTTPS / SOCKS5，优惠码：`0105`。请在合法授权并遵守目标站点条款的前提下使用。
+
+### ⚙️ 配置项说明（新增 / 重点变更）
+
+- `open_subscribe_epg`：是否从订阅源 M3U 中自动提取 EPG 地址。
+- `open_subscribe_logo`：是否优先使用订阅源 M3U 中的 `tvg-logo`。
+- `cdn_url`：支持多个 CDN 地址，使用英文逗号分隔。
+- `user_agent`：全局请求 UA，用于订阅源拉取、测速和 M3U 结果输出。
+- `sort_by`：频道结果排序维度，支持 `speed`、`delay`、`resolution`。
+- `open_filter_ad`：是否开启广告/占位源过滤。
+
+### 🆙 升级建议
+
+1. 更新后请同步 `config/config.ini`，或将新增配置合并到 `config/user_config.ini`。
+2. 如果需要沿用订阅源内置 EPG 或台标，请手动开启 `open_subscribe_epg` / `open_subscribe_logo`。
+3. 如果使用 Docker 且公网只有 IPv6，请确认宿主机、容器网络与防火墙均已放行 IPv6 访问。
+
+<details>
+  <summary>English</summary>
+
+### 2026/7/7
+
+### 🚀 New Features
+
+1. Subscription EPG discovery: Added `open_subscribe_epg` to discover EPG URLs from M3U `url-tvg` / `x-tvg-url` headers and merge them into the EPG fetch flow, while configured `config/epg.txt` entries still take priority (#1301).
+2. Subscription logo priority: Added `open_subscribe_logo` so generated M3U results can prefer `tvg-logo` from subscription sources and fall back to the logo library only when missing (#1301).
+3. Multiple CDN fallback: `cdn_url` now supports multiple comma-separated URLs. Subscription and EPG fetches for GitHub Raw content fall back through them in order until one succeeds; static resources such as logos continue to use the first URL (#1275).
+4. Global and per-source UA improvements: Added global `user_agent`; UA configured on subscription entries can now be used for speed testing and M3U output as well. Priority: interface UA > subscription URL UA > global UA > built-in default UA (#1372, #1380).
+5. Result sorting strategy: Added `sort_by` to sort channel interfaces by combinations of `speed`, `delay`, and `resolution` (#1372).
+6. Docker IPv6 listen: When IPv6 support is detected in the container environment, Nginx automatically adds an IPv6 HTTP listener for IPv6-only public access scenarios (#1370).
+7. Ad / placeholder source filtering: Added `open_filter_ad` to identify and filter no-signal, advertisement, and short-loop placeholder HLS sources during speed testing.
+
+### 🐛 Optimizations & Fixes
+
+1. Improved the `open_supply` compensation mechanism: interfaces that do not match `location` / `isp` preferences but are still usable can be downranked to the end of channel results instead of being dropped directly (#1372).
+2. Fixed an issue where some RTP interfaces could not be speed-tested or have metadata such as resolution detected (#1384).
+3. Updated the IP attribution database to improve location and ISP matching accuracy.
+4. Upgraded dependencies including `requests`, `aiohttp`, `urllib3`, and `pillow` to address security advisories.
+5. Added AGPL-3.0 usage clarification, sponsor information, related documentation updates, and improved the Star History display in README files.
+
+### 🤝 Acknowledgements
+
+Thanks to [IPWO](https://www.ipwo.net/?ref=githubGuovin) for sponsoring this project. IPWO provides a stable residential proxy network for compliant scenarios such as public data collection, API debugging, automated testing, and multi-region access verification. It supports HTTP / HTTPS / SOCKS5. Coupon code: `0105`. Use it only with lawful authorization and in compliance with target site terms.
+
+### ⚙️ Configuration Items (new / important changes)
+
+- `open_subscribe_epg`: Extract EPG URLs from subscription M3U files automatically.
+- `open_subscribe_logo`: Prefer `tvg-logo` from subscription M3U files.
+- `cdn_url`: Supports multiple CDN URLs separated by commas.
+- `user_agent`: Global request UA for subscription fetching, speed testing, and M3U output.
+- `sort_by`: Channel result sorting dimensions; supports `speed`, `delay`, and `resolution`.
+- `open_filter_ad`: Enable ad / placeholder source filtering.
+
+### 🆙 Upgrade Recommendations
+
+1. After updating, synchronize `config/config.ini` or merge the new settings into `config/user_config.ini`.
+2. Enable `open_subscribe_epg` / `open_subscribe_logo` manually if you want to reuse EPG or logo information embedded in subscription sources.
+3. If Docker is used in an IPv6-only public network, verify that the host, container network, and firewall all allow IPv6 access.
+
+</details>
+
 ## v2.0.1
 
 ### 2026/3/11
