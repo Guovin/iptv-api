@@ -175,7 +175,7 @@ async def get_channels_by_subscribe_urls(
                                                                                     start_time=start_time)),
                     int((pbar.n / subscribe_urls_len) * 100),
                 )
-            return channels
+        return channels
 
     with ThreadPoolExecutor(max_workers=10) as executor:
         futures = [

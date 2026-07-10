@@ -4,7 +4,7 @@
 
 <p>
   <br>
-  ⚡️IPTV直播源自动更新平台，『🤖全自动采集、筛选、测速、生成🚀』，支持丰富的个性化配置，将结果地址输入播放器即可观看
+  ⚡️IPTV直播源自动更新工具，支持自动采集、多源聚合、可用性校验、测速筛选与播放列表生成。可通过丰富配置自定义频道结果，并以 M3U、TXT 或 API 接口形式输出，导入播放器即可观看。
 </p>
 
 [![Support me on Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/govin)

@@ -1,11 +1,14 @@
 import asyncio
 import http.cookies
 import re
+from collections import deque
+from contextlib import asynccontextmanager
+from importlib import import_module
 from time import time
+from typing import Any
 from urllib.parse import quote, urljoin
 
 import m3u8
-from aiohttp import ClientSession, TCPConnector
 
 import utils.constants as constants
 from utils.config import config
@@ -16,6 +19,10 @@ from utils.tools import get_resolution_value
 from utils.types import TestResult, ChannelTestResult, TestResultCacheData
 
 http.cookies._is_legal_key = lambda _: True
+_aiohttp = import_module("aiohttp")
+ClientSession = getattr(_aiohttp, "ClientSession")
+TCPConnector = getattr(_aiohttp, "TCPConnector")
+ClientTimeout = getattr(_aiohttp, "ClientTimeout")
 cache: TestResultCacheData = {}
 speed_test_timeout = config.speed_test_timeout
 speed_test_filter_host = config.speed_test_filter_host
@@ -27,7 +34,6 @@ sort_by = config.sort_by
 open_filter_speed = config.open_filter_speed
 min_speed_value = config.min_speed
 resolution_speed_map = config.resolution_speed_map
-speed_test_limit = config.speed_test_limit
 open_filter_ad = config.open_filter_ad
 m3u8_headers = ['application/x-mpegurl', 'application/vnd.apple.mpegurl', 'audio/mpegurl', 'audio/x-mpegurl']
 default_ipv6_delay = 0.1
@@ -41,6 +47,8 @@ default_ipv6_result = {
 min_measure_time = 1.0
 stability_window = 4
 stability_threshold = 0.12
+segment_sample_limit = 2
+playlist_max_bytes = 2 * 1024 * 1024
 
 ad_filter_keywords = [
     "no_signal",
@@ -60,8 +68,35 @@ ad_filter_keywords = [
 ad_max_loop_duration = 90
 
 
-async def get_speed_with_download(url: str, headers: dict = None, session: ClientSession = None,
-                                  timeout: int = speed_test_timeout) -> dict[str, float | None]:
+def create_speed_test_session(concurrency: int):
+    limit = max(1, int(concurrency or 1))
+    return ClientSession(
+        connector=TCPConnector(ssl=False, limit=limit, limit_per_host=min(2, limit), ttl_dns_cache=300),
+        timeout=ClientTimeout(total=None),
+        trust_env=True,
+    )
+
+
+@asynccontextmanager
+async def _limit(semaphore):
+    if semaphore is None:
+        yield
+        return
+    async with semaphore:
+        yield
+
+
+@asynccontextmanager
+async def _session(session, concurrency: int = 1):
+    if session is not None:
+        yield session
+        return
+    async with create_speed_test_session(concurrency) as created_session:
+        yield created_session
+
+
+async def get_speed_with_download(url: str, headers: dict = None, session: Any = None,
+                                  timeout: int = speed_test_timeout, semaphore=None) -> dict[str, float | None]:
     """
     Get the speed of the url with a total timeout
     """
@@ -78,52 +113,53 @@ async def get_speed_with_download(url: str, headers: dict = None, session: Clien
     else:
         created_session = False
 
-    speed_samples: list[float] = []
+    speed_samples = deque(maxlen=stability_window)
     try:
-        async with session.get(url, headers=headers, timeout=timeout) as response:
-            if response.status != 200:
-                raise Exception("Invalid response")
-            delay = int(round((time() - start_time) * 1000))
-            async for chunk in response.content.iter_any():
-                if chunk:
-                    total_size += len(chunk)
-                    now = time()
-                    elapsed = now - start_time
-                    delta_t = now - last_sample_time
-                    delta_b = total_size - last_sample_size
-                    if delta_t > 0 and delta_b > 0:
-                        inst_speed = delta_b / delta_t / 1024.0 / 1024.0
-                        speed_samples.append(inst_speed)
-                        last_sample_time = now
-                        last_sample_size = total_size
-                    if (elapsed >= min_measure_time and total_size >= min_bytes
-                            and len(speed_samples) >= stability_window):
-                        window = speed_samples[-stability_window:]
-                        mean = sum(window) / len(window)
-                        if mean > 0 and (max(window) - min(window)) / mean < stability_threshold:
-                            total_time = elapsed
-                            return {
-                                'speed': total_size / total_time / 1024 / 1024,
-                                'delay': delay,
-                                'size': total_size,
-                                'time': total_time,
-                            }
+        async with _limit(semaphore):
+            async with session.get(url, headers=headers, timeout=timeout) as response:
+                if response.status != 200:
+                    raise Exception("Invalid response")
+                delay = int(round((time() - start_time) * 1000))
+                async for chunk in response.content.iter_any():
+                    if chunk:
+                        total_size += len(chunk)
+                        now = time()
+                        elapsed = now - start_time
+                        delta_t = now - last_sample_time
+                        delta_b = total_size - last_sample_size
+                        if delta_t > 0 and delta_b > 0:
+                            inst_speed = delta_b / delta_t / 1024.0 / 1024.0
+                            speed_samples.append(inst_speed)
+                            last_sample_time = now
+                            last_sample_size = total_size
+                        if (elapsed >= min_measure_time and total_size >= min_bytes
+                                and len(speed_samples) >= stability_window):
+                            mean = sum(speed_samples) / len(speed_samples)
+                            if mean > 0 and (max(speed_samples) - min(speed_samples)) / mean < stability_threshold:
+                                total_time = elapsed
+                                return {
+                                    'speed': total_size / total_time / 1024 / 1024,
+                                    'delay': delay,
+                                    'size': total_size,
+                                    'time': total_time,
+                                }
     except:
         pass
     finally:
-        total_time = time() - start_time
         if created_session:
             await session.close()
-        speed_value = total_size / total_time / 1024 / 1024 if total_time > 0 else 0.0
-        return {
-            'speed': speed_value,
-            'delay': delay,
-            'size': total_size,
-            'time': total_time,
-        }
+    total_time = time() - start_time
+    speed_value = total_size / total_time / 1024 / 1024 if total_time > 0 else 0.0
+    return {
+        'speed': speed_value,
+        'delay': delay,
+        'size': total_size,
+        'time': total_time,
+    }
 
 
-async def get_headers(url: str, headers: dict = None, session: ClientSession = None, timeout: int = 3) -> dict:
+async def get_headers(url: str, headers: dict = None, session: Any = None, timeout: int = 3,
+                      semaphore=None) -> dict:
     """
     Get the headers of the url
     """
@@ -134,18 +170,19 @@ async def get_headers(url: str, headers: dict = None, session: ClientSession = N
         created_session = False
     res_headers = {}
     try:
-        async with session.head(url, headers=headers, timeout=timeout) as response:
-            res_headers = response.headers
+        async with _limit(semaphore):
+            async with session.head(url, headers=headers, timeout=timeout, allow_redirects=False) as response:
+                res_headers = dict(response.headers)
     except:
         pass
     finally:
         if created_session:
             await session.close()
-        return res_headers
+    return res_headers
 
 
-async def get_url_content(url: str, headers: dict = None, session: ClientSession = None,
-                          timeout: int = speed_test_timeout) -> str:
+async def get_url_content(url: str, headers: dict = None, session: Any = None,
+                          timeout: int = speed_test_timeout, semaphore=None) -> str:
     """
     Get the content of the url
     """
@@ -156,17 +193,21 @@ async def get_url_content(url: str, headers: dict = None, session: ClientSession
         created_session = False
     content = ""
     try:
-        async with session.get(url, headers=headers, timeout=timeout) as response:
-            if response.status == 200:
-                content = await response.text()
-            else:
-                raise Exception("Invalid response")
+        async with _limit(semaphore):
+            async with session.get(url, headers=headers, timeout=timeout) as response:
+                if response.status == 200:
+                    payload = await response.content.read(playlist_max_bytes + 1)
+                    if len(payload) > playlist_max_bytes:
+                        raise Exception("Response too large")
+                    content = payload.decode(response.charset or "utf-8", errors="replace")
+                else:
+                    raise Exception("Invalid response")
     except:
         pass
     finally:
         if created_session:
             await session.close()
-        return content
+    return content
 
 
 def check_m3u8_valid(headers: dict) -> bool:
@@ -213,33 +254,58 @@ def _parse_time_to_seconds(t: str) -> float:
 
 async def get_result(url: str, headers: dict = None, resolution: str = None,
                      filter_resolution: bool = config.open_filter_resolution,
-                     timeout: int = speed_test_timeout) -> dict[str, float | None]:
+                     timeout: int = speed_test_timeout, session: Any = None,
+                     http_semaphore=None, probe_semaphore=None,
+                     redirects_remaining: int = 5) -> dict[str, float | None]:
     """
     Get the test result of the url
     """
     info = {'speed': 0.0, 'delay': -1, 'resolution': resolution}
     location = None
+    segment_urls = []
     try:
         url = quote(url, safe=':/?$&=@[]%').partition('$')[0]
-        async with ClientSession(connector=TCPConnector(ssl=False), trust_env=True) as session:
-            res_headers = await get_headers(url, headers, session)
-            if not res_headers:
-                res_info = await get_speed_with_download(url, headers, session, timeout)
-                info.update({'speed': res_info['speed'], 'delay': res_info['delay']})
-                return info
-            location = res_headers.get('Location')
+        async with _session(session) as active_session:
+            res_headers = await get_headers(url, headers, active_session, semaphore=http_semaphore)
+            location = res_headers.get('Location') if res_headers else None
             if location:
-                info.update(await get_result(location, headers, resolution, filter_resolution, timeout))
+                if redirects_remaining <= 0:
+                    raise Exception("Too many redirects")
+                info.update(await get_result(
+                    urljoin(url, location),
+                    headers,
+                    resolution,
+                    filter_resolution,
+                    timeout,
+                    session=active_session,
+                    http_semaphore=http_semaphore,
+                    probe_semaphore=probe_semaphore,
+                    redirects_remaining=redirects_remaining - 1,
+                ))
             else:
-                url_content = await get_url_content(url, headers, session, timeout)
-                if url_content:
+                should_parse_m3u8 = ".m3u8" in url.lower() or check_m3u8_valid(res_headers)
+                if should_parse_m3u8:
+                    url_content = await get_url_content(
+                        url, headers, active_session, timeout, semaphore=http_semaphore
+                    )
+                else:
+                    url_content = ""
+                if should_parse_m3u8 and url_content:
                     m3u8_obj = m3u8.loads(url_content)
                     playlists = m3u8_obj.playlists
                     segments = m3u8_obj.segments
                     if playlists:
-                        best_playlist = max(m3u8_obj.playlists, key=lambda p: p.stream_info.bandwidth)
+                        best_playlist = max(m3u8_obj.playlists, key=lambda p: p.stream_info.bandwidth or 0)
+                        stream_resolution = getattr(best_playlist.stream_info, "resolution", None)
+                        if stream_resolution and len(stream_resolution) == 2:
+                            info['resolution'] = f"{stream_resolution[0]}x{stream_resolution[1]}"
+                        stream_frame_rate = getattr(best_playlist.stream_info, "frame_rate", None)
+                        if stream_frame_rate:
+                            info['fps'] = stream_frame_rate
                         playlist_url = urljoin(url, best_playlist.uri)
-                        playlist_content = await get_url_content(playlist_url, headers, session, timeout)
+                        playlist_content = await get_url_content(
+                            playlist_url, headers, active_session, timeout, semaphore=http_semaphore
+                        )
                         if playlist_content:
                             media_playlist = m3u8.loads(playlist_content)
                             if open_filter_ad and is_ad_playlist(media_playlist, playlist_url):
@@ -252,49 +318,75 @@ async def get_result(url: str, headers: dict = None, resolution: str = None,
                     if not segment_urls:
                         raise Exception("Segment urls not found")
                 else:
-                    res_info = await get_speed_with_download(url, headers, session, timeout)
+                    res_info = await get_speed_with_download(
+                        url, headers, active_session, timeout, semaphore=http_semaphore
+                    )
                     info.update({'speed': res_info['speed'], 'delay': res_info['delay']})
-                start_time = time()
-                sampled_segment_urls = sample_segment_urls(segment_urls, speed_test_limit)
-                tasks = [get_speed_with_download(ts_url, headers, session, timeout) for ts_url in sampled_segment_urls]
-                results = await asyncio.gather(*tasks, return_exceptions=True)
-                total_size = sum(result['size'] for result in results if isinstance(result, dict))
-                total_time = sum(result['time'] for result in results if isinstance(result, dict))
-                info['speed'] = total_size / total_time / 1024 / 1024 if total_time > 0 else 0
-                info['delay'] = int(round((time() - start_time) * 1000))
-                try:
-                    if round(info['speed'], 2) == 0 and info['delay'] != -1:
-                        ff_out = await ffmpeg_url(url, headers, timeout)
-                        if ff_out:
-                            try:
-                                parsed = get_video_info(ff_out)
-                                if parsed:
-                                    parsed_speed = parsed.get('speed')
-                                    parsed_resolution = parsed.get('resolution')
-                                    parsed_fps = parsed.get('fps')
-                                    parsed_video_codec = parsed.get('video_codec')
-                                    parsed_audio_codec = parsed.get('audio_codec')
-                                    if parsed_speed:
-                                        info['speed'] = parsed_speed
-                                    if parsed_resolution:
-                                        info['resolution'] = parsed_resolution
-                                    if parsed_fps:
-                                        info['fps'] = parsed_fps
-                                    if parsed_video_codec:
-                                        info['video_codec'] = parsed_video_codec
-                                    if parsed_audio_codec:
-                                        info['audio_codec'] = parsed_audio_codec
-                            except Exception:
-                                pass
+                if segment_urls:
+                    sampled_segment_urls = segment_urls[-(segment_sample_limit + 1):-1]
+                    if not sampled_segment_urls:
+                        sampled_segment_urls = segment_urls[-segment_sample_limit:]
+                    tasks = [
+                        get_speed_with_download(
+                            ts_url,
+                            headers,
+                            active_session,
+                            timeout,
+                            semaphore=http_semaphore,
+                        )
+                        for ts_url in sampled_segment_urls
+                    ]
+                    results = await asyncio.gather(*tasks, return_exceptions=True)
+                    valid_results = [
+                        result for result in results
+                        if isinstance(result, dict) and result.get('size') and result.get('time')
+                    ]
+                    total_size = sum(result['size'] for result in valid_results)
+                    total_time = sum(result['time'] for result in valid_results)
+                    info['speed'] = total_size / total_time / 1024 / 1024 if total_time > 0 else 0
+                    delays = [result['delay'] for result in valid_results if result.get('delay', -1) >= 0]
+                    info['delay'] = int(sum(delays) / len(delays)) if delays else -1
+                    try:
+                        if round(info['speed'], 2) == 0 and info['delay'] != -1:
+                            async with _limit(probe_semaphore):
+                                ff_out = await ffmpeg_url(url, headers, timeout)
+                            if ff_out:
+                                try:
+                                    parsed = get_video_info(ff_out)
+                                    if parsed:
+                                        parsed_speed = parsed.get('speed')
+                                        parsed_resolution = parsed.get('resolution')
+                                        parsed_fps = parsed.get('fps')
+                                        parsed_video_codec = parsed.get('video_codec')
+                                        parsed_audio_codec = parsed.get('audio_codec')
+                                        if parsed_speed:
+                                            info['speed'] = parsed_speed
+                                        if parsed_resolution:
+                                            info['resolution'] = parsed_resolution
+                                        if parsed_fps:
+                                            info['fps'] = parsed_fps
+                                        if parsed_video_codec:
+                                            info['video_codec'] = parsed_video_codec
+                                        if parsed_audio_codec:
+                                            info['audio_codec'] = parsed_audio_codec
+                                except Exception:
+                                    pass
 
-                except Exception:
-                    pass
+                    except Exception:
+                        pass
     except:
         pass
     finally:
-        if filter_resolution and not location and not info.get('resolution') and info.get('delay') != -1:
+        probe_speed_threshold = min(
+            [min_speed_value, *resolution_speed_map.values()],
+            default=min_speed_value,
+        )
+        should_probe = open_supply or not open_filter_speed or (info.get('speed') or 0) >= probe_speed_threshold
+        if (filter_resolution and should_probe and not location
+                and not info.get('resolution') and info.get('delay') != -1):
             try:
-                probed = await probe_url(url, headers, timeout=timeout)
+                async with _limit(probe_semaphore):
+                    probed = await probe_url(url, headers, timeout=timeout)
                 if probed:
                     info['resolution'] = probed.get('resolution')
                     info['fps'] = probed.get('fps')
@@ -302,7 +394,7 @@ async def get_result(url: str, headers: dict = None, resolution: str = None,
                     info['audio_codec'] = probed.get('audio_codec')
             except Exception:
                 pass
-        return info
+    return info
 
 
 async def get_delay_requests(url, timeout=speed_test_timeout, proxy=None):
@@ -473,12 +565,18 @@ def sample_segment_urls(segment_urls: list, limit: int) -> list:
 
 
 def get_avg_result(result) -> TestResult:
-    return {
-        'speed': sum(item['speed'] or 0 for item in result) / len(result),
-        'delay': max(
-            int(sum(item['delay'] or -1 for item in result) / len(result)), -1),
-        'resolution': max((item['resolution'] for item in result), key=get_resolution_value)
+    delays = [item.get('delay') for item in result if isinstance(item.get('delay'), (int, float)) and item['delay'] >= 0]
+    resolutions = [item.get('resolution') for item in result if item.get('resolution')]
+    best = max(result, key=lambda item: item.get('speed') or 0)
+    averaged = {
+        'speed': sum(item.get('speed') or 0 for item in result) / len(result),
+        'delay': int(sum(delays) / len(delays)) if delays else -1,
+        'resolution': max(resolutions, key=get_resolution_value) if resolutions else None,
     }
+    for key in ('fps', 'video_codec', 'audio_codec'):
+        if best.get(key) is not None:
+            averaged[key] = best[key]
+    return averaged
 
 
 def get_speed_result(key: str) -> TestResult:
@@ -492,7 +590,8 @@ def get_speed_result(key: str) -> TestResult:
 
 
 async def get_speed(data, headers=None, ipv6_proxy=None, filter_resolution=open_filter_resolution,
-                    timeout=speed_test_timeout, logger=None, callback=None) -> TestResult:
+                    timeout=speed_test_timeout, logger=None, callback=None, session: Any = None,
+                    http_semaphore=None, probe_semaphore=None) -> TestResult:
     """
     Get the speed (response time and resolution) of the url
     """
@@ -508,8 +607,7 @@ async def get_speed(data, headers=None, ipv6_proxy=None, filter_resolution=open_
             if data['ipv_type'] == "ipv6" and ipv6_proxy:
                 result.update(default_ipv6_result)
             elif constants.rt_url_pattern.match(url) is not None:
-                rt_headers = await get_headers(url, headers)
-                if rt_headers:
+                async with _limit(probe_semaphore):
                     start_time = time()
                     ff_out = await ffmpeg_url(url, headers, timeout)
                     if ff_out:
@@ -525,9 +623,20 @@ async def get_speed(data, headers=None, ipv6_proxy=None, filter_resolution=open_
                         except Exception:
                             pass
             else:
-                result.update(await get_result(url, headers, resolution, filter_resolution, timeout))
+                result.update(await get_result(
+                    url,
+                    headers,
+                    resolution,
+                    filter_resolution,
+                    timeout,
+                    session=session,
+                    http_semaphore=http_semaphore,
+                    probe_semaphore=probe_semaphore,
+                ))
             if cache_key:
                 cache.setdefault(cache_key, []).append(result)
+    except Exception:
+        pass
     finally:
         if callback:
             callback()
@@ -537,7 +646,7 @@ async def get_speed(data, headers=None, ipv6_proxy=None, filter_resolution=open_
             logger.info(
                 f"ID: {data.get('id')}, {t('name.name')}: {data.get('name')}, {t('pbar.url')}: {data.get('url')}, {t('name.from')}: {origin_name}, {t('name.ipv_type')}: {data.get('ipv_type')}, {t('name.location')}: {data.get('location')}, {t('name.isp')}: {data.get('isp')}, {t('name.delay')}: {result.get('delay') or -1} ms, {t('name.speed')}: {result.get('speed') or 0:.2f} M/s, {t('name.resolution')}: {result.get('resolution')}, {t('name.fps')}: {result.get('fps') or t('name.unknown')}, {t('name.video_codec')}: {result.get('video_codec') or t('name.unknown')}, {t('name.audio_codec')}: {result.get('audio_codec') or t('name.unknown')}"
             )
-        return result
+    return result
 
 
 def get_sort_result(

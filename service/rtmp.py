@@ -1,5 +1,8 @@
+import atexit
+import ctypes
 import json
 import os
+import signal
 import subprocess
 import sys
 import threading
@@ -25,6 +28,8 @@ app_rtmp_url = f"rtmp://127.0.0.1:{config.nginx_rtmp_port}"
 hls_running_streams = OrderedDict()
 STREAMS_LOCK = threading.Lock()
 hls_last_access = {}
+hls_starting_streams = set()
+hls_starting_processes = {}
 HLS_IDLE_TIMEOUT = config.rtmp_idle_timeout
 HLS_WAIT_TIMEOUT = 30
 HLS_WAIT_INTERVAL = 0.5
@@ -34,6 +39,79 @@ hls_temp_path = resource_path(os.path.join(nginx_dir, 'temp', 'hls')) if sys.pla
 
 _hls_monitor_started_evt = threading.Event()
 _hls_monitor_lock = threading.Lock()
+_libc = ctypes.CDLL(None) if sys.platform.startswith("linux") else None
+
+
+def _reserve_stream(channel_id):
+    victims = []
+    with STREAMS_LOCK:
+        for running_channel_id, running_process in list(hls_running_streams.items()):
+            if running_process.poll() is not None:
+                hls_running_streams.pop(running_channel_id, None)
+                hls_last_access.pop(running_channel_id, None)
+        existing = hls_running_streams.get(channel_id)
+        if existing and existing.poll() is None:
+            hls_last_access[channel_id] = time.time()
+            hls_running_streams.move_to_end(channel_id)
+            return existing, False
+        if existing:
+            hls_running_streams.pop(channel_id, None)
+            hls_last_access.pop(channel_id, None)
+        if channel_id in hls_starting_streams:
+            return None, False
+        if MAX_STREAMS <= 0:
+            return None, False
+
+        while len(hls_running_streams) + len(hls_starting_streams) >= MAX_STREAMS:
+            if not hls_running_streams:
+                return None, False
+            oldest_channel_id, oldest_process = hls_running_streams.popitem(last=False)
+            hls_last_access.pop(oldest_channel_id, None)
+            victims.append(oldest_process)
+        hls_starting_streams.add(channel_id)
+
+    for process in victims:
+        _terminate_process_safe(process)
+    return None, True
+
+
+def _release_stream_reservation(channel_id):
+    with STREAMS_LOCK:
+        hls_starting_streams.discard(channel_id)
+        process = hls_starting_processes.pop(channel_id, None)
+    if process and process.poll() is None:
+        _terminate_process_safe(process)
+
+
+def _set_parent_death_signal(parent_pid):
+    _libc.prctl(1, signal.SIGTERM)
+    if os.getppid() != parent_pid:
+        os.kill(os.getpid(), signal.SIGTERM)
+
+
+def _start_ffmpeg_process(cmd, channel_id):
+    with STREAMS_LOCK:
+        if channel_id not in hls_starting_streams:
+            raise RuntimeError
+    kwargs = {}
+    if sys.platform.startswith("linux"):
+        parent_pid = os.getpid()
+        kwargs["preexec_fn"] = lambda: _set_parent_death_signal(parent_pid)
+    process = subprocess.Popen(
+        cmd,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        stdin=subprocess.DEVNULL,
+        **kwargs,
+    )
+    with STREAMS_LOCK:
+        accepted = channel_id in hls_starting_streams
+        if accepted:
+            hls_starting_processes[channel_id] = process
+    if not accepted:
+        _terminate_process_safe(process)
+        raise RuntimeError
+    return process
 
 
 def _save_probe_metadata_to_db(channel_id: str, url: str, headers: dict | None, meta: dict | None):
@@ -42,13 +120,10 @@ def _save_probe_metadata_to_db(channel_id: str, url: str, headers: dict | None, 
     """
     if not meta:
         return
+    conn = None
     try:
         ensure_result_data_schema(constants.rtmp_data_path)
         conn = get_db_connection(constants.rtmp_data_path)
-    except Exception as e:
-        print(t("msg.write_error").format(info=f"open rtmp db error: {e}"))
-        return
-    try:
         cursor = conn.cursor()
         cursor.execute(
             "CREATE TABLE IF NOT EXISTS result_data ("
@@ -67,10 +142,16 @@ def _save_probe_metadata_to_db(channel_id: str, url: str, headers: dict | None, 
             )
         )
         conn.commit()
-    except Exception:
-        pass
+    except Exception as e:
+        if conn:
+            try:
+                conn.rollback()
+            except Exception:
+                pass
+        print(t("msg.write_error").format(info=e))
     finally:
-        return_db_connection(constants.rtmp_data_path, conn)
+        if conn:
+            return_db_connection(constants.rtmp_data_path, conn)
 
 
 def ensure_hls_idle_monitor_started():
@@ -144,34 +225,37 @@ def _get_video_encoder_candidates():
 
 
 def start_hls_to_rtmp(host, channel_id, client_user_agent: str | None = None):
-    """
-    Start a HLS -> RTMP forwarding process for a given channel.
-    Optimized: clearer early returns, reduced duplicated checks, use wait(timeout)
-    to detect quick ffmpeg failures instead of manual poll loops.
-    """
     ensure_hls_idle_monitor_started()
-
     if not host:
         return None
     if not channel_id:
         print(t("msg.error_channel_id_not_found"))
         return None
 
+    existing, reserved = _reserve_stream(channel_id)
+    if existing:
+        print(t("msg.rtmp_hls_stream_already_running"))
+        return existing
+    if not reserved:
+        return None
+
+    try:
+        return _start_reserved_hls_to_rtmp(host, channel_id, client_user_agent)
+    finally:
+        _release_stream_reservation(channel_id)
+
+
+def _start_reserved_hls_to_rtmp(host, channel_id, client_user_agent: str | None = None):
+    """
+    Start a HLS -> RTMP forwarding process for a given channel.
+    Optimized: clearer early returns, reduced duplicated checks, use wait(timeout)
+    to detect quick ffmpeg failures instead of manual poll loops.
+    """
     data = get_channel_data(channel_id)
     url = data.get("url", "")
     if not url:
         print(t("msg.error_channel_url_not_found"))
         return None
-
-    with STREAMS_LOCK:
-        existing = hls_running_streams.get(channel_id)
-        if existing and existing.poll() is None:
-            print(t("msg.rtmp_hls_stream_already_running"))
-            hls_last_access[channel_id] = time.time()
-            return existing
-        hls_running_streams.pop(channel_id, None)
-
-    cleanup_streams(hls_running_streams)
 
     headers = data.get("headers", None)
     headers_str = ''.join(f'{k}: {v}\r\n' for k, v in headers.items()) if headers else ''
@@ -211,7 +295,6 @@ def start_hls_to_rtmp(host, channel_id, client_user_agent: str | None = None):
         client_forces_transcode = bool(
             client_user_agent and _client_needs_transcode_for_codec(client_user_agent, meta.get('video_codec')))
 
-    devnull = subprocess.DEVNULL
     base_cmd = ['ffmpeg', '-loglevel', 'error', '-re']
 
     local_loop = False
@@ -265,20 +348,22 @@ def start_hls_to_rtmp(host, channel_id, client_user_agent: str | None = None):
         except Exception:
             pass
 
+        with STREAMS_LOCK:
+            hls_starting_processes.pop(channel_id, None)
+            hls_starting_streams.discard(channel_id)
+            hls_running_streams[channel_id] = proc
+            hls_last_access[channel_id] = time.time()
+
         threading.Thread(
             target=monitor_stream_process,
             args=(hls_running_streams, proc, channel_id),
             daemon=True
         ).start()
 
-        with STREAMS_LOCK:
-            hls_running_streams[channel_id] = proc
-            hls_last_access[channel_id] = time.time()
-
     def _start_copy_trial(wait_seconds=3, copy_audio: bool = True):
         cmd = _build_copy_cmd(copy_audio=copy_audio)
         try:
-            copy_p = subprocess.Popen(cmd, stdout=devnull, stderr=devnull, stdin=devnull)
+            copy_p = _start_ffmpeg_process(cmd, channel_id)
         except Exception as copy_e:
             print(t("msg.error_start_ffmpeg_failed").format(info=copy_e))
             return None, False
@@ -337,7 +422,7 @@ def start_hls_to_rtmp(host, channel_id, client_user_agent: str | None = None):
         print(t("msg.rtmp_try_encoder").format(encoder=enc_name, channel_id=channel_id))
         cmd_try = base_cmd + enc_args + rest_args
         try:
-            p = subprocess.Popen(cmd_try, stdout=devnull, stderr=devnull, stdin=devnull)
+            p = _start_ffmpeg_process(cmd_try, channel_id)
         except Exception as e:
             print(t("msg.rtmp_encoder_start_failed").format(encoder=enc_name, info=e))
             continue
@@ -386,22 +471,22 @@ def _terminate_process_safe(process):
 
 
 def cleanup_streams(streams):
+    victims = []
     with STREAMS_LOCK:
-        to_delete = []
         for channel_id, process in list(streams.items()):
             if process.poll() is not None:
-                to_delete.append(channel_id)
-        for channel_id in to_delete:
-            streams.pop(channel_id, None)
-            hls_last_access.pop(channel_id, None)
+                streams.pop(channel_id, None)
+                hls_last_access.pop(channel_id, None)
 
         while len(streams) > MAX_STREAMS:
             try:
                 oldest_channel_id, oldest_proc = streams.popitem(last=False)
-                _terminate_process_safe(oldest_proc)
                 hls_last_access.pop(oldest_channel_id, None)
+                victims.append(oldest_proc)
             except KeyError:
                 break
+    for process in victims:
+        _terminate_process_safe(process)
 
 
 def monitor_stream_process(streams, process, channel_id):
@@ -438,10 +523,11 @@ def hls_idle_monitor():
 
 
 def get_channel_data(channel_id):
-    ensure_result_data_schema(constants.rtmp_data_path)
-    conn = get_db_connection(constants.rtmp_data_path)
     channel_data = {}
+    conn = None
     try:
+        ensure_result_data_schema(constants.rtmp_data_path)
+        conn = get_db_connection(constants.rtmp_data_path)
         cursor = conn.cursor()
         cursor.execute(
             "SELECT url, headers, video_codec, audio_codec, resolution, fps FROM result_data WHERE id=?",
@@ -460,20 +546,39 @@ def get_channel_data(channel_id):
     except Exception as e:
         print(t("msg.error_get_channel_data_from_database").format(info=e))
     finally:
-        return_db_connection(constants.rtmp_data_path, conn)
+        if conn:
+            return_db_connection(constants.rtmp_data_path, conn)
     return channel_data
 
 
 def stop_stream(channel_id):
     with STREAMS_LOCK:
-        process = hls_running_streams.get(channel_id)
-        if process and process.poll() is None:
+        process = hls_running_streams.pop(channel_id, None)
+        starting_process = hls_starting_processes.pop(channel_id, None)
+        hls_starting_streams.discard(channel_id)
+        hls_last_access.pop(channel_id, None)
+    for target in (process, starting_process):
+        if target and target.poll() is None:
             try:
-                _terminate_process_safe(process)
+                _terminate_process_safe(target)
             except Exception as e:
                 print(t("msg.error_stop_channel_stream").format(channel_id=channel_id, info=e))
-        hls_running_streams.pop(channel_id, None)
-        hls_last_access.pop(channel_id, None)
+
+
+def stop_all_streams():
+    with STREAMS_LOCK:
+        processes = list(hls_running_streams.values()) + list(hls_starting_processes.values())
+        hls_running_streams.clear()
+        hls_starting_processes.clear()
+        hls_starting_streams.clear()
+        hls_last_access.clear()
+    seen = set()
+    for process in processes:
+        if process.pid in seen:
+            continue
+        seen.add(process.pid)
+        if process.poll() is None:
+            _terminate_process_safe(process)
 
 
 def start_rtmp_service():
@@ -494,3 +599,6 @@ def stop_rtmp_service():
         subprocess.Popen([stop_path], shell=True)
     except Exception as e:
         print(t("msg.error_rtmp_service_stop_failed").format(info=e))
+
+
+atexit.register(stop_all_streams)
