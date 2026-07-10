@@ -229,8 +229,13 @@ class UpdateSource:
 
     async def _stop_aggregator(self):
         if self.aggregator:
-            await self.aggregator.stop()
-            self.aggregator = None
+            aggregator = self.aggregator
+            try:
+                await aggregator.stop()
+                return aggregator.result
+            finally:
+                self.aggregator = None
+        return {}
 
     # ----------------------------
     # stage 4: speed test
@@ -258,7 +263,6 @@ class UpdateSource:
 
         if self.total <= 0:
             self.aggregator.is_last = True
-            await self.aggregator.flush_once(force=True)
             return {}
         if self.update_progress:
             self.update_progress(
@@ -351,13 +355,12 @@ class UpdateSource:
                 else:
                     self.aggregator.test_results = self.channel_data
                     self.aggregator.is_last = True
-                    await self.aggregator.flush_once(force=True)
 
             finally:
+                final_result = await self._stop_aggregator()
                 if config.open_history:
-                    self._save_cache(self.aggregator.result)
+                    self._save_cache(final_result)
                     frozen.save(constants.frozen_path)
-                await self._stop_aggregator()
 
             print(
                 t("msg.update_completed").format(

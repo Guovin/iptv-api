@@ -2,7 +2,7 @@ import asyncio
 import copy
 from collections import defaultdict
 from logging import INFO
-from typing import Any, Dict, Optional, Set, Tuple, Callable, cast
+from typing import Any, Dict, Optional, Set, Tuple
 
 import utils.constants as constants
 from utils.channel import sort_channel_result, generate_channel_statistic, write_channel_to_file, retain_origin
@@ -44,33 +44,12 @@ class ResultAggregator:
         self.stat_logger = stat_logger or get_logger(constants.statistic_log_path, level=INFO, init=True)
         self.is_last = False
         self._lock = asyncio.Lock()
+        self._write_lock = asyncio.Lock()
         self._min_items_before_flush = min_items_before_flush
         self.flush_debounce = flush_debounce if flush_debounce is not None else max(0.2, write_interval / 2)
         self._flush_event = asyncio.Event()
-        self._debounce_task: Optional[asyncio.Task] = None
         self._pending_channels: Set[Tuple[str, str]] = set()
         self._finished_channels: Set[Tuple[str, str]] = set()
-
-    def _ensure_debounce_task_in_loop(self, loop: asyncio.AbstractEventLoop) -> None:
-        """
-        Ensure the debounce task is running in the specified event loop.
-        """
-        if not self._debounce_task or self._debounce_task.done():
-            try:
-                self._debounce_task = loop.create_task(self._debounce_loop())
-            except Exception:
-                try:
-                    cast(Any, loop).call_soon_threadsafe(
-                        cast(Callable[[], None], self._create_debounce_task_threadsafe), *())
-                except Exception:
-                    pass
-
-    def _create_debounce_task_threadsafe(self) -> None:
-        """
-        Helper to create the debounce task from within the event loop thread.
-        This is intended to be invoked via loop.call_soon_threadsafe.
-        """
-        self._debounce_task = asyncio.create_task(self._debounce_loop())
 
     def add_item(self, cate: str, name: str, item: dict, is_channel_last: bool = False, is_last: bool = False,
                  is_valid: bool = True):
@@ -89,21 +68,18 @@ class ResultAggregator:
                 pass
 
         if is_valid and self.realtime_write:
+            self._dirty = True
+            self._dirty_count += 1
+            if self._dirty_count < self._min_items_before_flush:
+                return
+            self._dirty_count = 0
             try:
-                self._dirty = True
-                self._dirty_count += 1
-                loop = asyncio.get_running_loop()
-                self._ensure_debounce_task_in_loop(loop)
-                if self._dirty_count >= self._min_items_before_flush:
-                    self._dirty_count = 0
-                    cast(Any, loop).call_soon(cast(Callable[[], None], self._flush_event.set), *())
+                asyncio.get_running_loop()
+                self._flush_event.set()
             except RuntimeError:
                 try:
                     loop = asyncio.get_event_loop()
-                    self._ensure_debounce_task_in_loop(loop)
-                    if self._dirty_count >= self._min_items_before_flush:
-                        self._dirty_count = 0
-                        cast(Any, loop).call_soon_threadsafe(cast(Callable[[], None], self._flush_event.set), *())
+                    loop.call_soon_threadsafe(self._flush_event.set)
                 except Exception:
                     pass
 
@@ -112,10 +88,21 @@ class ResultAggregator:
             test_copy: Dict[str, Dict[str, list]],
             affected: Optional[Set[Tuple[str, str]]] = None,
             finished: Optional[Set[Tuple[str, str]]] = None,
+            is_last: bool = False,
     ) -> None:
         """
         Atomic write of sorted view to file, either partially or fully.
         """
+        async with self._write_lock:
+            await self._write_sorted_view(test_copy, affected, finished, is_last)
+
+    async def _write_sorted_view(
+            self,
+            test_copy: Dict[str, Dict[str, list]],
+            affected: Optional[Set[Tuple[str, str]]] = None,
+            finished: Optional[Set[Tuple[str, str]]] = None,
+            is_last: bool = False,
+    ) -> None:
         if finished is None:
             finished = set()
 
@@ -190,29 +177,10 @@ class ResultAggregator:
             self.ipv6_support,
             self.first_channel_name,
             True,
-            self.is_last,
+            is_last,
         )
 
         self.result = merged
-
-    async def _debounce_loop(self):
-        """
-        Debounce loop to handle flush events.
-        """
-        self._debounce_task = asyncio.current_task()
-        try:
-            while not self._stopped:
-                await self._flush_event.wait()
-                try:
-                    await asyncio.sleep(self.flush_debounce)
-                except asyncio.CancelledError:
-                    raise
-                self._flush_event.clear()
-                if self._dirty:
-                    await self.flush_once()
-        finally:
-            self._debounce_task = None
-            self._flush_event.clear()
 
     async def flush_once(self, force: bool = False) -> None:
         """
@@ -242,10 +210,16 @@ class ResultAggregator:
 
             self._dirty = False
             self._dirty_count = 0
+            is_last_for_flush = self.is_last
 
         affected = None if force else (pending if pending else None)
         try:
-            await self._atomic_write_sorted_view(test_copy, affected=affected, finished=finished_for_flush)
+            await self._atomic_write_sorted_view(
+                test_copy,
+                affected=affected,
+                finished=finished_for_flush,
+                is_last=is_last_for_flush,
+            )
         except Exception:
             pass
 
@@ -253,14 +227,26 @@ class ResultAggregator:
         """
         Run the periodic flush loop.
         """
-        self._stopped = False
         try:
             while not self._stopped:
-                await asyncio.sleep(self.write_interval)
+                triggered = False
+                try:
+                    await asyncio.wait_for(self._flush_event.wait(), timeout=self.write_interval)
+                    triggered = True
+                except asyncio.TimeoutError:
+                    pass
+                if self._stopped:
+                    break
+                if triggered:
+                    await asyncio.sleep(self.flush_debounce)
+                    if self._stopped:
+                        break
+                self._flush_event.clear()
                 if self._dirty:
                     await self.flush_once()
         finally:
             self._stopped = True
+            self._flush_event.clear()
 
     async def start(self) -> None:
         """
@@ -271,29 +257,22 @@ class ResultAggregator:
             return
         if self._task and not self._task.done():
             return
+        self._stopped = False
+        self._flush_event.clear()
         self._task = asyncio.create_task(self._run_loop())
-        loop = asyncio.get_running_loop()
-        self._ensure_debounce_task_in_loop(loop)
 
     async def stop(self) -> None:
         """
         Stop the aggregator and clean up resources.
         """
+        self._stopped = True
+        self._flush_event.set()
+        if self._task:
+            await self._task
+            self._task = None
         try:
             await self.flush_once(force=True)
         except Exception:
             pass
-
-        self._stopped = True
-        if self._task:
-            await self._task
-            self._task = None
-        if self._debounce_task:
-            self._debounce_task.cancel()
-            try:
-                await self._debounce_task
-            except asyncio.CancelledError:
-                pass
-            self._debounce_task = None
         if self.stat_logger:
             close_logger_handlers(self.stat_logger)
