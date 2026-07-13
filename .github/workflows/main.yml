@@ -1,21 +1,23 @@
 name: 'Update schedule'
 
+# ⚠️注意：请不要在 fork 的仓库中添加 `on: schedule` 定时任务（cron）。
+# Forks 可能被大量复制并触发定时执行，当前 GitHub Actions 资源使用已接近上限，
+# 大量 fork 的定时任务可能导致工作流被禁用。若需要定时执行，请使用其它部署方式。
+#
+# ⚠️NOTICE: Do NOT add `on: schedule` cron triggers in forked repositories.
+# Forks may multiply scheduled runs and GitHub Actions resource usage is near limits.
+# Many scheduled workflows from forks can cause workflows to be disabled.
+# If scheduled execution is required, use other deployment methods.
+
 on:
   schedule:
+    # 每天北京时间 06:00 触发 (UTC 22:00)
     - cron: '0 22 * * *'
   workflow_dispatch:
-    branches:
-      - master
-      - dev
-      - gd
 
 jobs:
   push:
     runs-on: ${{ matrix.operating-system }}
-    timeout-minutes: 120
-    permissions:
-      actions: write      # 允许删除 workflow 运行记录
-      contents: write     # 允许推送代码
     strategy:
       matrix:
         operating-system: [ 'ubuntu-latest' ]
@@ -23,57 +25,23 @@ jobs:
       - name: Set branch name
         id: vars
         run: echo "BRANCH_NAME=${{ github.repository_owner == 'Guovin' && 'gd' || 'master' }}" >> $GITHUB_ENV
-
-      # 修改1：checkout v3 -> v4
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v3
         with:
           ref: ${{ env.BRANCH_NAME }}
-
-      # 修改2：setup-python v4 -> v5，保留 pipenv 缓存写法
       - name: Run with setup-python 3.13
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v4
         with:
           python-version: '3.13'
           update-environment: true
           cache: 'pipenv'
-
-      - name: Check open_driver config
-        id: check_driver
-        run: |
-          echo "OPEN_DRIVER=$(python -c '
-          try:
-            from utils.config import config
-            open_driver = config.open_driver
-          except:
-            open_driver = False
-          print(open_driver)')" >> $GITHUB_ENV
-
-      - name: Set up Chrome
-        if: env.OPEN_DRIVER == 'True'
-        uses: browser-actions/setup-chrome@latest
-        with:
-          chrome-version: stable
-
-      - name: Download chrome driver
-        if: env.OPEN_DRIVER == 'True'
-        uses: nanasess/setup-chromedriver@master
-
       - name: Install FFmpeg
         run: sudo apt-get update && sudo apt-get install -y ffmpeg
-
       - name: Install pipenv
         run: pip3 install --user pipenv
-
-      - name: Install dependencies
+      - name: Install dependecies
         run: pipenv --python 3.13 && pipenv install --deploy
-
-      - name: Install selenium
-        if: env.OPEN_DRIVER == 'True'
-        run: pipenv install selenium
-
       - name: Update
         run: pipenv run dev
-
       - name: Commit and push if changed
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
@@ -83,67 +51,10 @@ jobs:
             git commit -m "Github Action Auto Updated"
             git push --force
           fi
-
-      # 修改3：github-script v6 -> v7
-      - name: Cleanup old workflow runs (keep only 5)
-        if: always()
-        uses: actions/github-script@v7
+      - name: Delete old workflow runs
+        uses: Mattraks/delete-workflow-runs@v2
         with:
-          script: |
-            const owner = context.repo.owner;
-            const repo = context.repo.repo;
-            const current_run_id = context.runId;
-
-            // 从 GITHUB_WORKFLOW_REF 解析当前工作流文件名
-            const workflowRef = process.env.GITHUB_WORKFLOW_REF;
-            let workflow_id;
-            if (workflowRef) {
-              const match = workflowRef.match(/\.github\/workflows\/(.+?)@/);
-              if (match) {
-                workflow_id = match[1];  // 例如 "update-schedule.yml"
-              }
-            }
-            // 降级方案：如果解析失败，尝试使用 context.workflow（但可能仍是名称，这里保留仅作最后尝试）
-            if (!workflow_id) {
-              workflow_id = context.workflow;
-            }
-
-            console.log(`Using workflow_id: ${workflow_id}`);
-
-            // 分页获取所有运行记录
-            let runs = [];
-            let page = 1;
-            const per_page = 100;
-            let response;
-
-            do {
-              response = await github.rest.actions.listWorkflowRuns({
-                owner,
-                repo,
-                workflow_id,
-                per_page,
-                page
-              });
-              runs = runs.concat(response.data.workflow_runs);
-              page++;
-            } while (response.data.workflow_runs.length === per_page);
-
-            // 按创建时间降序排序（最新的在前）
-            runs.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-
-            // 保留前 5 条，删除其余
-            const runsToDelete = runs.slice(5);
-            console.log(`Total runs: ${runs.length}, keeping 5, deleting ${runsToDelete.length} runs.`);
-
-            for (const run of runsToDelete) {
-              if (run.id === current_run_id) {
-                console.log(`Skipping current run ${run.id}`);
-                continue;
-              }
-              console.log(`Deleting run ${run.id} from ${run.created_at}`);
-              await github.rest.actions.deleteWorkflowRun({
-                owner,
-                repo,
-                run_id: run.id
-              });
-            }
+          token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          retain_days: 0
+          keep_minimum_runs: 5
