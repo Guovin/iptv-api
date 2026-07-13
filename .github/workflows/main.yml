@@ -15,6 +15,10 @@ on:
     - cron: '0 22 * * *'
   workflow_dispatch:
 
+permissions:
+  contents: write
+  actions: write
+
 jobs:
   push:
     runs-on: ${{ matrix.operating-system }}
@@ -51,6 +55,12 @@ jobs:
             git commit -m "Github Action Auto Updated"
             git push --force
           fi
+
+  cleanup:
+    runs-on: ubuntu-latest
+    needs: push
+    if: always()
+    steps:
       - name: Delete old workflow runs
         uses: Mattraks/delete-workflow-runs@v2
         with:
