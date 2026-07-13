@@ -29,23 +29,30 @@ jobs:
       - name: Set branch name
         id: vars
         run: echo "BRANCH_NAME=${{ github.repository_owner == 'Guovin' && 'gd' || 'master' }}" >> $GITHUB_ENV
+
       - uses: actions/checkout@v3
         with:
           ref: ${{ env.BRANCH_NAME }}
+
       - name: Run with setup-python 3.13
         uses: actions/setup-python@v4
         with:
           python-version: '3.13'
           update-environment: true
           cache: 'pipenv'
+
       - name: Install FFmpeg
         run: sudo apt-get update && sudo apt-get install -y ffmpeg
+
       - name: Install pipenv
         run: pip3 install --user pipenv
+
       - name: Install dependecies
         run: pipenv --python 3.13 && pipenv install --deploy
+
       - name: Update
         run: pipenv run dev
+
       - name: Commit and push if changed
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
@@ -56,15 +63,42 @@ jobs:
             git push --force
           fi
 
-  cleanup:
-    runs-on: ubuntu-latest
-    needs: push
-    if: always()
-    steps:
-      - name: Delete old workflow runs
-        uses: Mattraks/delete-workflow-runs@v2
-        with:
-          token: ${{ github.token }}
-          repository: ${{ github.repository }}
-          retain_days: 0
-          keep_minimum_runs: 5
+      - name: Cleanup old workflow runs (keep latest 5)
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          WORKFLOW_NAME="Update schedule"
+          CURRENT_RUN_ID=${{ github.run_id }}
+
+          echo "Current run ID: $CURRENT_RUN_ID"
+          echo "Fetching runs for workflow: $WORKFLOW_NAME"
+
+          mapfile -t RUNS < <(
+            gh run list \
+              --workflow "$WORKFLOW_NAME" \
+              --limit 100 \
+              --json databaseId \
+              --jq '.[].databaseId'
+          )
+
+          KEEP=5
+          TOTAL=${#RUNS[@]}
+          echo "Found $TOTAL runs. Keeping latest $KEEP."
+
+          if [ "$TOTAL" -le "$KEEP" ]; then
+            echo "Nothing to delete."
+            exit 0
+          fi
+
+          for ((i = KEEP; i < TOTAL; i++)); do
+            RUN_ID="${RUNS[$i]}"
+            if [ "$RUN_ID" = "$CURRENT_RUN_ID" ]; then
+              echo "Skipping current run ID: $RUN_ID (can't delete itself)"
+              continue
+            fi
+            echo "Deleting run ID: $RUN_ID"
+            gh run delete "$RUN_ID" || echo "Failed to delete run $RUN_ID (may be already running)"
+          done
+
+          echo "Cleanup completed."
