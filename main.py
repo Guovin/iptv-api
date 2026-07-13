@@ -72,11 +72,11 @@ class UpdateSource:
     # ----------------------------
     # progress / pbar
     # ----------------------------
-    def pbar_update(self, name: str = "", item_name: str = ""):
+    def pbar_update(self, name: str = "", item_name: str = "", count: int = 1):
         if not self.pbar:
             return
         if self.pbar.n < self.total:
-            self.pbar.update()
+            self.pbar.update(min(max(1, count), self.total - self.pbar.n))
             remaining_total = self.total - self.pbar.n
             remaining_time = get_pbar_remaining(n=self.pbar.n, total=self.total, start_time=self.start_time)
             if self.update_progress:
@@ -222,7 +222,9 @@ class UpdateSource:
             base_data=self.channel_data,
             first_channel_name=self.channel_names[0] if self.channel_names else None,
             ipv6_support=self.ipv6_support,
-            write_interval=2.0,
+            write_interval=10.0,
+            flush_debounce=2.0,
+            min_items_before_flush=max(25, config.urls_limit),
             result=cache,
         )
         await self.aggregator.start()
@@ -275,17 +277,23 @@ class UpdateSource:
             total=self.total,
             desc=t("pbar.speed_test"),
             file=sys.stdout,
-            mininterval=0,
+            mininterval=1.0,
             miniters=1,
             dynamic_ncols=False,
         )
         try:
-            return await test_speed(
+            result = await test_speed(
                 test_data,
                 ipv6=self.ipv6_support,
-                callback=lambda: self.pbar_update(name=t("pbar.speed_test"), item_name=t("pbar.url")),
+                callback=lambda count=1: self.pbar_update(
+                    name=t("pbar.speed_test"),
+                    item_name=t("pbar.url"),
+                    count=count,
+                ),
                 on_task_complete=self.aggregator.add_item,
             )
+            self.aggregator.is_last = True
+            return result
         finally:
             if self.pbar:
                 self.pbar.close()

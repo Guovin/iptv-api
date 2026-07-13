@@ -14,7 +14,6 @@ from utils.i18n import t
 from utils.requests.tools import get_soup_requests
 from utils.retry import retry_func
 from utils.tools import (
-    merge_objects,
     get_pbar_remaining,
     get_name_value,
     get_m3u_epg_urls,
@@ -24,6 +23,27 @@ from utils.tools import (
     save_url_content, close_logger_handlers,
     disable_urls_in_file,
 )
+
+
+def _channel_item_key(item):
+    return (
+        item.get("url"),
+        tuple(sorted((item.get("headers") or {}).items())),
+        item.get("tvg_logo"),
+        item.get("extra_info", ""),
+    )
+
+
+def _merge_channel_results(target, source, seen):
+    for name, items in source.items():
+        target_items = target.setdefault(name, [])
+        name_seen = seen.setdefault(name, set())
+        for item in items:
+            key = _channel_item_key(item)
+            if key in name_seen:
+                continue
+            name_seen.add(key)
+            target_items.append(item)
 
 
 async def get_channels_by_subscribe_urls(
@@ -51,7 +71,7 @@ async def get_channels_by_subscribe_urls(
         total=subscribe_urls_len,
         desc=t("pbar.getting_name").format(name=t("name.subscribe")),
         file=sys.stdout,
-        mininterval=0,
+        mininterval=1.0,
         miniters=1,
         dynamic_ncols=False,
     )
@@ -72,6 +92,9 @@ async def get_channels_by_subscribe_urls(
     disabled_lock = Lock()
     discovered_epg_urls = set()
     epg_discover_lock = Lock()
+    unmatched_logged = 0
+    unmatched_lock = Lock()
+    unmatched_log_limit = 10000
 
     def _mark_disabled(source_url: str, reason: str):
         if not open_auto_disable_source or not source_url:
@@ -81,11 +104,13 @@ async def get_channels_by_subscribe_urls(
         print(t("msg.auto_disable_source").format(name=mode_name, url=source_url, reason=reason), flush=True)
 
     def process_subscribe_channels(subscribe_info: str | dict) -> defaultdict:
+        nonlocal unmatched_logged
         subscribe_url = subscribe_info.get('url') if isinstance(subscribe_info, dict) else subscribe_info
         source_url = subscribe_info.get('source_url', subscribe_url) if isinstance(subscribe_info,
                                                                                    dict) else subscribe_url
         headers = subscribe_info.get('headers') if isinstance(subscribe_info, dict) else None
         channels = defaultdict(list)
+        channel_seen = defaultdict(set)
         in_whitelist = whitelist and (subscribe_url in whitelist)
         disable_reason = None
         try:
@@ -136,7 +161,10 @@ async def get_channels_by_subscribe_urls(
                         if data_name and url:
                             name = format_channel_name(data_name)
                             if normalized_names and name not in normalized_names:
-                                logger.info(f"{data_name},{url}")
+                                with unmatched_lock:
+                                    if unmatched_logged < unmatched_log_limit:
+                                        logger.info(f"{data_name},{url}")
+                                        unmatched_logged += 1
                                 if not open_unmatch_category:
                                     continue
                             url_partition = url.partition("$")
@@ -151,11 +179,10 @@ async def get_channels_by_subscribe_urls(
                             }
                             if in_whitelist:
                                 value["origin"] = "whitelist"
-                            if name in channels:
-                                if value not in channels[name]:
-                                    channels[name].append(value)
-                            else:
-                                channels[name] = [value]
+                            key = _channel_item_key(value)
+                            if key not in channel_seen[name]:
+                                channel_seen[name].add(key)
+                                channels[name].append(value)
                 if not channels and not disable_reason:
                     disable_reason = t("msg.auto_disable_no_match")
         except Exception as e:
@@ -182,8 +209,10 @@ async def get_channels_by_subscribe_urls(
             executor.submit(process_subscribe_channels, subscribe_url)
             for subscribe_url in urls
         ]
+        subscribe_results = defaultdict(list)
+        subscribe_seen = defaultdict(set)
         for future in futures:
-            subscribe_results = merge_objects(subscribe_results, future.result())
+            _merge_channel_results(subscribe_results, future.result(), subscribe_seen)
         pbar.close()
         active_count = len(urls)
         disabled_count = 0

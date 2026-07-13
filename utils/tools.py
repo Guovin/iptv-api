@@ -1,6 +1,7 @@
 import copy
 import datetime
 import hashlib
+import io
 import ipaddress
 import json
 import logging
@@ -8,6 +9,7 @@ import os
 import re
 import shutil
 import sys
+import tempfile
 from collections import defaultdict
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
@@ -57,7 +59,13 @@ def get_logger(path, level=logging.ERROR, init=False):
             except Exception:
                 pass
 
-    handler = RotatingFileHandler(path, encoding="utf-8", delay=True)
+    handler = RotatingFileHandler(
+        path,
+        maxBytes=5 * 1024 * 1024,
+        backupCount=2,
+        encoding="utf-8",
+        delay=True,
+    )
 
     abs_path = os.path.abspath(path)
     if not any(
@@ -444,12 +452,13 @@ def get_channel_epg_id(name: str | None) -> str:
     return _channel_alias_instance.get_primary(name)
 
 
-def convert_to_m3u(path=None, first_channel_name=None, data=None):
+def convert_to_m3u(path=None, first_channel_name=None, data=None, content=None):
     """
     Convert result txt to m3u format
     """
-    if os.path.exists(path):
-        with open(path, "r", encoding="utf-8") as file:
+    if content is not None or os.path.exists(path):
+        source = io.StringIO(content) if content is not None else open(path, "r", encoding="utf-8")
+        with source as file:
             m3u_output = f'#EXTM3U x-tvg-url="{get_epg_url()}"\n' if config.open_epg else "#EXTM3U\n"
             current_group = None
             logo_url = get_logo_url()
@@ -507,8 +516,13 @@ def convert_to_m3u(path=None, first_channel_name=None, data=None):
                             m3u_output += f"#EXTVLCOPT:http-{key.lower()}={value}\n"
                         m3u_output += f"{channel_link}\n"
             m3u_file_path = os.path.splitext(path)[0] + ".m3u"
-            with open(m3u_file_path, "w", encoding="utf-8") as m3u_file:
+            target_dir = os.path.dirname(m3u_file_path) or "."
+            with tempfile.NamedTemporaryFile(
+                    mode="w", encoding="utf-8", delete=False, dir=target_dir,
+                    prefix=os.path.basename(m3u_file_path) + ".tmp.") as m3u_file:
                 m3u_file.write(m3u_output)
+                tmp_path = m3u_file.name
+            os.replace(tmp_path, m3u_file_path)
 
 
 def get_result_file_content(path=None, show_content=False, file_type=None):

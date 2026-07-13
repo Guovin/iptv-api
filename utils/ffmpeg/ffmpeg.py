@@ -38,7 +38,7 @@ async def ffmpeg_url(url, headers=None, timeout=10):
     """
     headers_str = "".join(f"{k}: {v}\r\n" for k, v in (headers or {}).items())
 
-    args = ["ffmpeg", "-t", str(timeout)]
+    args = ["ffmpeg", "-nostdin", "-threads", "1", "-t", str(timeout)]
     if headers_str:
         args += ["-headers", headers_str]
     args += ["-http_persistent", "0", "-stats", "-i", url, "-f", "null", "-"]
