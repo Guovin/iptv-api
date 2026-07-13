@@ -69,8 +69,10 @@ async def probe_url(url: str, headers: dict = None, timeout: int = 10) -> dict |
         args = [
             'ffprobe',
             '-v', 'error',
-            '-show_format',
-            '-show_streams',
+            '-probesize', '512000',
+            '-analyzeduration', '1000000',
+            '-show_entries',
+            'stream=codec_type,codec_name,width,height,avg_frame_rate,r_frame_rate',
             '-print_format', 'json',
         ]
         if header_str:

@@ -346,34 +346,6 @@ async def get_result(url: str, headers: dict = None, resolution: str = None,
                     info['speed'] = total_size / total_time / 1024 / 1024 if total_time > 0 else 0
                     delays = [result['delay'] for result in valid_results if result.get('delay', -1) >= 0]
                     info['delay'] = int(sum(delays) / len(delays)) if delays else -1
-                    try:
-                        if round(info['speed'], 2) == 0 and info['delay'] != -1:
-                            async with _limit(probe_semaphore):
-                                ff_out = await ffmpeg_url(url, headers, timeout)
-                            if ff_out:
-                                try:
-                                    parsed = get_video_info(ff_out)
-                                    if parsed:
-                                        parsed_speed = parsed.get('speed')
-                                        parsed_resolution = parsed.get('resolution')
-                                        parsed_fps = parsed.get('fps')
-                                        parsed_video_codec = parsed.get('video_codec')
-                                        parsed_audio_codec = parsed.get('audio_codec')
-                                        if parsed_speed:
-                                            info['speed'] = parsed_speed
-                                        if parsed_resolution:
-                                            info['resolution'] = parsed_resolution
-                                        if parsed_fps:
-                                            info['fps'] = parsed_fps
-                                        if parsed_video_codec:
-                                            info['video_codec'] = parsed_video_codec
-                                        if parsed_audio_codec:
-                                            info['audio_codec'] = parsed_audio_codec
-                                except Exception:
-                                    pass
-
-                    except Exception:
-                        pass
     except:
         pass
     finally:
