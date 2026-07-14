@@ -333,6 +333,19 @@ class UpdateSource:
     async def main(self):
         try:
             main_start_time = time()
+            performance = config.performance_settings
+            print(
+                t("msg.performance_settings").format(
+                    mode=performance.requested_mode,
+                    resolved=performance.resolved_mode,
+                    cpu=performance.cpu_count,
+                    memory=performance.memory_gb,
+                    speed=performance.speed_test_concurrency,
+                    probe=performance.probe_concurrency,
+                    fetch=performance.fetch_workers,
+                ),
+                flush=True,
+            )
 
             self._prepare_channel_data()
 

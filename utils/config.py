@@ -5,6 +5,8 @@ import shutil
 import socket
 import sys
 
+from utils.performance import PERFORMANCE_MODES, get_performance_settings
+
 
 def resource_path(relative_path, persistent=False):
     """
@@ -278,7 +280,16 @@ class ConfigManager:
 
     @property
     def speed_test_limit(self):
-        return self.config.getint("Settings", "speed_test_limit", fallback=5)
+        return self.config.getint("Settings", "speed_test_limit", fallback=0)
+
+    @property
+    def performance_mode(self):
+        mode = self.config.get("Settings", "performance_mode", fallback="auto").lower()
+        return mode if mode in PERFORMANCE_MODES else "auto"
+
+    @property
+    def performance_settings(self):
+        return get_performance_settings(self.performance_mode, self.speed_test_limit)
 
     @property
     def location(self):

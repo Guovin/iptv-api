@@ -1,5 +1,6 @@
 {
   "msg.version_info": "⚡\uFE0F {name} 版本: {version} (构建时间: {build_time})",
+  "msg.performance_settings": "⚙️ 性能模式: {mode} → {resolved}，可用资源: {cpu} CPU / {memory} GB，并发: 测速 {speed}、媒体探测 {probe}、源抓取 {fetch}",
   "msg.check_ipv6_support": "\uD83D\uDEDC 正在检查当前网络是否支持IPv6...",
   "msg.ipv6_supported": "✅ 当前网络支持IPv6！",
   "msg.ipv6_not_supported": "⚠\uFE0F 当前网络不支持IPv6，别担心，IPv6的结果会被保存下来",
@@ -84,6 +85,7 @@
   "pbar.source": "源",
   "pbar.getting_name": "\uD83D\uDD0D 正在进行获取{name}",
   "pbar.name_search": "{name}查询",
+  "ui.performance_mode": "性能模式:",
   "name.whitelist": "白名单",
   "name.local": "本地源",
   "name.hls": "推流源",

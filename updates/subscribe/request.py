@@ -204,7 +204,7 @@ async def get_channels_by_subscribe_urls(
                 )
         return channels
 
-    with ThreadPoolExecutor(max_workers=10) as executor:
+    with ThreadPoolExecutor(max_workers=config.performance_settings.fetch_workers) as executor:
         futures = [
             executor.submit(process_subscribe_channels, subscribe_url)
             for subscribe_url in urls
