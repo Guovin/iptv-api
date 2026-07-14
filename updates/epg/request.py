@@ -221,10 +221,10 @@ async def get_epg(names=None, callback=None, extra_entries=None):
                     int((pbar.n / urls_len) * 100),
                 )
 
-    with ThreadPoolExecutor(max_workers=10) as executor:
+    with ThreadPoolExecutor(max_workers=config.performance_settings.fetch_workers) as executor:
         for entry in configured_entries:
             executor.submit(process_run, entry)
-    with ThreadPoolExecutor(max_workers=10) as executor:
+    with ThreadPoolExecutor(max_workers=config.performance_settings.fetch_workers) as executor:
         for entry in discovered_entries:
             executor.submit(process_run, entry)
     session.close()

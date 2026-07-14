@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 
 from utils.config import config
+from utils.i18n import t
 
 
 class SpeedUI:
@@ -30,14 +31,19 @@ class SpeedUI:
         )
         self.open_speed_test_checkbutton.pack(side=tk.LEFT, padx=4, pady=8)
 
-        self.speed_test_limit_label = tk.Label(
-            frame_default_sort_column2, text="测速并发:", width=12
+        self.performance_mode_label = tk.Label(
+            frame_default_sort_column2, text=t("ui.performance_mode"), width=12
         )
-        self.speed_test_limit_label.pack(side=tk.LEFT, padx=4, pady=8)
-        self.speed_test_limit_entry = tk.Entry(frame_default_sort_column2, width=10)
-        self.speed_test_limit_entry.pack(side=tk.LEFT, padx=4, pady=8)
-        self.speed_test_limit_entry.insert(0, config.speed_test_limit)
-        self.speed_test_limit_entry.bind("<KeyRelease>", self.update_speed_test_limit)
+        self.performance_mode_label.pack(side=tk.LEFT, padx=4, pady=8)
+        self.performance_mode_combo = ttk.Combobox(
+            frame_default_sort_column2,
+            values=("auto", "powersave", "balance", "fast"),
+            width=10,
+            state="readonly",
+        )
+        self.performance_mode_combo.pack(side=tk.LEFT, padx=4, pady=8)
+        self.performance_mode_combo.set(config.performance_mode)
+        self.performance_mode_combo.bind("<<ComboboxSelected>>", self.update_performance_mode)
 
         self.speed_test_timeout_label = tk.Label(
             frame_default_sort_column2, text="响应超时(s):", width=12
@@ -164,8 +170,8 @@ class SpeedUI:
     def update_open_speed_test(self):
         config.set("Settings", "open_speed_test", str(self.open_speed_test_var.get()))
 
-    def update_speed_test_limit(self, event):
-        config.set("Settings", "speed_test_limit", self.speed_test_limit_entry.get())
+    def update_performance_mode(self, event):
+        config.set("Settings", "performance_mode", self.performance_mode_combo.get())
 
     def update_speed_test_timeout(self, event):
         config.set("Settings", "speed_test_timeout", self.speed_test_timeout_entry.get())
@@ -199,7 +205,7 @@ class SpeedUI:
     def change_entry_state(self, state):
         for entry in [
             "open_speed_test_checkbutton",
-            "speed_test_limit_entry",
+            "performance_mode_combo",
             "speed_test_timeout_entry",
             "open_filter_speed_checkbutton",
             "min_speed_entry",

@@ -757,9 +757,10 @@ async def test_speed(data, ipv6=False, callback=None, on_task_complete=None):
     ipv6_proxy_url = None if (not config.open_ipv6 or ipv6) else constants.ipv6_proxy
     open_full_speed_test = config.open_full_speed_test
     get_resolution = config.open_filter_resolution and check_ffmpeg_installed_status()
-    concurrency = max(1, config.speed_test_limit)
+    performance = config.performance_settings
+    concurrency = performance.speed_test_concurrency
     http_semaphore = asyncio.Semaphore(concurrency)
-    probe_semaphore = asyncio.Semaphore(1)
+    probe_semaphore = asyncio.Semaphore(performance.probe_concurrency)
     speed_log_handler = get_logger(constants.speed_test_log_path, level=INFO, init=True)
     result_log_handler = get_logger(constants.result_log_path, level=INFO, init=True)
     logger = _LimitedLogger(speed_log_handler, 10000)
