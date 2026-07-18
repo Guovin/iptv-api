@@ -3,11 +3,11 @@ import http.cookies
 import re
 from collections import deque
 from contextlib import asynccontextmanager
-from importlib import import_module
 from time import time
 from typing import Any
 from urllib.parse import quote, urljoin
 
+from aiohttp import ClientSession, ClientTimeout, TCPConnector
 import m3u8
 
 import utils.constants as constants
@@ -19,10 +19,6 @@ from utils.tools import get_resolution_value
 from utils.types import TestResult, ChannelTestResult, TestResultCacheData
 
 http.cookies._is_legal_key = lambda _: True
-_aiohttp = import_module("aiohttp")
-ClientSession = getattr(_aiohttp, "ClientSession")
-TCPConnector = getattr(_aiohttp, "TCPConnector")
-ClientTimeout = getattr(_aiohttp, "ClientTimeout")
 cache: TestResultCacheData = {}
 speed_test_timeout = config.speed_test_timeout
 speed_test_filter_host = config.speed_test_filter_host
