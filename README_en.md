@@ -51,10 +51,8 @@
     - [Docker](#docker)
 - [📖 Detailed Tutorial](./docs/tutorial_en.md)
 - [🗓️ Changelog](./CHANGELOG.md)
-- [🤝 Sponsors](#sponsors)
 - [❤️ Donations](#donations)
 - [👀 Follow](#follow)
-- [⭐️ Star History](#star-history)
 - [⚠️ Disclaimer](#disclaimer)
 - [⚖️ License](#license)
 
@@ -383,14 +381,6 @@ WeChat public account search for Govin, or scan the code to receive updates and 
 ### Contact Me
 
 Contact via email: [360996299@qq.com](mailto:360996299@qq.com)
-
-## Star History
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=Guovin/iptv-api&type=date&theme=dark&legend=top-left" />
-  <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=Guovin/iptv-api&type=date&legend=top-left" />
-  <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=Guovin/iptv-api&type=date&legend=top-left" />
-</picture>
 
 ## Donations
 

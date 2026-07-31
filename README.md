@@ -51,9 +51,7 @@
     - [Docker](#Docker)
 - [📖 详细教程](./docs/tutorial.md)
 - [🗓️ 更新日志](./CHANGELOG.md)
-- [🤝 赞助商](#赞助商)
 - [👀 关注](#关注)
-- [⭐️ Star统计](#Star统计)
 - [❤️ 捐赠](#捐赠)
 - [⚠️ 免责声明](#免责声明)
 - [⚖️ 许可证](#许可证)
@@ -368,14 +366,6 @@ docker run -d -p 80:8080 guovern/iptv-api
 ### 联系我
 
 联系邮箱：[360996299@qq.com](mailto:360996299@qq.com)
-
-## Star统计
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=Guovin/iptv-api&type=date&theme=dark&legend=top-left" />
-  <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=Guovin/iptv-api&type=date&legend=top-left" />
-  <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=Guovin/iptv-api&type=date&legend=top-left" />
-</picture>
 
 ## 捐赠
 
