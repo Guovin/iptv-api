@@ -568,13 +568,17 @@ def remove_duplicates_from_list(data_list, seen, filter_host=False, ipv6_support
 
 def process_nested_dict(data, seen, filter_host=False, ipv6_support=True):
     """
-    Process nested dict
+    Process nested dict in-place, removing duplicate URLs from lists.
+    Returns the total number of remaining URLs after deduplication.
     """
+    total = 0
     for key, value in data.items():
         if isinstance(value, dict):
-            process_nested_dict(value, seen, filter_host, ipv6_support)
+            total += process_nested_dict(value, seen, filter_host, ipv6_support)
         elif isinstance(value, list):
             data[key] = remove_duplicates_from_list(value, seen, filter_host, ipv6_support)
+            total += len(data[key])
+    return total
 
 
 def get_url_host(url):
