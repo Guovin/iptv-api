@@ -1,5 +1,4 @@
 import asyncio
-import copy
 import datetime
 import gzip
 import os
@@ -246,20 +245,23 @@ class UpdateSource:
         """
         Run speed test on the channel data and return the test results.
         """
-        test_data = {
-            category: copy.deepcopy(items)
-            for category, items in self.channel_data.items()
-            if category != t("content.unmatch_channel")
-        }
+        # Use a shallow two-level copy instead of deepcopy:
+        # process_nested_dict replaces entire lists (not mutating individual items),
+        # so we only need to copy the list wrappers, not each dict inside them.
+        test_data = {}
+        for category, items in self.channel_data.items():
+            if category == t("content.unmatch_channel"):
+                continue
+            test_data[category] = {name: list(url_list) for name, url_list in items.items()}
+
         urls_total = get_urls_len(test_data)
 
-        process_nested_dict(
+        self.total = process_nested_dict(
             test_data,
             seen=set(),
             filter_host=config.speed_test_filter_host,
             ipv6_support=self.ipv6_support,
         )
-        self.total = get_urls_len(test_data)
 
         print(t("msg.total_urls_need_test_speed").format(total=urls_total, speed_total=self.total))
 
